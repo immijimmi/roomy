@@ -22,7 +22,9 @@ class AnimationHandler:
         frame_filenames_list = AnimationHandler._get_or_load_frame_filenames(target_instance)
         total_frames = len(frame_filenames_list)
 
-        frame_number = int(target_instance.animation.elapsed / target_instance.animation.frame_time)
+        frame_number = int(
+            target_instance.animation.elapsed_effective / target_instance.animation.frame_time
+        )
         frame_number = frame_number % total_frames  # Makes animation frames cycle back to the beginning to repeat
 
         # Standardised animation frame file names
