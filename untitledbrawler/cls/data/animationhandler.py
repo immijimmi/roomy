@@ -3,6 +3,8 @@ from pygame import Surface, image
 from json import loads
 from typing import List
 
+from ..enums import AnimationOnFinish
+
 
 class AnimationHandler:
     """
@@ -22,13 +24,20 @@ class AnimationHandler:
         frame_filenames_list = AnimationHandler._get_or_load_frame_filenames(target_instance)
         total_frames = len(frame_filenames_list)
 
-        frame_number = int(
+        frames_elapsed = int(
             target_instance.animation.elapsed_effective / target_instance.animation.frame_time
         )
-        frame_number = frame_number % total_frames  # Makes animation frames cycle back to the beginning to repeat
+
+        if target_instance.animation.on_finish == AnimationOnFinish.REPEAT:
+            frame_number = frames_elapsed % total_frames
+        elif target_instance.animation.on_finish == AnimationOnFinish.HANG:
+            frame_number = min(total_frames-1, frames_elapsed)
+        else:
+            raise NotImplementedError
 
         # Standardised animation frame file names
         frame_file_path = rf"res\{target_class_name}\{frame_filenames_list[frame_number]}"
+
         return AnimationHandler._get_or_load_frame(frame_file_path)
 
     @staticmethod

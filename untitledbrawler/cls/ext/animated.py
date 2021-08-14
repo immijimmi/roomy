@@ -22,7 +22,6 @@ class Animated(Extension):
     def __wrap_update(self, elapsed_ms, events):
         yield
         self.animation.add_elapsed(elapsed_ms)
-        self.animation.update()
 
         self.surface = AnimationHandler.get_frame(self)
 
