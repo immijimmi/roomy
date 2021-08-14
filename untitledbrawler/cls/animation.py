@@ -75,8 +75,6 @@ class Animation:
             self._elapsed_effective = animation.elapsed_effective
 
     def _set(self, parent, animation_key, frame_time, priority, speed, on_finish):
-        assert on_finish in ("", "", "")
-
         self._parent = parent
         self._key = animation_key
         self._frame_time = frame_time
