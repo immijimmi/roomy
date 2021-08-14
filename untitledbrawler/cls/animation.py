@@ -1,6 +1,8 @@
 from typing import Any
 from datetime import timedelta
 
+from .enums import AnimationOnFinish
+
 
 class Animation:
     default_frame_time = timedelta(microseconds=20000)
@@ -8,7 +10,7 @@ class Animation:
     def __init__(
             self, parent: "Entity.with_extensions(Animated)",
             animation_key: str = "", frame_time: timedelta = default_frame_time, priority: Any = None,
-            speed: float = 1, on_finish: str = "repeat"
+            speed: float = 1, on_finish: str = AnimationOnFinish.REPEAT
     ):
         self._set(parent, animation_key, frame_time, priority, speed, on_finish)
 
