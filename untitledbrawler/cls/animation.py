@@ -5,6 +5,7 @@ from .enums import AnimationOnFinish
 
 
 class Animation:
+    # Animations use a standard framerate as defined here, however this can be overridden if necessary
     default_frame_time = timedelta(microseconds=20000)
 
     def __init__(
