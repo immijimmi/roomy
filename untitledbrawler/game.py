@@ -58,17 +58,14 @@ class Game:
         pygame.display.update(updated_rects)
 
     def _init_screen(self):
+        ##### TODO: Replace with logic which loads a menu Screen
+
         state_extended_class = State.with_extensions(Registrar, Listeners)
 
-        save_states = []
-        for potential_save_filename in ("save1.json", "save2.json", "save3.json"):
-            try:
-                with open(potential_save_filename, "r") as file:
-                    save_state = state_extended_class(loads(file.read()))
-            except FileNotFoundError:
-                save_state = state_extended_class()
+        try:
+            with open("save1.json", "r") as file:
+                save_state = state_extended_class(loads(file.read()))
+        except FileNotFoundError:
+            save_state = state_extended_class()
 
-            save_states.append(save_state)
-
-        ##### TODO: Replace with logic to load menu screen once it is designed
-        self.change_screen(World(self, save_states[0]))
+        self.change_screen(World(self, save_state))

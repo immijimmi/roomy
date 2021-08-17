@@ -11,10 +11,18 @@ class World(Screen):
         self.state = state
         self.curr_room = None
 
-        self.change_room(Room(self))  ##### TODO
+        self._register_paths()
+        self.set_room()
 
-    def change_room(self, new_room: Room):
+    def set_room(self):
+        new_room_id = self.state.registered_get("curr_room_id")  ##### TODO: Register path
+        if new_room_id == self.curr_room.room_id:
+            return
+
         old_room = self.curr_room
-        self.curr_room = new_room
+        self.curr_room = Room(new_room_id, self)
 
-        self.game.observers.on_change_room(old_room, new_room)
+        self.game.observers.on_change_room(old_room, self.curr_room)
+
+    def _register_paths(self):
+        pass
