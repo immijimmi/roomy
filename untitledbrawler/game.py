@@ -1,7 +1,10 @@
 from managedstate import State
+from managedstate.extensions import Listeners, Registrar
 import pygame
 
-from cls import *
+from json import loads
+
+from .cls import *
 
 
 class Game:
@@ -17,7 +20,7 @@ class Game:
 
         self._screen = None
 
-        self.change_screen(World(self, State()))  ##### TODO
+        self._init_screen()
         self.run()
 
     @property
@@ -54,6 +57,18 @@ class Game:
 
         pygame.display.update(updated_rects)
 
+    def _init_screen(self):
+        state_extended_class = State.with_extensions(Registrar, Listeners)
 
-if __name__ == "__main__":
-    Game()
+        save_states = []
+        for potential_save_filename in ("save1.json", "save2.json", "save3.json"):
+            try:
+                with open(potential_save_filename, "r") as file:
+                    save_state = state_extended_class(loads(file.read()))
+            except FileNotFoundError:
+                save_state = state_extended_class()
+
+            save_states.append(save_state)
+
+        ##### TODO: Replace with logic to load menu screen once it is designed
+        self.change_screen(World(self, save_states[0]))

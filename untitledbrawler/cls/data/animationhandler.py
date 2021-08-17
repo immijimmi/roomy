@@ -35,7 +35,7 @@ class AnimationHandler:
         else:
             raise NotImplementedError
 
-        # Standardised animation frame file names
+        # Standardised animation frame file path structure
         frame_file_path = rf"res\{target_class_name}\{frame_filenames_list[frame_number]}"
 
         return AnimationHandler._get_or_load_frame(frame_file_path)
