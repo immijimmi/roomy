@@ -23,7 +23,7 @@ class Entity(Extendable, Recurface, ABC):
 
     def _update(self, elapsed_ms: int, events: Tuple):
         """
-        This is a lifecycle method which will be called automatically in the game loop
+        This is an overridable lifecycle method which will be called automatically in the game loop
         """
 
         pass

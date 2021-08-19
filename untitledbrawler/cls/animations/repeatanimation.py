@@ -6,13 +6,21 @@ from .animation import Animation
 
 class RepeatAnimation(Animation):
     def __init__(
-            self, parent: "Entity.with_extensions(Animated)",
-            animation_key: str = "", speed: float = 1, priority: Any = None,
+            self, parent: "Entity.with_extensions(Animated)", animation_key: str,
+            speed: float = 1, priority: Any = None,
             frame_duration: Optional[timedelta] = None
     ):
         super().__init__(parent, animation_key, speed, priority)
 
-        self._frame_time = frame_duration or self._data.get("frame_duration", None) or Animation.default_frame_duration
+        if frame_duration is not None:
+            self._frame_time = frame_duration
+        else:
+            frame_duration_ms = self._data.get("frame_duration_ms", None)
+
+            if frame_duration_ms is not None:
+                self._frame_time = timedelta(microseconds=frame_duration_ms*1000)
+            else:
+                self._frame_time = Animation.default_frame_duration
 
     @property
     def frame_index(self):

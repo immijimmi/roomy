@@ -14,9 +14,19 @@ class Animated(Extension):
         Extension._wrap(target_cls, "__init__", Animated.__wrap_init)
         Extension._wrap(target_cls, "update", Animated.__wrap_update)
 
+        Extension._set(target_cls, "default_animation_key", Animated.__default_animation_key)
+
+    @property
+    def __default_animation_key(self) -> str:
+        """
+        .default_animation_key must be overridden in the base class with a property that provides a valid animation key
+        """
+
+        raise NotImplementedError
+
     def __wrap_init(self, *args, **kwargs):
-        Extension._set(self, "animation", RepeatAnimation(self))  # Default animation will be a repeating idle animation
         yield
+        Extension._set(self, "animation", RepeatAnimation(self, self.default_animation_key))
 
     def __wrap_update(self, elapsed_ms, events):
         yield
