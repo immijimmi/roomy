@@ -19,7 +19,7 @@ class Animated(Extension):
     @property
     def __default_animation_key(self) -> str:
         """
-        .default_animation_key must be overridden in the base class with a property that provides a valid animation key
+        .default_animation_key must be overridden in the subclass with a property that provides a valid animation key
         """
 
         raise NotImplementedError
