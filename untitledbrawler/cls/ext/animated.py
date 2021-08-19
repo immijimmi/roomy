@@ -1,8 +1,7 @@
 from objectextensions import Extension
 
 from ..entity import Entity
-from ..animation import Animation
-from ..data import AnimationHandler
+from ..animations import RepeatAnimation
 
 
 class Animated(Extension):
@@ -16,16 +15,10 @@ class Animated(Extension):
         Extension._wrap(target_cls, "update", Animated.__wrap_update)
 
     def __wrap_init(self, *args, **kwargs):
-        Extension._set(self, "animation", Animation(self))
+        Extension._set(self, "animation", RepeatAnimation(self))  # Default animation will be a repeating idle animation
         yield
 
     def __wrap_update(self, elapsed_ms, events):
         yield
-        self.animation.add_elapsed(elapsed_ms)
-
-        self.surface = AnimationHandler.get_frame(self)
-
-    # Not in use as objectextensions does not yet support property syntax
-    @property
-    def __animation_getter(self):
-        return self._animation
+        self.animation.update(elapsed_ms)
+        self.surface = self.animation.frame

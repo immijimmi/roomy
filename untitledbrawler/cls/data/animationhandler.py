@@ -1,65 +1,49 @@
 from pygame import Surface, image
 
 from json import loads
-from typing import List
-
-from ..enums import AnimationOnFinish
+from typing import Type, Dict, Any
 
 
 class AnimationHandler:
     """
-    Helper class which calculates what animation frame an instance should be displaying,
-    as well as storing loaded frames for reuse
+    Helper class which retrieves and stores animation data
     """
 
-    # For performance optimisation, stores frames which have already been loaded under their file paths as keys
+    # For performance optimisation. Stores data which has already been loaded before using file paths as their keys
+    data = {}
+    # For performance optimisation, stores frames which have already been generated using file paths as their keys
     frames = {}
-    # Similar optimisation for storing frame filename lists
-    frame_filenames = {}
 
     @staticmethod
-    def get_frame(target_instance: "Entity.with_extensions(Animated)") -> Surface:
-        target_class_name = target_instance.__class__.__name__
+    def get_data(target_cls: Type["Entity.with_extensions(Animated)"], animation_key: str) -> Dict[str, Any]:
+        AnimationHandler._load_data(target_cls)
 
-        frame_filenames_list = AnimationHandler._get_or_load_frame_filenames(target_instance)
-        total_frames = len(frame_filenames_list)
-
-        frames_elapsed = int(
-            target_instance.animation.elapsed_effective / target_instance.animation.frame_time
-        )
-
-        if target_instance.animation.on_finish == AnimationOnFinish.REPEAT:
-            frame_number = frames_elapsed % total_frames
-        elif target_instance.animation.on_finish == AnimationOnFinish.HANG:
-            frame_number = min(total_frames-1, frames_elapsed)
-        else:
-            raise NotImplementedError
-
-        # Standardised animation frame file path structure
-        frame_file_path = rf"res\{target_class_name}\{frame_filenames_list[frame_number]}"
-
-        return AnimationHandler._get_or_load_frame(frame_file_path)
+        return AnimationHandler.data[target_cls.__name__][animation_key]
 
     @staticmethod
-    def _get_or_load_frame(file_path: str) -> Surface:
-        if file_path not in AnimationHandler.frames:
-            AnimationHandler.frames[file_path] = image.load(file_path).convert_alpha()
+    def get_frame(file_path: str) -> Surface:
+        AnimationHandler._load_frame(file_path)
 
         return AnimationHandler.frames[file_path]
 
     @staticmethod
-    def _get_or_load_frame_filenames(target_instance: "Entity.with_extensions(Animated)") -> List[str]:
+    def _load_data(target_cls: Type["Entity.with_extensions(Animated)"]) -> None:
         """
-        Returns only the list of frame filenames for the specific animation in question, however if data needs to be
-        loaded from file it is done in chunks containing data for every animation associated with the target class
+        Loads all animation data for the target class, if it is not already loaded
         """
 
-        target_class_name = target_instance.__class__.__name__
-        animation_key = target_instance.animation.key
+        if target_cls.__name__ not in AnimationHandler.data:
+            animation_data_file_path = rf"res\{target_cls.__name__}\animation_data.json"
 
-        if target_class_name not in AnimationHandler.frame_filenames:
-            with open(rf"res\{target_class_name}\animation_data.json", "r") as file:
+            with open(animation_data_file_path, "r") as file:
                 data = loads(file.read())
-                AnimationHandler.frame_filenames[target_class_name] = data
+                AnimationHandler.data[target_cls.__name__] = data
 
-        return AnimationHandler.frame_filenames[target_class_name][animation_key]
+    @staticmethod
+    def _load_frame(file_path: str) -> None:
+        """
+        Loads the animation frame at the target file path, if it is not already loaded
+        """
+
+        if file_path not in AnimationHandler.frames:
+            AnimationHandler.frames[file_path] = image.load(file_path).convert_alpha()
