@@ -1,0 +1,1 @@
+from .roomoccupant import RoomOccupant

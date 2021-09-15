@@ -2,6 +2,7 @@ from managedstate import State
 
 from .screen import Screen
 from ..room import Room
+from .constants import Constants
 
 
 class World(Screen):
@@ -29,3 +30,4 @@ class World(Screen):
 
     def _register_paths(self):
         self.state.register("curr_room_id", ["curr_room_id"], [None])
+        self.state.register("room_contents", ["room_data", Constants.PATH_DYNAMIC_KEY, "contents"], [{}, {}, {}])

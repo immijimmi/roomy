@@ -1,8 +1,9 @@
 from typing import Any
 
+from .methods import Methods
 from .entity import Entity
 from .ext import Animated
-from .animations import RepeatAnimation
+from .roomoccupants import RoomOccupant
 
 
 class Room(Entity.with_extensions(Animated)):
@@ -26,7 +27,15 @@ class Room(Entity.with_extensions(Animated)):
         return str(self._room_id)
 
     def _load_room(self):
-        pass  ##### TODO
+        room_contents_data = self.parent.state.registered_get("room_contents", [self._room_id])
+
+        for room_occupant_class_name in room_contents_data:
+            occupant_class: RoomOccupant = Methods.get_class_from_str(room_occupant_class_name)
+
+            for occupant_kwargs in room_contents_data[room_occupant_class_name]:
+                self.add_child(occupant_class(self, **occupant_kwargs))
+
+        ##### TODO: Add logic to render players in the room as well - player data will be separate from room data
 
     def _register_paths(self):
         pass
