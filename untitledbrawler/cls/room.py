@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Iterable
 
 from .methods import Methods
 from .entity import Entity
@@ -14,7 +14,6 @@ class Room(Entity.with_extensions(Animated)):
 
         self.parent = world
 
-        self._register_paths()
         self._load_room()
 
     @property
@@ -27,15 +26,21 @@ class Room(Entity.with_extensions(Animated)):
         return str(self._room_id)
 
     def _load_room(self):
-        room_contents_data = self.parent.state.registered_get("room_contents", [self._room_id])
+        curr_room_occupants_ids: Iterable[str] = self.parent.state.registered_get("room_occupants_ids", [self._room_id])
+        curr_players_ids: Iterable[str] = self.parent.state.registered_get("curr_players_ids")
 
-        for room_occupant_class_name in room_contents_data:
-            occupant_class: RoomOccupant = Methods.get_class_from_str(room_occupant_class_name)
+        for room_occupant_id in curr_room_occupants_ids:
+            room_occupant_data: dict = self.parent.state.registered_get("room_occupant", [room_occupant_id])
 
-            for occupant_kwargs in room_contents_data[room_occupant_class_name]:
-                self.add_child(occupant_class(self, **occupant_kwargs))
+            occupant_class: RoomOccupant = Methods.get_class_from_str(room_occupant_data["class"])
+            occupant_stats: dict = room_occupant_data["stats"]
 
-        ##### TODO: Add logic to render players in the room as well - player data will be separate from room data
+            self.add_child(occupant_class(self, stats=occupant_stats))
 
-    def _register_paths(self):
-        pass
+        for player_id in curr_players_ids:
+            player_data: dict = self.parent.state.registered_get("player", [player_id])
+
+            player_class: RoomOccupant = Methods.get_class_from_str(player_data["class"])
+            player_stats: dict = player_data["stats"]
+
+            self.add_child(player_class(self, stats=player_stats))
