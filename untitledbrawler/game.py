@@ -66,6 +66,6 @@ class Game:
             with open("save1.json", "r") as file:
                 save_state = state_extended_class(loads(file.read()))
         except FileNotFoundError:
-            save_state = state_extended_class()
+            save_state = state_extended_class(StateHandler.generate_new_save_data())
 
         self.change_screen(World(self, save_state))
