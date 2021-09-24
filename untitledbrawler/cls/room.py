@@ -7,7 +7,7 @@ from .roomoccupants import RoomOccupant
 
 
 class Room(Entity.with_extensions(Animated)):
-    def __init__(self, room_id: Any, world: "World"):
+    def __init__(self, room_id: str, world: "World"):
         self._room_id = room_id  # Hoisted as it is required for animation setup in the base constructor
 
         super().__init__(position=(0, 0))
@@ -17,13 +17,13 @@ class Room(Entity.with_extensions(Animated)):
         self._load_room()
 
     @property
-    def room_id(self) -> Any:
+    def room_id(self) -> str:
         return self._room_id
 
     @property
     def default_animation_key(self):
-        # Room animation keys will simply be stringified IDs
-        return str(self._room_id)
+        # Room animation keys will simply be their IDs
+        return self._room_id
 
     def _load_room(self):
         curr_room_occupants_ids: Iterable[str] = self.parent.state.registered_get("room_occupants_ids", [self._room_id])

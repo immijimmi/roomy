@@ -2,7 +2,6 @@ from managedstate import State
 
 from .screen import Screen
 from ..room import Room
-from .constants import Constants
 
 
 class World(Screen):
@@ -12,7 +11,6 @@ class World(Screen):
         self.state = state
         self.curr_room = None
 
-        self._register_paths()
         self.set_room()
 
     def set_room(self):
@@ -27,13 +25,3 @@ class World(Screen):
         self.curr_room = Room(new_room_id, self)
 
         self.game.observers.on_change_room(old_room, self.curr_room)
-
-    def _register_paths(self):
-        self.state.register("curr_room_id", ["current", "room_id"], [{}, None])
-        self.state.register("curr_players_ids", ["current", "players_ids"], [{}, []])
-
-        self.state.register("player", ["players", Constants.PATH_DYNAMIC_KEY], [{}, {}])
-        self.state.register("room", ["rooms", Constants.PATH_DYNAMIC_KEY], [{}, {}])
-        self.state.register("room_occupant", ["room_occupants", Constants.PATH_DYNAMIC_KEY], [{}, {}])
-
-        self.state.register("room_occupants_ids", ["rooms", Constants.PATH_DYNAMIC_KEY, "occupants_ids"], [{}, {}, []])

@@ -61,11 +61,12 @@ class Game:
         ##### TODO: Replace with logic which loads a menu Screen
 
         state_extended_class = State.with_extensions(Registrar, Listeners)
+        save_state = state_extended_class()
 
         try:
-            with open("save1.json", "r") as file:
-                save_state = state_extended_class(loads(file.read()))
+            with open("save/save1.json", "r") as file:
+                save_state.set(loads(file.read()))
         except FileNotFoundError:
-            save_state = state_extended_class(StateHandler.generate_new_save_data())
+            StateHandler.generate_new_save_data(save_state)
 
         self.change_screen(World(self, save_state))
