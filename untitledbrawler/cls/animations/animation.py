@@ -6,6 +6,7 @@ from weakref import ref
 from pygame import Surface
 
 from ..data import AnimationHandler
+from .constants import AnimationParams
 
 
 class Animation(ABC):
@@ -60,11 +61,11 @@ class Animation(ABC):
 
     @property
     def total_frames(self) -> int:
-        return len(self._data["frames"])
+        return len(self._data[AnimationParams.FRAMES])
 
     @property
     def frame(self) -> Surface:
-        frame_file_path = self._data["frames"][self.frame_index]
+        frame_file_path = self._data[AnimationParams.FRAMES][self.frame_index]
 
         return AnimationHandler.get_frame(frame_file_path)
 

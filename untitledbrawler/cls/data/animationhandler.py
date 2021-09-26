@@ -38,11 +38,11 @@ class AnimationHandler:
         is expected to be as follows:
         {
             "<animation key>": {
-                "frames": [
+                "<animation frames key>": [
                     "<frame filename>",
                     ...
                 ],
-                "<second animation parameter>": <value>,
+                "<second animation parameter key>": <value>,
                 ...
             }
             "<second animation key>": {
