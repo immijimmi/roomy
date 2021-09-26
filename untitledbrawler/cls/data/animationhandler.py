@@ -29,7 +29,27 @@ class AnimationHandler:
     @staticmethod
     def _load_data(target_cls: Type["Entity.with_extensions(Animated)"]) -> None:
         """
-        Loads all animation data for the target class, if it is not already loaded
+        Loads all animation data for the target class, if it is not already loaded.
+
+        The animation data that is retrieved via this method comprises a list of the included frames, and
+        any relevant generic parameters for them (for example, default framerate).
+
+        The structure of each data file (containing all animation data for one `Animated` class)
+        is expected to be as follows:
+        {
+            "<animation key>": {
+                "frames": [
+                    "<frame filename>",
+                    ...
+                ],
+                "<second animation parameter>": <value>,
+                ...
+            }
+            "<second animation key>": {
+            ...
+            }
+            ...
+        }
         """
 
         if target_cls.__name__ not in AnimationHandler.data:

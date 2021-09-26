@@ -2,6 +2,7 @@ from typing import Any, Optional
 from datetime import timedelta
 
 from .animation import Animation
+from .constants import AnimationParams
 
 
 class RepeatAnimation(Animation):
@@ -15,7 +16,7 @@ class RepeatAnimation(Animation):
         if frame_duration is not None:
             self._frame_time = frame_duration
         else:
-            frame_duration_ms = self._data.get("frame_duration_ms", None)
+            frame_duration_ms = self._data.get(AnimationParams.FRAME_DURATION_MS, None)
 
             if frame_duration_ms is not None:
                 self._frame_time = timedelta(microseconds=frame_duration_ms*1000)
