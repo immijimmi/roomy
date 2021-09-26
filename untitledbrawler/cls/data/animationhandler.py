@@ -31,21 +31,20 @@ class AnimationHandler:
         """
         Loads all animation data for the target class, if it is not already loaded.
 
-        The animation data that is retrieved via this method comprises a list of the included frames, and
-        any relevant generic parameters for them (for example, default framerate).
+        The animation data that is retrieved via this method includes any parameters that have the possibility of being
+        unique to an animation - typically this includes the animation's frames, default framerate etc. - since
+        these unique parameters are the ones that it is worth abstracting into a data file, rather than keeping them
+        directly integrated in a class.
 
-        The structure of each data file (containing all animation data for one `Animated` class)
+        The structure of data in each file (containing all animation data for one `Animated` class)
         is expected to be as follows:
         {
             "<animation key>": {
-                "<animation frames key>": [
-                    "<frame filename>",
-                    ...
-                ],
-                "<second animation parameter key>": <value>,
+                "<animation parameter key>": <value>,
+                "<another animation parameter key>": <value>,
                 ...
-            }
-            "<second animation key>": {
+            },
+            "<another animation key>": {
             ...
             }
             ...
