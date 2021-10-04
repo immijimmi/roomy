@@ -13,16 +13,10 @@ class Screen(Entity, ABC):
     for example, the start menu would be one Screen class whereas the game world would be a separate Screen class
     """
 
-    def __init__(self, game: "Game"):
-        self._game = game
-
+    def __init__(self, game):
         # Screen objects are only containers for child entities so as a recurface they simply render a black rectangle
         surface = Surface((game.window.get_width(), game.window.get_height()))
         surface.fill((0, 0, 0))
         position = (0, 0)
 
-        super().__init__(surface, position)
-
-    @property
-    def game(self) -> "Game":
-        return self._game
+        super().__init__(game, surface, position)

@@ -62,6 +62,7 @@ class Game:
 
         state_extended_class = State.with_extensions(Registrar, Listeners)
         save_state = state_extended_class()
+        StateHandler.register_paths(save_state)
 
         try:
             with open("save/save1.json", "r") as file:

@@ -1,4 +1,4 @@
-from pygame import Surface, image
+from pygame import Surface, image, transform
 
 from json import loads
 from typing import Type, Dict, Any
@@ -21,10 +21,10 @@ class AnimationHandler:
         return AnimationHandler.data[target_cls.__name__][animation_key]
 
     @staticmethod
-    def get_frame(file_path: str) -> Surface:
-        AnimationHandler._load_frame(file_path)
+    def get_frame(file_path: str, size: float = 1) -> Surface:
+        AnimationHandler._load_frame(file_path, size)
 
-        return AnimationHandler.frames[file_path]
+        return AnimationHandler.frames[file_path][size]
 
     @staticmethod
     def _load_data(target_cls: Type["Entity.with_extensions(Animated)"]) -> None:
@@ -59,10 +59,13 @@ class AnimationHandler:
                 AnimationHandler.data[target_cls.__name__] = data
 
     @staticmethod
-    def _load_frame(file_path: str) -> None:
+    def _load_frame(file_path: str, size: float) -> None:
         """
-        Loads the animation frame at the target file path, if it is not already loaded
+        Loads the animation frame at the target file path and size, if it is not already loaded.
         """
 
-        if file_path not in AnimationHandler.frames:
-            AnimationHandler.frames[file_path] = image.load(file_path).convert_alpha()
+        if file_path not in AnimationHandler.frames or size not in AnimationHandler.frames[file_path]:
+            frame_sizes = AnimationHandler.frames.get(file_path, {})
+            frame_sizes[size] = transform.rotozoom(image.load(file_path).convert_alpha(), 0, size)
+
+            AnimationHandler.frames[file_path] = frame_sizes
