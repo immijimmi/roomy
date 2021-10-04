@@ -14,11 +14,12 @@ class Animation(ABC):
 
     def __init__(
             self, parent: "Entity.with_extensions(Animated)", animation_key: str,
-            speed: float = 1, priority: Any = None
+            size: float = 1, speed: float = 1, priority: Any = None
     ):
         self._parent = ref(parent)  # Weakref so that it does not prevent parent object being garbage collected
         self._key = animation_key
         self._speed = speed
+        self._size = size
         self._priority = priority
 
         self._data = AnimationHandler.get_data(type(parent), animation_key)
@@ -33,6 +34,14 @@ class Animation(ABC):
     @property
     def key(self) -> Any:
         return self._key
+
+    @property
+    def size(self) -> float:
+        return self._size
+
+    @size.setter
+    def size(self, value: float):
+        self._size = value
 
     @property
     def speed(self) -> float:
@@ -67,7 +76,7 @@ class Animation(ABC):
     def frame(self) -> Surface:
         frame_file_path = self._data[AnimationParams.FRAMES][self.frame_index]
 
-        return AnimationHandler.get_frame(frame_file_path)
+        return AnimationHandler.get_frame(frame_file_path, self._size)
 
     @property
     def frame_index(self) -> int:

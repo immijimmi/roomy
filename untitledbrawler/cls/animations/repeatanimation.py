@@ -8,10 +8,10 @@ from .constants import AnimationParams
 class RepeatAnimation(Animation):
     def __init__(
             self, parent: "Entity.with_extensions(Animated)", animation_key: str,
-            speed: float = 1, priority: Any = None,
+            size: float = 1, speed: float = 1, priority: Any = None,
             frame_duration: Optional[timedelta] = None
     ):
-        super().__init__(parent, animation_key, speed, priority)
+        super().__init__(parent, animation_key, size=size, speed=speed, priority=priority)
 
         if frame_duration is not None:
             self._frame_time = frame_duration
