@@ -66,6 +66,9 @@ class AnimationHandler:
 
         if file_path not in AnimationHandler.frames or size not in AnimationHandler.frames[file_path]:
             frame_sizes = AnimationHandler.frames.get(file_path, {})
-            frame_sizes[size] = transform.rotozoom(image.load(file_path).convert_alpha(), 0, size)
+
+            surface = image.load(file_path).convert_alpha()
+            surface = transform.rotozoom(surface, 0, size)
+            frame_sizes[size] = surface
 
             AnimationHandler.frames[file_path] = frame_sizes

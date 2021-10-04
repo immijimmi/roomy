@@ -24,7 +24,9 @@ class Room(Entity):
         background_key = parent.state.registered_get("room_background_key", [self._room_id])
 
         background_file_path = rf"untitledbrawler\res\{type(self).__name__}\{background_key}.png"
-        self.surface = transform.rotozoom(image.load(background_file_path).convert_alpha(), 0, size)
+        surface = image.load(background_file_path).convert_alpha()
+        surface = transform.rotozoom(surface, 0, size)
+        self.surface = surface
 
     def _load_room(self, parent):
         curr_room_occupants_ids: Iterable[str] = parent.state.registered_get("room_occupants_ids", [self._room_id])
