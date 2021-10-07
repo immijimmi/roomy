@@ -5,17 +5,11 @@ from ..room import Room
 
 
 class World(Screen):
-    def __init__(self, game: "Game", state: State):
-        super().__init__(game)
+    def __init__(self, game, state):
+        super().__init__(game, state)
 
-        self._state = state
         self._curr_room = None
-
         self.set_room()
-
-    @property
-    def state(self) -> State:
-        return self._state
 
     @property
     def curr_room(self) -> Room:

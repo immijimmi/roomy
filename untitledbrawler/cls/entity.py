@@ -11,15 +11,24 @@ class Entity(Extendable, Recurface, ABC):
     An Entity is any object that has a place in the rendering hierarchy.
     """
 
-    def __init__(self, game, surface: Surface = None, position: Optional[Sequence[int]] = None, priority: Any = None):
+    def __init__(
+            self, game: "Game", state: "State.with_extensions(Registrar)",
+            parent: Optional["Entity"] = None, surface: Optional[Surface] = None,
+            position: Optional[Sequence[int]] = None, priority: Any = None
+    ):
         Extendable.__init__(self)
-        Recurface.__init__(self, surface=surface, position=position, priority=priority)
+        Recurface.__init__(self, parent=parent, surface=surface, position=position, priority=priority)
 
         self._game = game
+        self._state = state
 
     @property
     def game(self):
         return self._game
+
+    @property
+    def state(self):
+        return self._state
 
     def update(self, elapsed_ms: int, events: Tuple):
         self._update(elapsed_ms, events)
