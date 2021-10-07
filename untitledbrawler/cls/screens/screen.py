@@ -19,4 +19,4 @@ class Screen(Entity, ABC):
         surface.fill((0, 0, 0))
         position = (0, 0)
 
-        super().__init__(game, surface, position)
+        super().__init__(game, surface=surface, position=position)

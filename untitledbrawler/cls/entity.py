@@ -13,7 +13,7 @@ class Entity(Extendable, Recurface, ABC):
 
     def __init__(self, game, surface: Surface = None, position: Optional[Sequence[int]] = None, priority: Any = None):
         Extendable.__init__(self)
-        Recurface.__init__(self, surface, position, priority)
+        Recurface.__init__(self, surface=surface, position=position, priority=priority)
 
         self._game = game
 
@@ -24,7 +24,8 @@ class Entity(Extendable, Recurface, ABC):
     def update(self, elapsed_ms: int, events: Tuple):
         self._update(elapsed_ms, events)
 
-        for child in self.children:
+        child: Entity
+        for child in self.child_recurfaces:
             child.update(elapsed_ms, events)
 
     def _update(self, elapsed_ms: int, events: Tuple):
