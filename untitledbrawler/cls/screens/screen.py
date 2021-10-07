@@ -3,6 +3,7 @@ from pygame import Surface
 from abc import ABC
 
 from ..entity import Entity
+from ..constants import Constants as ClassConstants
 
 
 class Screen(Entity, ABC):
@@ -16,7 +17,7 @@ class Screen(Entity, ABC):
     def __init__(self, game):
         # Screen objects are only containers for child entities so as a recurface they simply render a black rectangle
         surface = Surface((game.window.get_width(), game.window.get_height()))
-        surface.fill((0, 0, 0))
+        surface.fill(ClassConstants.COLOURS["dev"])
         position = (0, 0)
 
         super().__init__(game, surface=surface, position=position)
