@@ -48,7 +48,7 @@ class Game:
 
     def update(self) -> None:
         elapsed_ms = self._clock.tick(self.fps)
-        events = tuple(pygame.event.get())
+        events = list(pygame.event.get())  # Events are passed in a list so that they can be consumed if necessary
 
         self._screen.update(elapsed_ms, events)
 
