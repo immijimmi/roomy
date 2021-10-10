@@ -9,7 +9,7 @@ from .roomoccupants import RoomOccupant
 
 class Room(Entity):
     def __init__(self, parent: Entity, room_id: str):
-        super().__init__(parent.game, parent.state, parent=parent, position=(0, 0))
+        super().__init__(parent.game, parent.state, parent=parent, position=(0, 0), priority=0)
 
         self._room_id = room_id
 

@@ -11,6 +11,8 @@ class World(Screen):
         self._curr_room = None
         self.set_room()
 
+        ##### TODO: Render UI layer
+
     @property
     def curr_room(self) -> Room:
         return self._curr_room
