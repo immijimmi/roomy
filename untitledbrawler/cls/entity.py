@@ -9,6 +9,10 @@ from typing import Optional, Sequence, Any
 class Entity(Extendable, Recurface, ABC):
     """
     An Entity is any object that has a place in the rendering hierarchy.
+
+    Explanation of additional constructor param requirements:
+    - game: A reference to the Game instance allows all entities to navigate the object hierarchy from a static origin
+    - state: Passed to all Entity objects for convenience in accessing the state object
     """
 
     def __init__(
