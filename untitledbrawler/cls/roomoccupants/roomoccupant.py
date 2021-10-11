@@ -1,3 +1,5 @@
+from typing import Sequence
+
 from ..entity import Entity
 
 
@@ -9,4 +11,7 @@ class RoomOccupant(Entity):
     and will not be saved to the game state
     """
 
-    pass  ##### TODO
+    def __init__(self, parent: Entity, render_position: Sequence[int], surface=None, priority=None):
+        super().__init__(
+            parent.game, parent.state, parent=parent, surface=surface, position=render_position, priority=priority
+        )
