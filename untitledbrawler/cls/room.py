@@ -4,7 +4,7 @@ from typing import Iterable
 
 from .methods import Methods
 from .entity import Entity
-from .roomoccupants import RoomOccupant
+from .roomoccupants import *
 
 
 class Room(Entity):
