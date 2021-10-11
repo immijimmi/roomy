@@ -18,4 +18,4 @@ class Screen(Entity, ABC):
         surface = Surface((game.window.get_width(), game.window.get_height()))
         surface.fill(ClassConstants.COLOURS["dev"])
 
-        super().__init__(game, state, surface=surface, position=position)
+        super().__init__(game, state, surface=surface, position=position, parent=None, priority=None)
