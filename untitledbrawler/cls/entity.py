@@ -17,7 +17,7 @@ class Entity(Extendable, Recurface, ABC):
             position: Optional[Sequence[int]] = None, priority: Any = None
     ):
         Extendable.__init__(self)
-        Recurface.__init__(self, parent=parent, surface=surface, position=position, priority=priority)
+        Recurface.__init__(self, surface=surface, parent=parent, position=position, priority=priority)
 
         self._game = game
         self._state = state
