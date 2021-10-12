@@ -2,9 +2,9 @@ from pygame import transform, image
 
 from typing import Iterable
 
+from .roomoccupants import *
 from .methods import Methods
 from .entity import Entity
-from .roomoccupants import *
 
 
 class Room(Entity):
