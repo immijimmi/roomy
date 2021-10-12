@@ -35,7 +35,9 @@ class Room(Entity):
         for room_occupant_id in curr_room_occupants_ids:
             room_occupant_data: dict = self.state.registered_get("room_occupant", [room_occupant_id])
 
-            occupant_class: RoomOccupant = Methods.get_class_from_str(room_occupant_data["class"])
+            occupant_class: RoomOccupant = Methods.get_class_from_str(
+                room_occupant_data["class"]["module"], room_occupant_data["class"]["name"]
+            )
             occupant_stats: dict = room_occupant_data["stats"]
 
             self.add_child_recurface(occupant_class(self, **occupant_stats))
@@ -43,7 +45,9 @@ class Room(Entity):
         for player_id in curr_players_ids:
             player_data: dict = self.state.registered_get("player", [player_id])
 
-            player_class: RoomOccupant = Methods.get_class_from_str(player_data["class"])
+            player_class: RoomOccupant = Methods.get_class_from_str(
+                player_data["class"]["module"], player_data["class"]["name"]
+            )
             player_stats: dict = player_data["stats"]
 
             self.add_child_recurface(player_class(self, **player_stats))
