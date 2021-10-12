@@ -18,15 +18,20 @@ class StateHandler:
 
     @staticmethod
     def generate_new_save_data(save_state: State.with_extensions(Registrar)):
+        StateHandler._generate_room_occupants(save_state)
         StateHandler._generate_rooms(save_state)
 
-        ##### TODO: Incomplate. All initial worldgen will be in here
+        ##### TODO: Incomplete. All initial worldgen will be in here
 
     @staticmethod
-    def _generate_rooms(save_state: State.with_extensions(Registrar)):
+    def _generate_rooms(save_state):
         for room_id in StateHandler.ROOM_STATES:
             room_state = StateHandler.ROOM_STATES[room_id]
             save_state.registered_set(room_state, "room", [room_id])
+
+    @staticmethod
+    def _generate_room_occupants(save_state):
+        pass
 
     @staticmethod
     def register_paths(save_state: State.with_extensions(Registrar)):
