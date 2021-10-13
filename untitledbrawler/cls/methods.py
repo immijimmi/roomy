@@ -2,10 +2,24 @@ from sys import modules
 
 
 class Methods:
-    @staticmethod
-    def get_class_from_str(class_module: str, class_name: str):
-        """
-        class_module is in the format: 'game.cls.classfilename' where game and cls are directory names
-        """
+    CLASSES = {}
 
-        return getattr(modules[class_module], class_name)
+    @staticmethod
+    def get_class_from_str(class_name: str):
+        Methods._load_class(class_name)
+
+        return Methods.CLASSES[class_name]
+
+    @staticmethod
+    def _load_class(class_name: str):
+        if class_name in Methods.CLASSES:
+            return
+
+        for module_name in modules:
+            if "cls." in module_name:
+                module = modules[module_name]
+
+                try:
+                    Methods.CLASSES[class_name] = getattr(module, class_name)
+                except AttributeError:
+                    pass
