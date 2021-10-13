@@ -10,21 +10,21 @@ class AnimationHandler:
     """
 
     # For performance optimisation. Stores data which has already been loaded before using file paths as their keys
-    data = {}
+    DATA = {}
     # For performance optimisation, stores frames which have already been generated using file paths as their keys
-    frames = {}
+    FRAMES = {}
 
     @staticmethod
     def get_data(target_cls: Type["Entity.with_extensions(Animated)"], animation_key: str) -> Dict[str, Any]:
         AnimationHandler._load_data(target_cls)
 
-        return AnimationHandler.data[target_cls.__name__][animation_key]
+        return AnimationHandler.DATA[target_cls.__name__][animation_key]
 
     @staticmethod
     def get_frame(file_path: str, size: float = 1) -> Surface:
         AnimationHandler._load_frame(file_path, size)
 
-        return AnimationHandler.frames[file_path][size]
+        return AnimationHandler.FRAMES[file_path][size]
 
     @staticmethod
     def _load_data(target_cls: Type["Entity.with_extensions(Animated)"]) -> None:
@@ -51,12 +51,12 @@ class AnimationHandler:
         }
         """
 
-        if target_cls.__name__ not in AnimationHandler.data:
+        if target_cls.__name__ not in AnimationHandler.DATA:
             animation_data_file_path = rf"untitledbrawler\res\{target_cls.__name__}\animation_data.json"
 
             with open(animation_data_file_path, "r") as file:
                 data = loads(file.read())
-                AnimationHandler.data[target_cls.__name__] = data
+                AnimationHandler.DATA[target_cls.__name__] = data
 
     @staticmethod
     def _load_frame(file_path: str, size: float) -> None:
@@ -64,11 +64,11 @@ class AnimationHandler:
         Loads the animation frame at the target file path and size, if it is not already loaded.
         """
 
-        if file_path not in AnimationHandler.frames or size not in AnimationHandler.frames[file_path]:
-            frame_sizes = AnimationHandler.frames.get(file_path, {})
+        if file_path not in AnimationHandler.FRAMES or size not in AnimationHandler.FRAMES[file_path]:
+            frame_sizes = AnimationHandler.FRAMES.get(file_path, {})
 
             surface = image.load(file_path).convert_alpha()
             surface = transform.rotozoom(surface, 0, size)
             frame_sizes[size] = surface
 
-            AnimationHandler.frames[file_path] = frame_sizes
+            AnimationHandler.FRAMES[file_path] = frame_sizes
