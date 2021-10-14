@@ -1,7 +1,7 @@
 from objectextensions import Extension
 
 from ..entity import Entity
-from ..animations import RepeatAnimation
+from ..animations import Animation
 
 
 class Animated(Extension):
@@ -14,19 +14,18 @@ class Animated(Extension):
         Extension._wrap(target_cls, "__init__", Animated.__wrap_init)
         Extension._wrap(target_cls, "update", Animated.__wrap_update)
 
-        Extension._set(target_cls, "default_animation_key", Animated.__default_animation_key)
+        Extension._set(target_cls, "get_default_animation", Animated.__generate_default_animation)
 
-    @property
-    def __default_animation_key(self) -> str:
+    def __generate_default_animation(self) -> Animation:
         """
-        .default_animation_key must be overridden in the subclass with a property that provides a valid animation key
+        Must be overridden in subclasses with a method that provides a valid animation
         """
 
         raise NotImplementedError
 
     def __wrap_init(self, *args, **kwargs):
         yield
-        Extension._set(self, "animation", RepeatAnimation(self, self.default_animation_key))
+        Extension._set(self, "animation", self.get_default_animation())
 
     def __wrap_update(self, elapsed_ms, events):
         yield
