@@ -14,7 +14,7 @@ class Animated(Extension):
         Extension._wrap(target_cls, "__init__", Animated.__wrap_init)
         Extension._wrap(target_cls, "update", Animated.__wrap_update)
 
-        Extension._set(target_cls, "get_default_animation", Animated.__generate_default_animation)
+        Extension._set(target_cls, "generate_default_animation", Animated.__generate_default_animation)
 
     def __generate_default_animation(self) -> Animation:
         """
@@ -25,7 +25,7 @@ class Animated(Extension):
 
     def __wrap_init(self, *args, **kwargs):
         yield
-        Extension._set(self, "animation", self.get_default_animation())
+        Extension._set(self, "animation", self.generate_default_animation())
 
     def __wrap_update(self, elapsed_ms, events):
         yield
