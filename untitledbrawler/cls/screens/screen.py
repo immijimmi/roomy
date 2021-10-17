@@ -4,6 +4,7 @@ from abc import ABC
 
 from ..entity import Entity
 from ..constants import Constants as ClassConstants
+from ..hitboxmanager import HitboxManager
 
 
 class Screen(Entity, ABC):
@@ -19,3 +20,9 @@ class Screen(Entity, ABC):
         surface.fill(ClassConstants.COLOURS["dev"])
 
         super().__init__(game, state, surface=surface, position=position, parent=None, priority=None)
+
+        self._hitbox_manager = HitboxManager(self)
+
+    @property
+    def hitbox_manager(self) -> HitboxManager:
+        return self._hitbox_manager
