@@ -99,7 +99,3 @@ class Animation(ABC):
 
         self._elapsed += elapsed
         self._elapsed_effective += effective_elapsed
-
-    def set(self, animation: "Animation"):
-        if animation.priority >= self._priority:
-            self.parent.animation = animation
