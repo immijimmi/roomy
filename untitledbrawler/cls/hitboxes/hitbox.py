@@ -20,5 +20,5 @@ class Hitbox(ABC):
     def parent(self) -> "Entity.with_extensions(Hitboxed)":
         return self._parent()
 
-    def is_collision(self, other: "Hitbox"):
+    def is_collision(self, other: "Hitbox") -> bool:
         raise NotImplementedError
