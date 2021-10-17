@@ -16,10 +16,11 @@ class Animation(ABC):
             self, parent: "Entity.with_extensions(Animated)", animation_key: str,
             size: float = 1, speed: float = 1, priority: Any = None
     ):
+        self.size: float = size
+        self.speed: float = speed
+
         self._parent = ref(parent)  # Weakref so that it does not prevent parent object being garbage collected
         self._key = animation_key
-        self._speed = speed
-        self._size = size
         self._priority = priority
 
         self._data = AnimationHandler.get_data(type(parent), animation_key)
@@ -34,22 +35,6 @@ class Animation(ABC):
     @property
     def key(self) -> Any:
         return self._key
-
-    @property
-    def size(self) -> float:
-        return self._size
-
-    @size.setter
-    def size(self, value: float):
-        self._size = value
-
-    @property
-    def speed(self) -> float:
-        return self._speed
-
-    @speed.setter
-    def speed(self, value: float):
-        self._speed = value
 
     @property
     def priority(self) -> Any:
