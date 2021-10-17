@@ -12,7 +12,7 @@ class Game:
     fps = 144
 
     def __init__(self):
-        self._observers = ObserverManager(self)
+        self._observer_manager = ObserverManager(self)
 
         pygame.init()
         self._window = pygame.display.set_mode(self.resolution)
@@ -24,8 +24,8 @@ class Game:
         self.run()
 
     @property
-    def observers(self) -> ObserverManager:
-        return self._observers
+    def observer_manager(self) -> ObserverManager:
+        return self._observer_manager
 
     @property
     def screen(self) -> Screen:
@@ -39,7 +39,7 @@ class Game:
         old_screen = self._screen
         self._screen = new_screen
 
-        self._observers.on_change_screen(old_screen, new_screen)
+        self._observer_manager.on_change_screen(old_screen, new_screen)
 
     def run(self) -> None:
         while True:

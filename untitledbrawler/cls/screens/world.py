@@ -28,4 +28,4 @@ class World(Screen):
         old_room = self._curr_room
         self._curr_room = Room(self, new_room_id)
 
-        self.game.observers.on_change_room(old_room, self.curr_room)
+        self.game.observer_manager.on_change_room(old_room, self.curr_room)
