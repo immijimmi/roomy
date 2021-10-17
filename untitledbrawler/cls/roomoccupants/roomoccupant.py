@@ -1,9 +1,10 @@
 from typing import Sequence
+from abc import ABC
 
 from ..entity import Entity
 
 
-class RoomOccupant(Entity):
+class RoomOccupant(Entity, ABC):
     """
     Represents a persisting entity in a room.
     This includes people, inanimate objects, decorative objects, objects with no collision etc.
