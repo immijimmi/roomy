@@ -15,6 +15,7 @@ class Game:
         self._observer_manager = ObserverManager(self)
 
         pygame.init()
+        pygame.mixer.init()
         self._window = pygame.display.set_mode(self.resolution)
         self._clock = pygame.time.Clock()
 
