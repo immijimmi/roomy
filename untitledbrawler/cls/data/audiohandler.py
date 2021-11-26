@@ -61,6 +61,19 @@ class AudioHandler:
             del AudioHandler.AUDIO_BY_ENTITY_ID[id(entity)]
 
     @staticmethod
+    def get_channel():
+        """
+        This method will be called in the constructor of Audio, to provide it with an idle (or new) Channel object
+        """
+
+        channel = mixer.find_channel()
+        if channel:
+            return channel
+
+        mixer.set_num_channels(mixer.get_num_channels()+1)
+        return mixer.Channel(mixer.get_num_channels()-1)
+
+    @staticmethod
     def get_sound(audio: "Audio") -> mixer.Sound:
         """
         This method will be called in the constructor of Audio, to provide it with the relevant Sound object

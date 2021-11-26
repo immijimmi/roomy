@@ -24,12 +24,7 @@ class Audio:
         self._parent = ref(parent)  # Weakref so that it does not prevent parent object being garbage collected
         self._is_paused = False
 
-        """
-        Due to limitations with the way pygame implements channels, each Audio object will simply be assigned its own
-        channel for its lifespan. These are reserved using the id of the Audio instance in question
-        """
-        self._channel = mixer.Channel(id(self))
-
+        self._channel = AudioHandler.get_channel()
         self._sound = AudioHandler.get_sound(self)
         if self.status != AudioStatuses.PLAYING:
             self._channel.set_volume(0)
