@@ -5,7 +5,7 @@ from pygame import mixer
 
 class AudioHandler:
     """
-    Helper class which retrieves and stores sound objects, and handles
+    Helper class which retrieves and stores Sound objects, and handles various aspects of Audio objects
     """
 
     # For performance optimisation. Stores sounds which have already been loaded before, using file paths as their keys
