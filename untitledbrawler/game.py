@@ -52,6 +52,7 @@ class Game:
         events = list(pygame.event.get())  # Events are passed in a list so that they can be consumed if necessary
 
         self._screen.update(elapsed_ms, events)
+        AudioHandler.update(elapsed_ms)  # Audio is handled at the top level since it may persist between screens
 
     def render(self) -> None:
         updated_rects = self._screen.render(self._window)

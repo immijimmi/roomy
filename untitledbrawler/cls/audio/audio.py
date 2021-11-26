@@ -48,6 +48,10 @@ class Audio:
         return self._file_path
 
     def update(self, elapsed_ms: int):
+        """
+        This method will be called by AudioHandler once per game tick
+        """
+
         # Check if Sound has finished playing naturally
         if not self._channel.get_busy():
             self.status = AudioStatuses.STOPPED
