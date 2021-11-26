@@ -9,9 +9,9 @@ class AnimationHandler:
     Helper class which retrieves and stores animation data
     """
 
-    # For performance optimisation. Stores data which has already been loaded before using file paths as their keys
+    # For performance optimisation. Stores data which has already been loaded before, using file paths as their keys
     DATA = {}
-    # For performance optimisation, stores frames which have already been generated using file paths as their keys
+    # For performance optimisation, stores frames which have already been generated, using file paths as their keys
     FRAMES = {}
 
     @staticmethod
