@@ -43,7 +43,7 @@ class AudioHandler:
         """
 
         for audio in AudioHandler.AUDIO_OBJECTS:
-            audio.update()
+            audio.update(elapsed_ms)
 
     @staticmethod
     def delist_by_entity(entity: "Entity"):
