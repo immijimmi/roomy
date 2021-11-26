@@ -48,6 +48,10 @@ class Audio:
         return self._file_path
 
     def update(self, elapsed_ms: int):
+        # Check if Sound has finished playing naturally
+        if not self._channel.get_busy():
+            self.status = AudioStatuses.STOPPED
+
         # Pausing logic
         if self._is_paused:
             if self.status not in (AudioStatuses.PAUSED, AudioStatuses.STOPPED):
