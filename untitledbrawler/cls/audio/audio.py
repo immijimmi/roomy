@@ -12,7 +12,7 @@ class Audio:
     """
 
     def __init__(
-            self, parent: "Entity.with_extensions(Animated)", file_path: str,
+            self, parent: "Entity", file_path: str,
             volume: float = 1.0, status: str = AudioStatuses.PLAYING,
             full_fade_ms: int = 1000
     ):
@@ -40,7 +40,7 @@ class Audio:
         self.update(0)  # AudioHandler will make any successive calls to .update()
 
     @property
-    def parent(self) -> "Entity.with_extensions(Animated)":
+    def parent(self) -> "Entity":
         return self._parent()
 
     @property
