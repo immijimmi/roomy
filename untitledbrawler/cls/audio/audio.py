@@ -12,7 +12,7 @@ class Audio:
     """
 
     def __init__(
-            self, parent: "Entity.with_extensions(Animated)", file_name: str,
+            self, parent: "Entity.with_extensions(Animated)", file_path: str,
             volume: float = 1.0, status: str = AudioStatuses.PLAYING,
             full_fade_ms: int = 1000
     ):
@@ -20,7 +20,7 @@ class Audio:
         self.status = status
         self.full_fade_ms = full_fade_ms  # Dictates the time a fade from 0% to 100% or vice versa would take.
 
-        self._file_name = file_name
+        self._file_path = file_path
         self._parent = ref(parent)  # Weakref so that it does not prevent parent object being garbage collected
         self._is_paused = False
 
@@ -39,8 +39,8 @@ class Audio:
         return self._parent()
 
     @property
-    def file_name(self) -> str:
-        return self._file_name
+    def file_path(self) -> str:
+        return self._file_path
 
     def update(self, elapsed_ms: int):
         # Pausing logic
