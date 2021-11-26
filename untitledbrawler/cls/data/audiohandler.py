@@ -42,7 +42,7 @@ class AudioHandler:
         This method is to be called once per game tick, and will in turn update all Audio instances
         """
 
-        for audio in AudioHandler.AUDIO_OBJECTS:
+        for audio in frozenset(AudioHandler.AUDIO_OBJECTS):
             audio.update(elapsed_ms)
 
     @staticmethod
