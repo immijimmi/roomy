@@ -11,7 +11,7 @@ class AnimationHandler:
 
     # For performance optimisation. Stores data which has already been loaded before, using file paths as their keys
     DATA = {}
-    # For performance optimisation, stores frames which have already been generated, using file paths as their keys
+    # For performance optimisation. Stores frames which have already been generated, using file paths as their keys
     FRAMES = {}
 
     @staticmethod
