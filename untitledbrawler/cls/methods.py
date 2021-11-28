@@ -6,8 +6,8 @@ class Methods:
     CLASSES = {}
 
     @staticmethod
-    def get_class_attrs(cls) -> Dict[str, Any]:
-        return {k: v for k, v in vars(cls).items() if not k.startswith("__")}
+    def get_class_attrs(target_cls: type) -> Dict[str, Any]:
+        return {k: v for k, v in vars(target_cls).items() if not k.startswith("__")}
 
     @staticmethod
     def get_class_from_str(class_name: str):
