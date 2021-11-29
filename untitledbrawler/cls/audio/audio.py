@@ -17,6 +17,9 @@ class Audio:
             volume: float = 1.0, status: str = AudioStatuses.PLAYING,
             fade_ms: int = 1000
     ):
+        self._is_paused = False
+        self._is_playing = False
+
         self.volume = volume  # Implemented as mono for the time being
         self.fade_ms = fade_ms  # Only used if status is set to .FADING_IN or .FADING_OUT
 
@@ -25,9 +28,6 @@ class Audio:
 
         self._status = None
         self.status = status
-
-        self._is_paused = False
-        self._is_playing = False
 
         self._channel = AudioHandler.get_channel()
         self._sound = AudioHandler.get_sound(self)
