@@ -19,6 +19,7 @@ class Audio:
     ):
         self._is_paused = False
         self._is_playing = False
+        self._is_fading_out = False
 
         self.volume = volume  # Implemented as mono for the time being
         self.fade_ms = fade_ms  # Only used if status is set to .FADING_IN or .FADING_OUT
@@ -75,6 +76,7 @@ class Audio:
             if self.status == AudioStatuses.FADING_IN:
                 self._channel.play(self._sound, fade_ms=self.fade_ms)
                 self._is_playing = True
+                self.status = AudioStatuses.PLAYING
 
             elif self.status == AudioStatuses.PLAYING:
                 self._channel.play(self._sound)
@@ -97,17 +99,14 @@ class Audio:
             if self.status == AudioStatuses.PAUSED:
                 pass
 
-            elif self.status == AudioStatuses.FADING_IN:
-                if self._channel.get_volume() == self.volume:
-                    self.status = AudioStatuses.PLAYING
-
             elif self.status == AudioStatuses.PLAYING:
                 if self._channel.get_volume() != self.volume:
                     self._channel.set_volume(self.volume)
 
             elif self.status == AudioStatuses.FADING_OUT:
-                if self._channel.get_volume() == self.volume:
+                if not self._is_fading_out:
                     self._channel.fadeout(self.fade_ms)
+                    self._is_fading_out = True
 
                 else:
                     if not self._channel.get_busy():
