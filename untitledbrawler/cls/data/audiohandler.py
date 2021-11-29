@@ -13,12 +13,14 @@ class AudioHandler:
 
     # Audio objects are stored in multiple ways to optimise for performance when querying for them
     AUDIO_OBJECTS = set()
+    AUDIO_OBJECTS_FROZEN = frozenset(AUDIO_OBJECTS)  # Should be updated whenever AUDIO_OBJECTS is altered
     AUDIO_BY_FILE_PATH = {}
     AUDIO_BY_ENTITY_ID = {}  # Uses IDs as keys so that it does not prevent the entity being garbage collected
 
     @staticmethod
     def add(audio: "Audio") -> None:
         AudioHandler.AUDIO_OBJECTS.add(audio)
+        AudioHandler.AUDIO_OBJECTS_FROZEN = frozenset(AudioHandler.AUDIO_OBJECTS)
 
         if audio.file_path not in AudioHandler.AUDIO_BY_FILE_PATH:
             AudioHandler.AUDIO_BY_FILE_PATH[audio.file_path] = set()
@@ -31,19 +33,21 @@ class AudioHandler:
     @staticmethod
     def remove(audio: "Audio") -> None:
         AudioHandler.AUDIO_OBJECTS.remove(audio)
+        AudioHandler.AUDIO_OBJECTS_FROZEN = frozenset(AudioHandler.AUDIO_OBJECTS)
+
         AudioHandler.AUDIO_BY_FILE_PATH[audio.file_path].remove(audio)
 
         if audio in AudioHandler.AUDIO_BY_ENTITY_ID[id(audio)]:  # Necessary to account for delisted Audio instances
             AudioHandler.AUDIO_BY_ENTITY_ID[id(audio)].remove(audio)
 
     @staticmethod
-    def update(elapsed_ms: int) -> None:
+    def update() -> None:
         """
         This method is to be called once per game tick, and will in turn update all Audio instances
         """
 
-        for audio in frozenset(AudioHandler.AUDIO_OBJECTS):
-            audio.update(elapsed_ms)
+        for audio in AudioHandler.AUDIO_OBJECTS_FROZEN:
+            audio.update()
 
     @staticmethod
     def delist_by_entity(entity: "Entity"):

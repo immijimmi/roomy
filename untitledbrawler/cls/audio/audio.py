@@ -2,8 +2,9 @@ from pygame import mixer
 
 from weakref import ref
 
-from ..data import AudioHandler
 from .constants import AudioStatuses
+from ..data import AudioHandler
+from ..methods import Methods
 
 
 class Audio:
@@ -14,25 +15,47 @@ class Audio:
     def __init__(
             self, parent: "Entity", file_path: str,
             volume: float = 1.0, status: str = AudioStatuses.PLAYING,
-            full_fade_ms: int = 1000
+            fade_ms: int = 1000
     ):
-        self.volume = volume  # No support for stereo volume as of yet
-        self.status = status
-        self.full_fade_ms = full_fade_ms  # Dictates the time a fade from 0% to 100% or vice versa would take.
+        self.volume = volume  # Implemented as mono for the time being
+        self.fade_ms = fade_ms  # Only used if status is set to .FADING_IN or .FADING_OUT
 
         self._file_path = file_path
         self._parent = ref(parent)  # Weakref so that it does not prevent parent object being garbage collected
+
+        self._status = None
+        self.status = status
+
         self._is_paused = False
+        self._is_playing = False
 
         self._channel = AudioHandler.get_channel()
         self._sound = AudioHandler.get_sound(self)
-        if self.status != AudioStatuses.PLAYING:
-            self._channel.set_volume(0)
 
+        self._channel.set_volume(self.volume)
         AudioHandler.add(self)
 
-        self._channel.play(self._sound)
-        self.update(0)  # AudioHandler will make any successive calls to .update()
+        self.update()  # AudioHandler will make any successive calls to .update()
+
+    @property
+    def status(self) -> str:
+        return self._status
+
+    @status.setter
+    def status(self, value: str):
+        assert value in Methods.get_class_attrs(AudioStatuses).values(), f"invalid Audio status: {value}"
+
+        if self._status == AudioStatuses.FADING_OUT:  # This is checking the *current* status, not checking `value`
+            raise RuntimeError("Audio status cannot be changed once it has begun fading out")
+
+        if not self._is_playing:
+            if value not in AudioStatuses.VALID_INITIAL_STATUSES:
+                raise ValueError(f"initial Audio status must be one of {AudioStatuses.VALID_INITIAL_STATUSES}")
+        else:
+            if value == AudioStatuses.FADING_IN:
+                raise ValueError("Audio cannot fade in once it has already begun playing")
+
+        self._status = value
 
     @property
     def parent(self) -> "Entity":
@@ -42,68 +65,58 @@ class Audio:
     def file_path(self) -> str:
         return self._file_path
 
-    def update(self, elapsed_ms: int):
+    def update(self):
         """
         This method will be called by AudioHandler once per game tick
         """
 
-        # Check if Sound has finished playing naturally
-        if not self._channel.get_busy():
-            self.status = AudioStatuses.STOPPED
+        if not self._is_playing:
+            # Status handling
+            if self.status == AudioStatuses.FADING_IN:
+                self._channel.play(self._sound, fade_ms=self.fade_ms)
+                self._is_playing = True
 
-        # Pausing logic
-        if self._is_paused:
-            if self.status not in (AudioStatuses.PAUSED, AudioStatuses.STOPPED):
-                self._channel.unpause()
-                self._is_paused = False
+            elif self.status == AudioStatuses.PLAYING:
+                self._channel.play(self._sound)
+                self._is_playing = True
+
+            elif self.status == AudioStatuses.PAUSED:
+                pass
+
         else:
-            if self.status == AudioStatuses.PAUSED:
+            # Pause handling
+            if self.status == AudioStatuses.PAUSED and not self._is_paused:
                 self._channel.pause()
                 self._is_paused = True
 
-        # Individual status logic
-        if self.status == AudioStatuses.PAUSED:
-            pass  # Status is handled above
+            elif self.status not in AudioStatuses.SILENT_STATUSES and self._is_paused:
+                self._channel.unpause()
+                self._is_paused = False
 
-        elif self.status == AudioStatuses.PLAYING:
-            if self._channel.get_volume() != self.volume:
-                self._channel.set_volume(self.volume)
+            # Status handling
+            if self.status == AudioStatuses.PAUSED:
+                pass
 
-        elif self.status == AudioStatuses.FADING_IN:
-            if (curr_volume := self._channel.get_volume()) != self.volume:
-                volume_diff = self.volume - curr_volume
-                max_fade = min(1.0, elapsed_ms / self.full_fade_ms)
+            elif self.status == AudioStatuses.FADING_IN:
+                if self._channel.get_volume() == self.volume:
+                    self.status = AudioStatuses.PLAYING
 
-                positive_capped_fade = min(max_fade, volume_diff)
-                capped_fade = max(-max_fade, positive_capped_fade)  # Capped in both positive and negative directions
+            elif self.status == AudioStatuses.PLAYING:
+                if self._channel.get_volume() != self.volume:
+                    self._channel.set_volume(self.volume)
 
-                self._channel.set_volume(curr_volume + capped_fade)
+            elif self.status == AudioStatuses.FADING_OUT:
+                if self._channel.get_volume() == self.volume:
+                    self._channel.fadeout(self.fade_ms)
 
-            if curr_volume == self.volume:
-                self.status = AudioStatuses.PLAYING
+                else:
+                    if not self._channel.get_busy():
+                        self._stop()
 
-        elif self.status == AudioStatuses.FADING_OUT:
-            if (curr_volume := self._channel.get_volume()) != 0:
-                volume_diff = 0 - curr_volume
-                max_fade = min(1.0, elapsed_ms / self.full_fade_ms)
-
-                positive_capped_fade = min(max_fade, volume_diff)
-                capped_fade = max(-max_fade, positive_capped_fade)  # Capped in both positive and negative directions
-
-                self._channel.set_volume(curr_volume + capped_fade)
-
-            if curr_volume == 0:
-                self.status = AudioStatuses.STOPPED
+            elif self.status == AudioStatuses.STOPPED:
                 self._stop()
 
-        elif self.status == AudioStatuses.STOPPED:
-            self._stop()
-
-        else:
-            raise ValueError(self.status)
-
     def _stop(self):
-        self._sound.stop()
         self._channel.stop()
 
         AudioHandler.remove(self)
