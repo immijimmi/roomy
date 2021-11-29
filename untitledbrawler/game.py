@@ -5,6 +5,7 @@ import pygame
 from json import loads
 
 from .cls import *
+from .constants import Constants
 
 
 class Game:
@@ -14,8 +15,10 @@ class Game:
     def __init__(self):
         self._observer_manager = ObserverManager(self)
 
+        pygame.mixer.pre_init(frequency=Constants.AUDIO_FREQUENCY)
         pygame.init()
         pygame.mixer.init()
+
         self._window = pygame.display.set_mode(self.resolution)
         self._clock = pygame.time.Clock()
 
