@@ -2,6 +2,8 @@ from typing import Hashable
 
 from pygame import mixer
 
+from ..constants import AudioStatuses
+
 
 class AudioHandler:
     """
@@ -19,6 +21,11 @@ class AudioHandler:
 
     @staticmethod
     def add(audio: "Audio") -> None:
+        """
+        This method will be called automatically by Audio during normal execution, and does not need to be called
+        elsewhere
+        """
+
         AudioHandler.AUDIO_OBJECTS.add(audio)
         AudioHandler.AUDIO_OBJECTS_FROZEN = frozenset(AudioHandler.AUDIO_OBJECTS)
 
@@ -32,6 +39,14 @@ class AudioHandler:
 
     @staticmethod
     def remove(audio: "Audio") -> None:
+        """
+        This method will be called automatically by Audio during normal execution.
+        It can be called elsewhere to safely get rid of an Audio instance that has not yet begun playing
+        """
+
+        assert audio.status == AudioStatuses.STOPPED or not audio.is_playing, \
+            "AudioHandler.remove() should only be called manually on Audio instances that have not begun playing"
+
         AudioHandler.AUDIO_OBJECTS.remove(audio)
         AudioHandler.AUDIO_OBJECTS_FROZEN = frozenset(AudioHandler.AUDIO_OBJECTS)
 

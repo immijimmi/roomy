@@ -2,7 +2,7 @@ from pygame import mixer
 
 from weakref import ref
 
-from .constants import AudioStatuses
+from ..constants import AudioStatuses
 from ..data import AudioHandler
 from ..methods import Methods
 
@@ -17,9 +17,9 @@ class Audio:
             volume: float = 1.0, status: str = AudioStatuses.PLAYING,
             fade_ms: int = 1000
     ):
-        self._is_paused = False
-        self._is_playing = False
-        self._is_fading_out = False
+        self._is_playing = False  # Indicates whether the audio has ever begun playing
+        self._is_paused = False  # Indicates whether the audio was previously playing and is now paused
+        self._is_fading_out = False  # Indicates whether the audio was previously playing and is now fading out
 
         self.volume = volume  # Implemented as mono for the time being
         self.fade_ms = fade_ms  # Only used if status is set to .FADING_IN or .FADING_OUT
@@ -57,6 +57,10 @@ class Audio:
                 raise ValueError("Audio cannot fade in once it has already begun playing")
 
         self._status = value
+
+    @property
+    def is_playing(self) -> bool:
+        return self._is_playing
 
     @property
     def parent(self) -> "Entity":

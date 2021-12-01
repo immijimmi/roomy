@@ -2,7 +2,7 @@ from .entity import Entity
 from .observermanager import ObserverManager, RemoveObserver
 from .room import Room
 from .methods import Methods
-from .constants import Constants
+from .constants import Constants, AudioStatuses
 
 from .animations import *
 from .data import *
