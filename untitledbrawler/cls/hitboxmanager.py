@@ -57,7 +57,9 @@ class HitboxManager:
         if tags_all is None:
             pass
         else:
-            hitbox_has_all_tags = lambda _hitbox: all(_tag in _hitbox.tags for _tag in tags_all)
+            hitbox_has_all_tags = lambda target_hitbox: all(
+                tag_to_check in target_hitbox.tags for tag_to_check in tags_all
+            )
             result = filter(hitbox_has_all_tags, result)
 
         if custom_filter_key is not None:
