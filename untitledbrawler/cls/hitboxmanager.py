@@ -50,17 +50,17 @@ class HitboxManager:
         else:
             result = set()
 
-            for tag in tags_any:
-                for hitbox in self._hitboxes_by_tag[tag]:
-                    result.add(hitbox)
+            for tag_to_include in tags_any:
+                for hitbox_with_tag_to_include in self._hitboxes_by_tag[tag_to_include]:
+                    result.add(hitbox_with_tag_to_include)
 
         if tags_all is None:
             pass
         else:
-            hitbox_has_all_tags = lambda target_hitbox: all(
-                tag_to_check in target_hitbox.tags for tag_to_check in tags_all
+            hitbox_has_required_tags = lambda hitbox: all(
+                required_tag in hitbox.tags for required_tag in tags_all
             )
-            result = filter(hitbox_has_all_tags, result)
+            result = filter(hitbox_has_required_tags, result)
 
         if custom_filter_key is not None:
             result = frozenset(filter(custom_filter_key, result))
