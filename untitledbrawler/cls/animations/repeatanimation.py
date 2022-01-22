@@ -9,9 +9,13 @@ class RepeatAnimation(Animation):
     def __init__(
             self, parent: "Entity.with_extensions(Animated)", animation_key: str,
             size: float = 1, speed: float = 1, priority: Any = None,
-            frame_duration: Optional[timedelta] = None
+            frame_duration: Optional[timedelta] = None,
+            windup_frames: int = 0
     ):
         super().__init__(parent, animation_key, size=size, speed=speed, priority=priority)
+
+        # Windup frames are optional non-repeating frames at the start of the animation
+        self._windup_frames = windup_frames
 
         if frame_duration is not None:
             self._frame_time = frame_duration
@@ -24,7 +28,17 @@ class RepeatAnimation(Animation):
                 self._frame_time = Animation.default_frame_duration
 
     @property
+    def windup_frames(self) -> int:
+        return self._windup_frames
+
+    @property
     def frame_index(self):
         frames_elapsed = int(self._elapsed_effective / self._frame_time)
 
-        return frames_elapsed % self.total_frames
+        if frames_elapsed < self._windup_frames:
+            return frames_elapsed
+        else:
+            return (
+                           (frames_elapsed - self._windup_frames) %
+                           (self.total_frames - self._windup_frames)
+                   ) + self._windup_frames
