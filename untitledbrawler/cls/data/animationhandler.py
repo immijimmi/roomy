@@ -31,10 +31,9 @@ class AnimationHandler:
         """
         Loads all animation data for the target class, if it is not already loaded.
 
-        The animation data that is retrieved via this method includes any parameters that have the possibility of being
-        unique to an animation - typically this includes the animation's frames, default framerate etc. - since
-        these unique parameters are the ones that it is worth abstracting into a data file, rather than keeping them
-        directly integrated in a class.
+        The animation data that is retrieved via this method includes any custom parameters that pertain *only* to the
+        animation itself, as opposed to the use case;
+        typically this includes the animation's frames, default framerate etc.
 
         The structure of data in each file (containing all animation data for one `Animated` class)
         is expected to be as follows:
