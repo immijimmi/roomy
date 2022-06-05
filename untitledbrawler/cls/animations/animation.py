@@ -33,7 +33,7 @@ class Animation(ABC):
         return self._parent()
 
     @property
-    def key(self) -> Any:
+    def key(self) -> str:
         return self._key
 
     @property
