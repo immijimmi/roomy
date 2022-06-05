@@ -3,6 +3,7 @@ from managedstate.extensions import Listeners, Registrar
 import pygame
 
 from json import loads
+from typing import Type
 
 from .cls import *
 from .constants import Constants
@@ -13,7 +14,7 @@ class Game:
     fps = 144
 
     def __init__(self):
-        self._observer_manager = ObserverManager(self)
+        self._observer_manager = ObserverManager
 
         pygame.mixer.pre_init(frequency=Constants.AUDIO_FREQUENCY)
         pygame.init()
@@ -28,7 +29,7 @@ class Game:
         self.run()
 
     @property
-    def observer_manager(self) -> ObserverManager:
+    def observer_manager(self) -> Type[ObserverManager]:
         return self._observer_manager
 
     @property
@@ -55,7 +56,6 @@ class Game:
         events = list(pygame.event.get())  # Events are passed in a list so that they can be consumed if necessary
 
         self._screen.update(elapsed_ms, events)
-
 
     def render(self) -> None:
         updated_rects = self._screen.render(self._window)

@@ -9,34 +9,31 @@ class RemoveObserver(Exception):
 
 
 class ObserverManager:
-    def __init__(self, game: "Game"):
-        self._game = game
+    REGISTERED = {
+        "on_change_screen": set(),
+        "on_change_room": set(),
+    }
 
-        self._registered = {
-            "on_change_screen": set(),
-            "on_change_room": set(),
-        }
+    @staticmethod
+    def add(event_key: str, observer: Callable) -> None:
+        ObserverManager.REGISTERED[event_key].add(observer)
 
-    @property
-    def game(self) -> "Game":
-        return self._game
+    @staticmethod
+    def remove(event_key: str, observer: Callable) -> None:
+        ObserverManager.REGISTERED[event_key].remove(observer)
 
-    def add(self, event_key: str, observer: Callable) -> None:
-        self._registered[event_key].add(observer)
-
-    def remove(self, event_key: str, observer: Callable) -> None:
-        self._registered[event_key].remove(observer)
-
-    def on_change_screen(self, old_screen: Screen, new_screen: Screen) -> None:
-        for observer in self._registered["on_change_screen"]:
+    @staticmethod
+    def on_change_screen(old_screen: Screen, new_screen: Screen) -> None:
+        for observer in ObserverManager.REGISTERED["on_change_screen"]:
             try:
                 observer(old_screen, new_screen)
             except RemoveObserver:
-                self.remove("on_change_screen", observer)
+                ObserverManager.remove("on_change_screen", observer)
 
-    def on_change_room(self, old_room: Room, new_room: Room) -> None:
-        for observer in self._registered["on_change_room"]:
+    @staticmethod
+    def on_change_room(old_room: Room, new_room: Room) -> None:
+        for observer in ObserverManager.REGISTERED["on_change_room"]:
             try:
                 observer(old_room, new_room)
             except RemoveObserver:
-                self.remove("on_change_screen", observer)
+                ObserverManager.remove("on_change_screen", observer)
