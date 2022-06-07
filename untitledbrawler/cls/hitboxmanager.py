@@ -1,21 +1,15 @@
 from typing import Set, FrozenSet, Optional, Callable, Iterable, Union
-from weakref import ref
 
 from .hitboxes import Hitbox
 
 
 class HitboxManager:
-    def __init__(self, screen: "Screen"):
-        self._screen = ref(screen)  # Weakref so that it does not prevent parent object being garbage collected
+    def __init__(self):
 
         self._hitboxes = set()
         self._hitboxes_by_tag = {}
 
         self._checked_collisions = set()
-
-    @property
-    def screen(self) -> "Screen":
-        return self._screen()
 
     @property
     def checked_collisions(self) -> Set[FrozenSet[Union[Hitbox, "Entity.with_extensions(Hitboxed)"]]]:

@@ -21,7 +21,7 @@ class Screen(Entity, ABC):
 
         super().__init__(game, state, surface=surface, position=position, parent=None, priority=None)
 
-        self._hitbox_manager = HitboxManager(self)
+        self._hitbox_manager = HitboxManager()
 
     @property
     def hitbox_manager(self) -> HitboxManager:
