@@ -1,4 +1,4 @@
-from typing import FrozenSet, Optional, Callable, Iterable, Hashable
+from typing import Set, FrozenSet, Optional, Callable, Iterable, Hashable
 from weakref import ref
 
 from .hitboxes import Hitbox
@@ -11,9 +11,20 @@ class HitboxManager:
         self._hitboxes = set()
         self._hitboxes_by_tag = {}
 
+        self._checked_collisions = set()
+
     @property
     def screen(self) -> "Screen":
         return self._screen()
+
+    @property
+    def checked_collisions(self) -> Set[FrozenSet[Hitbox]]:
+        """
+        This set represents every unique hitbox combination that has already been checked for a collision in this tick.
+        Each combination is stored here as a frozenset containing the involved hitbox instances
+        """
+
+        return self._checked_collisions
 
     def add(self, hitbox: Hitbox) -> None:
         for tag in hitbox.tags:
@@ -37,7 +48,7 @@ class HitboxManager:
     ) -> FrozenSet[Hitbox]:
         """
         This is a querying method to retrieve a subsection of hitboxes in order to optimise collision checking.
-        tags_any defines tags of which only one must be present in each returned hitbox, tags_all defines tags
+        tags_any defines tags of which at least one must to be present in each returned hitbox, tags_all defines tags
         of which all must be present in each returned hitbox and custom_filter_key will be used to further narrow
         down the results as a more specific filter key.
 
@@ -68,3 +79,6 @@ class HitboxManager:
             result = frozenset(result)
 
         return result
+
+    def reset_checked_collisions(self) -> None:
+        self._checked_collisions = set()

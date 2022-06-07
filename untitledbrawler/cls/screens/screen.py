@@ -26,3 +26,6 @@ class Screen(Entity, ABC):
     @property
     def hitbox_manager(self) -> HitboxManager:
         return self._hitbox_manager
+
+    def _update(self, elapsed_ms: int, events: list):
+        self._hitbox_manager.reset_checked_collisions()
