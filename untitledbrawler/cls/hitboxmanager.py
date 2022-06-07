@@ -1,4 +1,4 @@
-from typing import Set, FrozenSet, Optional, Callable, Iterable, Hashable, Union
+from typing import Set, FrozenSet, Optional, Callable, Iterable, Union
 from weakref import ref
 
 from .hitboxes import Hitbox
@@ -43,7 +43,7 @@ class HitboxManager:
 
     def get(
             self,
-            tags_any: Optional[Iterable[Hashable]] = None, tags_all: Optional[Iterable[Hashable]] = None,
+            tags_any: Optional[Iterable[str]] = None, tags_all: Optional[Iterable[str]] = None,
             custom_filter_key: Optional[Callable] = None
     ) -> FrozenSet[Hitbox]:
         """

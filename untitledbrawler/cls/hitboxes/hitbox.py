@@ -1,17 +1,17 @@
-from typing import Iterable, Hashable, Optional, FrozenSet
+from typing import Iterable, Optional, FrozenSet
 from abc import ABC
 from weakref import ref
 
 
 class Hitbox(ABC):
-    def __init__(self, tags: Iterable[Hashable], parent: Optional["Entity.with_extensions(Hitboxed)"] = None):
-        self._tags: FrozenSet[Hashable] = frozenset(tags)
+    def __init__(self, tags: Iterable[str], parent: Optional["Entity.with_extensions(Hitboxed)"] = None):
+        self._tags: FrozenSet[str] = frozenset(tags)
 
         # Weakref so that it does not prevent parent object being garbage collected
         self._parent = lambda: None if parent is None else ref(parent)
 
     @property
-    def tags(self) -> FrozenSet[Hashable]:
+    def tags(self) -> FrozenSet[str]:
         return self._tags
 
     @property

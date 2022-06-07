@@ -1,5 +1,3 @@
-from typing import Hashable
-
 from pygame import mixer
 
 from ..constants import AudioStatuses
