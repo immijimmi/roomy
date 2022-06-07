@@ -2,8 +2,6 @@ from typing import Iterable, Hashable, Optional, FrozenSet
 from abc import ABC
 from weakref import ref
 
-from ..entity import Entity
-
 
 class Hitbox(ABC):
     def __init__(self, tags: Iterable[Hashable], parent: Optional["Entity.with_extensions(Hitboxed)"] = None):
@@ -20,57 +18,39 @@ class Hitbox(ABC):
     def parent(self) -> "Entity.with_extensions(Hitboxed)":
         return self._parent()
 
-    def is_collision(self, other: "Hitbox") -> bool:
+    def is_collision(self, other: "Hitbox", check_by_entity: bool = True) -> bool:
         """
-        Checks for a collision between this hitbox object and the provided other hitbox object.
-        If this specific collision (i.e. between these two hitbox objects) has already been checked this tick,
-        returns False
+        Checks for a collision between this hitbox and the provided other hitbox.
+        If this collision has already been checked this tick, returns False.
+
+        If check_by_entity is True, hitbox objects that have the same parent Entity
+        are considered to be the same hitbox for this purpose
         """
 
-        if parent := self.parent:
+        parent = self.parent
+        other_parent = other.parent
+
+        if not parent and not other_parent:
+            # There is no accessible HitboxManager to log collision checks to
+            return self._is_collision(other)
+
+        hitbox_manager = (parent or other_parent).game.screen.hitbox_manager
+
+        if check_by_entity:
+            collision_key = frozenset((parent or self, other.parent or other))
+        else:
             collision_key = frozenset((self, other))
-            checked_collisions = parent.game.screen.hitbox_manager.checked_collisions
 
-            if collision_key in checked_collisions:
-                return False  # This collision check has already been carried out previously this tick
+        if collision_key in hitbox_manager.checked_collisions:
+            return False  # This collision check has already been carried out previously this tick
 
-            checked_collisions.add(collision_key)
-
+        hitbox_manager.checked_collisions.add(collision_key)
         return self._is_collision(other)
-
-    def is_any_collision(self, others: Iterable["Hitbox"]) -> bool:
-        """
-        Checks for a collision between this hitbox and at least one of the provided other hitbox objects - this uses
-        the same general logic as its single-hitbox counterpart `.is_collision()`.
-        If any collision is detected, all possible collisions this function call would have checked for
-        are then marked as checked for this tick.
-
-        This method is designed to be used by entities which have collision surfaces comprised of multiple hitboxes,
-        where a collision with any one hitbox means a collision with the entity and so all its hitboxes
-        should be marked as checked simultaneously
-        """
-
-        if parent := self.parent:
-            collision_keys = [frozenset((self, other)) for other in others]
-            checked_collisions = parent.game.screen.hitbox_manager.checked_collisions
-
-            for collision_key in collision_keys:
-                if collision_key in checked_collisions:
-                    return False
-
-            for collision_key in collision_keys:
-                checked_collisions.add(collision_key)
-
-        for other in others:
-            if self._is_collision(other):
-                return True
-
-        return False
 
     def _is_collision(self, other: "Hitbox") -> bool:
         """
         This is an overridable method which should complete (or further delegate) the actual check for a collision
-        between this object and the other provided object
+        between this hitbox object and the other provided hitbox object
         """
 
         raise NotImplementedError

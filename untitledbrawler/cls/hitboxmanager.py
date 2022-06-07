@@ -1,4 +1,4 @@
-from typing import Set, FrozenSet, Optional, Callable, Iterable, Hashable
+from typing import Set, FrozenSet, Optional, Callable, Iterable, Hashable, Union
 from weakref import ref
 
 from .hitboxes import Hitbox
@@ -18,7 +18,7 @@ class HitboxManager:
         return self._screen()
 
     @property
-    def checked_collisions(self) -> Set[FrozenSet[Hitbox]]:
+    def checked_collisions(self) -> Set[FrozenSet[Union[Hitbox, "Entity.with_extensions(Hitboxed)"]]]:
         """
         This set represents every unique hitbox combination that has already been checked for a collision in this tick.
         Each combination is stored here as a frozenset containing the involved hitbox instances
