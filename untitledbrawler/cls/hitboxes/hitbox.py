@@ -43,7 +43,11 @@ class Hitbox(ABC):
         Checks for a collision between this hitbox and at least one of the provided other hitbox objects - this uses
         the same general logic as its single-hitbox counterpart `.is_collision()`.
         If any collision is detected, all possible collisions this function call would have checked for
-        are then marked as checked for this tick
+        are then marked as checked for this tick.
+
+        This method is designed to be used by entities which have collision surfaces comprised of multiple hitboxes,
+        where a collision with any one hitbox means a collision with the entity and so all its hitboxes
+        should be marked as checked simultaneously
         """
 
         if parent := self.parent:
