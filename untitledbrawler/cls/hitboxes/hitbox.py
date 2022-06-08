@@ -1,18 +1,17 @@
-from typing import Iterable, Optional, FrozenSet
+from typing import Iterable, Optional
 from abc import ABC
 from weakref import ref
 
+from ..tagged import Tagged
+from .constants import Constants
 
-class Hitbox(ABC):
+
+class Hitbox(Tagged, ABC):
     def __init__(self, tags: Iterable[str], parent: Optional["Entity.with_extensions(Hitboxed)"] = None):
-        self._tags: FrozenSet[str] = frozenset(tags)
+        super().__init__(tags)
 
         # Weakref so that it does not prevent parent object being garbage collected
         self._parent = lambda: None if parent is None else ref(parent)
-
-    @property
-    def tags(self) -> FrozenSet[str]:
-        return self._tags
 
     @property
     def parent(self) -> "Entity.with_extensions(Hitboxed)":
@@ -54,3 +53,6 @@ class Hitbox(ABC):
         """
 
         raise NotImplementedError
+
+    def _is_valid_tag(self, tag: str) -> bool:
+        return tag in Constants.HITBOX_TAGS
