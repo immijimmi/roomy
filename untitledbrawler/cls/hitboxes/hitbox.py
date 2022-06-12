@@ -1,4 +1,4 @@
-from typing import Iterable, Optional
+from typing import Iterable
 from abc import ABC
 from weakref import ref
 
@@ -7,11 +7,11 @@ from .constants import Constants
 
 
 class Hitbox(Tagged, ABC):
-    def __init__(self, tags: Iterable[str], parent: Optional["Entity.with_extensions(Hitboxed)"] = None):
+    def __init__(self, parent: "Entity.with_extensions(Hitboxed)", tags: Iterable[str]):
         super().__init__(tags)
 
         # Weakref so that it does not prevent parent object being garbage collected
-        self._parent = lambda: None if parent is None else ref(parent)
+        self._parent = ref(parent)
 
     @property
     def parent(self) -> "Entity.with_extensions(Hitboxed)":
@@ -26,17 +26,10 @@ class Hitbox(Tagged, ABC):
         are considered to be the same hitbox for this purpose
         """
 
-        parent = self.parent
-        other_parent = other.parent
-
-        if not parent and not other_parent:
-            # There is no accessible HitboxManager to log collision checks to
-            return self._is_collision(other)
-
-        hitbox_manager = (parent or other_parent).game.screen.hitbox_manager
+        hitbox_manager = self.parent.game.screen.hitbox_manager
 
         if check_by_entity:
-            collision_key = frozenset((parent or self, other.parent or other))
+            collision_key = frozenset((self.parent, other.parent))
         else:
             collision_key = frozenset((self, other))
 
