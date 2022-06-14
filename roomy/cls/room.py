@@ -23,7 +23,7 @@ class Room(Entity):
     def _load_surface(self, size: float = 1):
         background_key = self.state.registered_get("room_background_key", [self._room_id])
 
-        background_file_path = rf"untitledbrawler\res\{type(self).__name__}\{background_key}.png"
+        background_file_path = rf"roomy\res\{type(self).__name__}\{background_key}.png"
         surface = image.load(background_file_path).convert_alpha()
         surface = transform.rotozoom(surface, 0, size)
         self.surface = surface

@@ -51,7 +51,7 @@ class AnimationHandler:
         """
 
         if target_cls.__name__ not in AnimationHandler.DATA:
-            animation_data_file_path = rf"untitledbrawler\res\{target_cls.__name__}\animation_data.json"
+            animation_data_file_path = rf"roomy\res\{target_cls.__name__}\animation_data.json"
 
             with open(animation_data_file_path, "r") as file:
                 data = loads(file.read())
