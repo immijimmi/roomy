@@ -61,7 +61,7 @@ class Animation(ABC):
     def frame(self) -> Surface:
         frame_file_path = self._data[AnimationParams.FRAMES][self.frame_index]
 
-        return AnimationHandler.get_frame(frame_file_path, self._size)
+        return AnimationHandler.get_frame(frame_file_path, self.size)
 
     @property
     def frame_index(self) -> int:
@@ -80,7 +80,7 @@ class Animation(ABC):
 
     def _add_elapsed(self, elapsed_ms: int):
         elapsed = timedelta(microseconds=elapsed_ms*1000)
-        effective_elapsed = elapsed * self._speed
+        effective_elapsed = elapsed * self.speed
 
         self._elapsed += elapsed
         self._elapsed_effective += effective_elapsed
