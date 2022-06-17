@@ -7,9 +7,15 @@ from .constants import Constants
 
 
 class Game:
-    fps = 144
+    """
+    Entry point for the game.
+    Requires a Screen object to be passed into the constructor,
+    and then for .start() to be called to begin the game loop
+    """
 
-    def __init__(self, resolution: Sequence[int], initial_screen: Screen):
+    def __init__(self, fps: int, resolution: Sequence[int], initial_screen: Screen):
+        self.fps = fps
+
         self._resolution = (resolution[0], resolution[1])
         self._screen = initial_screen
         self._observer_manager = ObserverManager

@@ -12,11 +12,10 @@ class Entity(Extendable, Recurface, ABC):
 
     Explanation of additional constructor param requirements:
     - game: A reference to the Game instance allows all entities to navigate the object hierarchy from a static origin
-    - state: Passed to all Entity objects for convenience in accessing the state object
     """
 
     def __init__(
-            self, game: "Game", state: "State.with_extensions(Registrar)",
+            self, game: "Game",
             parent: Optional["Entity"] = None, surface: Optional[Surface] = None,
             position: Optional[Sequence[int]] = None, priority: Any = None
     ):
@@ -24,15 +23,10 @@ class Entity(Extendable, Recurface, ABC):
         Recurface.__init__(self, surface=surface, parent=parent, position=position, priority=priority)
 
         self._game = game
-        self._state = state
 
     @property
     def game(self):
         return self._game
-
-    @property
-    def state(self):
-        return self._state
 
     def update(self, elapsed_ms: int, events: list):
         self._update(elapsed_ms, events)
