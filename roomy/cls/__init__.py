@@ -5,6 +5,7 @@ from .methods import Methods
 
 from .animations import Animation, RepeatAnimation
 from .data import AnimationHandler
-from .screens import Screen, World
 from .ext import Animated, Hitboxed
+from .hitboxes import Hitbox
 from .roomoccupants import RoomOccupant
+from .screens import Screen, World
