@@ -1,4 +1,6 @@
 from pygame import transform, image
+from managedstate import State
+from managedstate.extensions import Registrar
 
 from typing import Iterable
 
@@ -8,8 +10,12 @@ from .entity import Entity
 
 
 class Room(Entity):
-    def __init__(self, parent: Entity, room_id: str):
-        super().__init__(parent.game, parent.state, parent=parent, position=(0, 0), priority=0)
+    """
+    Concrete class tightly coupled to the World screen, which renders a single room and its occupants
+    """
+
+    def __init__(self, parent: "World", room_id: str):
+        super().__init__(parent.game, parent=parent, position=(0, 0), priority=0)
 
         self._room_id = room_id
 
@@ -17,13 +23,26 @@ class Room(Entity):
         self._load_room()
 
     @property
+    def state(self) -> State.with_extensions(Registrar):
+        """
+        Shortcut property which accesses the state attached to the parent World object
+        """
+
+        return self.parent_recurface.state
+
+    @property
     def room_id(self) -> str:
         return self._room_id
 
     def _load_surface(self, size: float = 1):
-        background_key = self.state.registered_get("room_background_key", [self._room_id])
+        """
+        Loads the background image for the room object. Assumes a standard location for the image file as
+        dictated below in background_file_path
+        """
 
-        background_file_path = rf"roomy\res\{type(self).__name__}\{background_key}.png"
+        background_key = self.state.registered_get("room_background_key", [self._room_id])
+        background_file_path = rf"res\{type(self).__name__}\{background_key}.png"
+
         surface = image.load(background_file_path).convert_alpha()
         surface = transform.rotozoom(surface, 0, size)
         self.surface = surface
@@ -38,7 +57,7 @@ class Room(Entity):
             occupant_class: RoomOccupant = Methods.get_class_from_str(room_occupant_data["class"])
             occupant_stats: dict = room_occupant_data["stats"]
 
-            self.add_child_recurface(occupant_class(self, **occupant_stats))
+            occupant_class(self, **occupant_stats)
 
         for player_id in curr_players_ids:
             player_data: dict = self.state.registered_get("player", [player_id])
@@ -46,4 +65,4 @@ class Room(Entity):
             player_class: RoomOccupant = Methods.get_class_from_str(player_data["class"])
             player_stats: dict = player_data["stats"]
 
-            self.add_child_recurface(player_class(self, **player_stats))
+            player_class(self, **player_stats)
