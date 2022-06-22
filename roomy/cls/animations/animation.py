@@ -19,7 +19,7 @@ class Animation(ABC):
         self.size: float = size
         self.speed: float = speed
 
-        self._parent = ref(parent)  # Weakref so that it does not prevent parent object being garbage collected
+        self._parent_entity = ref(parent)  # Weakref so that it does not prevent parent entity being garbage collected
         self._key = animation_key
         self._priority = priority
 
@@ -29,8 +29,8 @@ class Animation(ABC):
         self._elapsed_effective = timedelta(0)
 
     @property
-    def parent(self) -> "Entity.with_extensions(Animated)":
-        return self._parent()
+    def parent_entity(self) -> "Entity.with_extensions(Animated)":
+        return self._parent_entity()
 
     @property
     def key(self) -> str:
