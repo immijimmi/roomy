@@ -34,6 +34,7 @@ class World(Screen):
         old_room = self._curr_room
         self._curr_room = Room(self, new_room_id)
 
+        old_room.parent_recurface = None
         self.game.observer_manager.on_change_room(old_room, self.curr_room)
 
     @staticmethod
