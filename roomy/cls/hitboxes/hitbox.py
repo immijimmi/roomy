@@ -10,12 +10,20 @@ class Hitbox(Tagged, ABC):
     def __init__(self, parent: "Entity.with_extensions(Hitboxed)", tags: Iterable[str]):
         super().__init__(tags)
 
-        # Weakref so that it does not prevent parent object being garbage collected
-        self._parent = ref(parent)
+        # Weakref so that it does not prevent parent entity being garbage collected
+        self._parent_entity = ref(parent)
 
     @property
-    def parent(self) -> "Entity.with_extensions(Hitboxed)":
-        return self._parent()
+    def hitbox_manager(self) -> "HitboxManager":
+        """
+        Shortcut property which accesses the current game screen, and then the current hitbox manager through that
+        """
+
+        return self.parent_entity.game.screen.hitbox_manager
+
+    @property
+    def parent_entity(self) -> "Entity.with_extensions(Hitboxed)":
+        return self._parent_entity()
 
     def is_collision(self, other: "Hitbox", check_by_entity: bool = True) -> bool:
         """
@@ -26,17 +34,15 @@ class Hitbox(Tagged, ABC):
         are considered to be the same hitbox for this purpose
         """
 
-        hitbox_manager = self.parent.game.screen.hitbox_manager
-
         if check_by_entity:
-            collision_key = frozenset((self.parent, other.parent))
+            collision_key = frozenset((self.parent_entity, other.parent_entity))
         else:
             collision_key = frozenset((self, other))
 
-        if collision_key in hitbox_manager.checked_collisions:
+        if collision_key in self.hitbox_manager.checked_collisions:
             return False  # This collision check has already been carried out previously this tick
 
-        hitbox_manager.checked_collisions.add(collision_key)
+        self.hitbox_manager.checked_collisions.add(collision_key)
         return self._is_collision(other)
 
     def _is_collision(self, other: "Hitbox") -> bool:
