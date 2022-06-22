@@ -63,7 +63,7 @@ class Audio:
         return self._is_playing
 
     @property
-    def parent(self) -> "Entity":
+    def parent(self) -> "Entity":  ##### TODO: Rename to .parent_entity
         return self._parent()
 
     @property
