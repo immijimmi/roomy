@@ -30,6 +30,7 @@ class AnimationHandler:
     def _load_data(target_cls: Type["Entity.with_extensions(Animated)"]) -> None:
         """
         Loads all animation data for the target class, if it is not already loaded.
+        Assumes a standard location for the data file as dictated below in animation_data_file_path.
 
         The animation data that is retrieved via this method includes any custom parameters that pertain *only* to the
         animation itself, as opposed to the use case;
