@@ -1,7 +1,10 @@
 from pygame import Surface, image, transform
 
+from os import path
 from json import loads
 from typing import Type, Dict, Any
+
+from ...constants import Constants as GameConstants
 
 
 class AnimationHandler:
@@ -52,7 +55,11 @@ class AnimationHandler:
         """
 
         if target_cls.__name__ not in AnimationHandler.DATA:
-            animation_data_file_path = rf"roomy\res\{target_cls.__name__}\animation_data.json"
+            animation_data_file_path = path.join(
+                GameConstants.RESOURCE_FOLDER_PATH,
+                f"{target_cls.__name__}",
+                "animation_data.json"
+            )
 
             with open(animation_data_file_path, "r") as file:
                 data = loads(file.read())
