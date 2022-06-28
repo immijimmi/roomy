@@ -23,7 +23,8 @@ class Hitboxed(Extension):
 
     def __generate_default_hitboxes(self) -> Iterable[Hitbox]:
         """
-        Must be overridden in subclasses with a method that provides a valid hitbox
+        Must be overridden.
+        Should return a default hitbox or default hitboxes for this entity
         """
 
         raise NotImplementedError
@@ -47,22 +48,25 @@ class Hitboxed(Extension):
 
     def __check_collisions(self) -> None:
         """
-        Overridable lifecycle method to standardise the entry point for collision checking.
+        Lifecycle method, called automatically each game tick.
+        Can optionally be overridden.
+        Standardises the entry point for checking collisions for this entity.
 
         Hitboxes from other entities that may have valid collisions with this entity's hitboxes can be retrieved
         using the get() method on self.game.screen.hitbox_manager, filtered down via the optional parameters
-        that method may receive.
+        that method can receive.
 
         When a collision is detected between two entities, each of their respective collide() methods should be
-        invoked and passed the other entity involved in that collision.
+        invoked here and passed the other entity involved in that collision.
         """
 
         pass
 
     def __collide(self, other: "Entity.with_extensions(Hitboxed)"):
         """
-        Overridable method which should apply this entity's on-collision effects
-        to itself and/or the provided other entity.
+        Can optionally be overridden.
+        Should apply this entity's on-collision effects to itself and/or the provided other entity.
+
         This includes inspecting the other entity (if needed) to decide what effects should apply.
 
         - Any *direct* changes to the position or movement (or other stats) of an entity as a result of the collision

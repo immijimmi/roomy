@@ -16,8 +16,8 @@ class Tagged(ABC):
 
     def _is_valid_tag(self, tag: str) -> bool:
         """
-        Must be overridden in subclasses with a method that checks whether the provided tag is a valid tag
-        for that subclass
+        Must be overridden.
+        Should check whether the provided tag is a valid tag for this object's class
         """
 
         raise NotImplementedError

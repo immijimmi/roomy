@@ -19,7 +19,8 @@ class Animated(Extension):
 
     def __generate_default_animation(self) -> Animation:
         """
-        Must be overridden in subclasses with a method that provides a valid animation
+        Must be overridden.
+        Should return a default animation for this entity
         """
 
         raise NotImplementedError

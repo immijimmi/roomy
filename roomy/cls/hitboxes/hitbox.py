@@ -47,7 +47,8 @@ class Hitbox(Tagged, ABC):
 
     def _is_collision(self, other: "Hitbox") -> bool:
         """
-        This is an overridable method which should complete (or further delegate) the actual check for a collision
+        Must be overridden.
+        Should complete (or further delegate, if necessary) the actual check for a collision
         between this hitbox object and the other provided hitbox object
         """
 

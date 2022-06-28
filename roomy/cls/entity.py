@@ -37,7 +37,10 @@ class Entity(Extendable, Recurface, ABC):
 
     def _update(self, elapsed_ms: int, events: list):
         """
-        This is an overridable lifecycle method which will be called automatically in the game loop
+        Lifecycle method, called automatically each game tick.
+        Can optionally be overridden.
+        Complete any miscellaneous work necessary for this entity each tick
+        that is not covered by other lifecycle methods here
         """
 
         pass

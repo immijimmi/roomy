@@ -41,7 +41,7 @@ class Screen(Entity, ABC):
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):
         """
-        Overridable method.
+        Can optionally be overridden.
         Register any paths for a state object which would be used by this screen or its children here
         """
 
