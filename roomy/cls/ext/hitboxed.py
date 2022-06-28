@@ -14,7 +14,6 @@ class Hitboxed(Extension):
     @staticmethod
     def extend(target_cls):
         Extension._wrap(target_cls, "__init__", Hitboxed.__wrap_init)
-        Extension._wrap(target_cls, "update", Hitboxed.__wrap_update)
 
         Extension._set(target_cls, "generate_default_hitboxes", Hitboxed.__generate_default_hitboxes)
         Extension._set(target_cls, "set_hitboxes", Hitboxed.__set_hitboxes)
@@ -48,7 +47,6 @@ class Hitboxed(Extension):
 
     def __check_collisions(self) -> None:
         """
-        Lifecycle method, called automatically each game tick.
         Can optionally be overridden.
         Standardises the entry point for checking collisions for this entity.
 
@@ -80,7 +78,3 @@ class Hitboxed(Extension):
         Extension._set(self, "_hitboxes", frozenset())
 
         self.set_hitboxes(self.generate_default_hitboxes())
-
-    def __wrap_update(self, elapsed_ms, events):
-        yield
-        self.check_collisions()
