@@ -15,15 +15,17 @@ class Hitboxed(Extension):
     def extend(target_cls):
         Extension._wrap(target_cls, "__init__", Hitboxed.__wrap_init)
 
-        Extension._set(target_cls, "generate_default_hitboxes", Hitboxed.__generate_default_hitboxes)
+        Extension._set(target_cls, "generate_hitboxes", Hitboxed.__generate_hitboxes)
         Extension._set(target_cls, "set_hitboxes", Hitboxed.__set_hitboxes)
         Extension._set(target_cls, "check_collisions", Hitboxed.__check_collisions)
         Extension._set(target_cls, "collide", Hitboxed.__collide)
 
-    def __generate_default_hitboxes(self) -> Iterable[Hitbox]:
+    def __generate_hitboxes(self) -> Iterable[Hitbox]:
         """
         Must be overridden.
-        Should return a default hitbox or default hitboxes for this entity
+        Should return the correct hitboxes for this entity based on its current state.
+        Note that event-driven rather than state-driven hitboxes can be set without the use of this method,
+        by directly calling .set_hitboxes() (and passing it new Hitbox objects) instead
         """
 
         raise NotImplementedError
@@ -77,4 +79,4 @@ class Hitboxed(Extension):
         yield
         Extension._set(self, "_hitboxes", frozenset())
 
-        self.set_hitboxes(self.generate_default_hitboxes())
+        self.set_hitboxes(self.generate_hitboxes())
