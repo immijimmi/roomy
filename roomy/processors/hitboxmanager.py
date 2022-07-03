@@ -1,6 +1,6 @@
 from typing import Set, FrozenSet, Optional, Callable, Iterable, Union
 
-from .hitboxes import Hitbox
+from ..hitboxes import Hitbox
 
 
 class HitboxManager:

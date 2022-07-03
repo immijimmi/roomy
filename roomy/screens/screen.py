@@ -5,8 +5,8 @@ from managedstate.extensions import Registrar
 from abc import ABC
 
 from ..entity import Entity
-from ...constants import Constants as GameConstants
-from ..hitboxmanager import HitboxManager
+from ..constants import Constants as GameConstants
+from ..processors import HitboxManager
 
 
 class Screen(Entity, ABC):

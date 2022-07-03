@@ -4,15 +4,15 @@ from os import path
 from json import loads
 from typing import Type, Dict, Any
 
-from ...constants import Constants as GameConstants
+from ..constants import Constants as GameConstants
 
 
 class AnimationHandler:
     """
-    Helper class which retrieves and stores animation data
+    Helper class which retrieves and stores animation processors
     """
 
-    # For performance optimisation. Stores data which has already been loaded before, using file paths as their keys
+    # For performance optimisation. Stores processors which has already been loaded before, using file paths as their keys
     DATA = {}
     # For performance optimisation. Stores frames which have already been generated, using file paths as their keys
     FRAMES = {}
@@ -32,14 +32,14 @@ class AnimationHandler:
     @staticmethod
     def _load_data(target_cls: Type["Entity.with_extensions(Animated)"]) -> None:
         """
-        Loads all animation data for the target class, if it is not already loaded.
-        Assumes a standard location for the data file as dictated below in animation_data_file_path.
+        Loads all animation processors for the target class, if it is not already loaded.
+        Assumes a standard location for the processors file as dictated below in animation_data_file_path.
 
-        The animation data that is retrieved via this method includes any custom parameters that pertain *only* to the
+        The animation processors that is retrieved via this method includes any custom parameters that pertain *only* to the
         animation itself, as opposed to the use case;
         typically this includes the animation's frames, default framerate etc.
 
-        The structure of data in each file (containing all animation data for one `Animated` class)
+        The structure of processors in each file (containing all animation processors for one `Animated` class)
         is expected to be as follows:
         {
             "<animation key>": {

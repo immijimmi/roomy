@@ -1,7 +1,7 @@
 from objectextensions import Extension
 
-from ..entity import Entity
-from ..animations import Animation
+from ...entity import Entity
+from ...animations import Animation
 
 
 class Animated(Extension):

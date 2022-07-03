@@ -5,7 +5,7 @@ from weakref import ref
 
 from pygame import Surface
 
-from ..data import AnimationHandler
+from ..processors import AnimationHandler
 from .constants import AnimationParams
 
 

@@ -2,8 +2,9 @@ import pygame
 
 from typing import Type, Sequence, Tuple
 
-from .cls import *
 from .constants import Constants
+from .processors import ObserverManager
+from .screens import Screen
 
 
 class Game:

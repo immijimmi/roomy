@@ -2,8 +2,8 @@ from objectextensions import Extension
 
 from typing import Iterable
 
-from ..entity import Entity
-from ..hitboxes import Hitbox
+from ...entity import Entity
+from ...hitboxes import Hitbox
 
 
 class Hitboxed(Extension):
