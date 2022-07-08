@@ -62,7 +62,7 @@ class Hitboxed(Extension):
 
         pass
 
-    def __collide(self, other: "Entity.with_extensions(Hitboxed)"):
+    def __collide(self, other: "Entity.with_extensions(Hitboxed)") -> None:
         """
         Can optionally be overridden.
         Should apply this entity's on-collision effects to itself and/or the provided other entity.
