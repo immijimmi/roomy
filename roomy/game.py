@@ -9,7 +9,7 @@ from .screens import Screen
 
 class Game:
     """
-    Entry point for the game.
+    Entry point for your game.
     Requires a Screen object to be passed into the constructor,
     and then for .start() to be called to begin the game loop
     """
