@@ -8,9 +8,8 @@ class RoomOccupant(Entity, ABC):
     """
     Concrete class tightly coupled to the Room class, which renders a persisting entity in a room.
 
-    This includes people, inanimate objects, decorative objects, objects with no collision etc.
-    Examples of excluded classes would be projectiles and hitboxes since these will not persist if the room is exited
-    and will not be saved to the game state
+    This includes people, inanimate objects, decorative objects, objects with no collision etc. and only
+    excludes things that would cease to exist once the room is exited
     """
 
     def __init__(self, parent: "Room", render_position: Sequence[int], surface=None, priority=None):

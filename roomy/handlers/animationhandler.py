@@ -36,7 +36,7 @@ class AnimationHandler:
         Assumes a standard location for the data file as dictated below in animation_data_file_path.
 
         The animation data that is retrieved via this method includes any custom parameters that pertain *only* to the
-        animation itself, as opposed to the use case;
+        animation itself, as opposed to the use case you are implementing it in;
         typically this includes the animation's frames, default framerate etc.
 
         The structure of data in each file (containing all animation data for one `Animated` class)
