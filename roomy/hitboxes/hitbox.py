@@ -14,12 +14,12 @@ class Hitbox(Tagged, ABC):
         self._parent_entity = ref(parent)
 
     @property
-    def hitbox_manager(self) -> "HitboxManager":
+    def hitbox_handler(self) -> "HitboxHandler":
         """
-        Shortcut property which accesses the current game screen, and then the current hitbox manager through that
+        Shortcut property which accesses the current game screen, and then the current hitbox handler through that
         """
 
-        return self.parent_entity.game.screen.hitbox_manager
+        return self.parent_entity.game.screen.hitbox_handler
 
     @property
     def parent_entity(self) -> "Entity.with_extensions(Hitboxed)":
@@ -39,10 +39,10 @@ class Hitbox(Tagged, ABC):
         else:
             collision_key = frozenset((self, other))
 
-        if collision_key in self.hitbox_manager.checked_collisions:
+        if collision_key in self.hitbox_handler.checked_collisions:
             return False  # This collision check has already been carried out previously this tick
 
-        self.hitbox_manager.checked_collisions.add(collision_key)
+        self.hitbox_handler.checked_collisions.add(collision_key)
         return self._is_collision(other)
 
     def _is_collision(self, other: "Hitbox") -> bool:

@@ -3,7 +3,7 @@ import pygame
 from typing import Type, Sequence, Tuple
 
 from .constants import Constants
-from .processors import ObserverManager
+from .handlers import ObserverHandler
 from .screens import Screen
 
 
@@ -19,7 +19,7 @@ class Game:
 
         self._resolution = (resolution[0], resolution[1])
         self._screen = initial_screen
-        self._observer_manager = ObserverManager
+        self._observer_handler = ObserverHandler
 
         pygame.mixer.pre_init(frequency=Constants.AUDIO_FREQUENCY)
         pygame.init()
@@ -41,11 +41,11 @@ class Game:
         old_screen = self._screen
         self._screen = value
 
-        self._observer_manager.on_change_screen(old_screen, value)
+        self._observer_handler.on_change_screen(old_screen, value)
 
     @property
-    def observer_manager(self) -> Type[ObserverManager]:
-        return self._observer_manager
+    def observer_handler(self) -> Type[ObserverHandler]:
+        return self._observer_handler
 
     @property
     def window(self):

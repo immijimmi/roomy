@@ -35,15 +35,15 @@ class Hitboxed(Extension):
         Workaround method since objectextensions does not currently support binding properties
         """
 
-        hitbox_manager = self.game.screen.hitbox_manager
+        hitbox_handler = self.game.screen.hitbox_handler
 
         for hitbox in self._hitboxes:
             if hitbox not in hitboxes:
-                hitbox_manager.remove(hitbox)
+                hitbox_handler.remove(hitbox)
 
         for hitbox in hitboxes:
             if hitbox not in self._hitboxes:
-                hitbox_manager.add(hitbox)
+                hitbox_handler.add(hitbox)
 
         self._hitboxes = frozenset(hitboxes)
 
@@ -53,7 +53,7 @@ class Hitboxed(Extension):
         Standardises the entry point for checking collisions for this entity.
 
         Hitboxes from other entities that may have valid collisions with this entity's hitboxes can be retrieved
-        using the get() method on self.game.screen.hitbox_manager, filtered down via the optional parameters
+        using the get() method on self.game.screen.hitbox_handler, filtered down via the optional parameters
         that method can receive.
 
         When a collision is detected between two entities, each of their respective collide() methods should be

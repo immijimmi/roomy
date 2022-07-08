@@ -35,7 +35,7 @@ class World(Screen):
         self._curr_room = Room(self, new_room_id)
 
         old_room.parent_recurface = None
-        self.game.observer_manager.on_change_room(old_room, self.curr_room)
+        self.game.observer_handler.on_change_room(old_room, self.curr_room)
 
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):

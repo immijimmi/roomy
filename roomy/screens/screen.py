@@ -6,7 +6,7 @@ from abc import ABC
 
 from ..entity import Entity
 from ..constants import Constants as GameConstants
-from ..processors import HitboxManager
+from ..handlers import HitboxHandler
 
 
 class Screen(Entity, ABC):
@@ -23,7 +23,7 @@ class Screen(Entity, ABC):
         super().__init__(game, surface=surface, position=(0, 0), parent=None, priority=None)
 
         self._state = state
-        self._hitbox_manager = HitboxManager()
+        self._hitbox_handler = HitboxHandler()
 
         self.register_paths(self._state)
 
@@ -32,11 +32,11 @@ class Screen(Entity, ABC):
         return self._state
 
     @property
-    def hitbox_manager(self) -> HitboxManager:
-        return self._hitbox_manager
+    def hitbox_handler(self) -> HitboxHandler:
+        return self._hitbox_handler
 
     def _update(self, elapsed_ms: int, events: list):
-        self._hitbox_manager.reset_checked_collisions()
+        self._hitbox_handler.reset_checked_collisions()
 
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):
