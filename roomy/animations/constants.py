@@ -1,6 +1,6 @@
 class AnimationParams:
     """
-    Constants representing JSON keys which are used in the files containing animation processors
+    Constants representing JSON keys which are used in the files containing animation data
     """
 
     FRAMES = "frames"  # Should retrieve a List[str] of frame file names
