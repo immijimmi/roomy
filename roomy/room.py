@@ -8,7 +8,7 @@ from os import path
 from .roomoccupants import *
 from .methods import Methods
 from .entity import Entity
-from ..constants import Constants as GameConstants
+from .constants import Constants
 
 
 class Room(Entity):
@@ -44,7 +44,7 @@ class Room(Entity):
 
         background_key = self.state.registered_get("room_background_key", [self._room_id])
         background_file_path = path.join(
-            GameConstants.RESOURCE_FOLDER_PATH,
+            Constants.RESOURCE_FOLDER_PATH,
             f"{type(self).__name__}",
             f"{background_key}.png"
         )
