@@ -19,7 +19,7 @@ setup(
     author="immijimmi",
     author_email="imranhamid99@msn.com",
     url="https://github.com/immijimmi/roomy",
-    download_url="",
+    download_url="https://github.com/immijimmi/roomy/archive/refs/tags/v0.1.0.tar.gz",
     keywords=["game", "engine", "2D"],
     install_requires=[
         "pygame~=2.0.1",
