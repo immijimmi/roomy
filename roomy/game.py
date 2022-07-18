@@ -1,7 +1,7 @@
 import pygame
 from pygame import Surface
 
-from typing import Type
+from typing import Type, Optional
 
 from .constants import Constants
 from .handlers import ObserverHandler
@@ -11,25 +11,25 @@ from .screens import Screen
 class Game:
     """
     Entry point for your game.
-    Requires a pygame display Surface and a Screen object to be passed into the constructor,
-    and then for .start() to be called to begin the game loop
+    Requires a pygame display Surface to be passed into the constructor,
+    and .screen to be set to a valid Screen object, before calling .start() to begin the game loop
     """
 
-    def __init__(self, window: Surface, initial_screen: Screen, fps: int = 0):
+    def __init__(self, window: Surface, fps: int = 0):
         pygame.mixer.pre_init(frequency=Constants.AUDIO_FREQUENCY)
         pygame.init()
         pygame.mixer.init()
 
         self._window = window
-        self._screen = initial_screen
 
         self.fps = fps
         self._clock = pygame.time.Clock()
 
+        self._screen = None
         self._observer_handler = ObserverHandler
 
     @property
-    def screen(self) -> Screen:
+    def screen(self) -> Optional[Screen]:
         return self._screen
 
     @screen.setter
@@ -48,6 +48,9 @@ class Game:
         return self._observer_handler
 
     def start(self) -> None:
+        if self._screen is None:
+            raise RuntimeError("a valid Screen object must be set to .screen before the game can be started")
+
         while True:
             self._update_screen()
             self._render_screen()
