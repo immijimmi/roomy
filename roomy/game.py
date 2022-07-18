@@ -1,6 +1,7 @@
 import pygame
+from pygame import Surface
 
-from typing import Type, Sequence, Tuple
+from typing import Type
 
 from .constants import Constants
 from .handlers import ObserverHandler
@@ -10,27 +11,22 @@ from .screens import Screen
 class Game:
     """
     Entry point for your game.
-    Requires a Screen object to be passed into the constructor,
+    Requires a pygame display Surface and a Screen object to be passed into the constructor,
     and then for .start() to be called to begin the game loop
     """
 
-    def __init__(self, fps: int, resolution: Sequence[int], initial_screen: Screen):
-        self.fps = fps
-
-        self._resolution = (resolution[0], resolution[1])
-        self._screen = initial_screen
-        self._observer_handler = ObserverHandler
-
+    def __init__(self, window: Surface, initial_screen: Screen, fps: int = 0):
         pygame.mixer.pre_init(frequency=Constants.AUDIO_FREQUENCY)
         pygame.init()
         pygame.mixer.init()
 
-        self._window = pygame.display.set_mode(self._resolution)
+        self._window = window
+        self._screen = initial_screen
+
+        self.fps = fps
         self._clock = pygame.time.Clock()
 
-    @property
-    def resolution(self) -> Tuple[int, int]:
-        return self._resolution
+        self._observer_handler = ObserverHandler
 
     @property
     def screen(self) -> Screen:
@@ -44,12 +40,12 @@ class Game:
         self._observer_handler.on_change_screen(old_screen, value)
 
     @property
-    def observer_handler(self) -> Type[ObserverHandler]:
-        return self._observer_handler
-
-    @property
     def window(self):
         return self._window
+
+    @property
+    def observer_handler(self) -> Type[ObserverHandler]:
+        return self._observer_handler
 
     def start(self) -> None:
         while True:
