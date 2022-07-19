@@ -23,9 +23,9 @@ setup(
     keywords=["game", "engine", "2D"],
     install_requires=[
         "pygame~=2.0.1",
-        "managedstate~=1.0.0",
+        "managedstate~=2.0.0",
         "recurfaces~=1.0.3",
-        "objectextensions~=1.1.0"
+        "objectextensions~=1.2.0"
     ],
     classifiers=[
         "Development Status :: 4 - Beta",

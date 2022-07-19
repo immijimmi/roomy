@@ -1,6 +1,6 @@
 from objectextensions import Extension
 
-from typing import Iterable
+from typing import Iterable, FrozenSet
 
 from ...entity import Entity
 from ...hitboxes import Hitbox
@@ -15,26 +15,22 @@ class Hitboxed(Extension):
     def extend(target_cls):
         Extension._wrap(target_cls, "__init__", Hitboxed.__wrap_init)
 
+        Extension._set_property(target_cls, "hitboxes", Hitboxed.__hitboxes)
+        Extension._set_setter(target_cls, "hitboxes", "hitboxes", Hitboxed.__set_hitboxes)
+
         Extension._set(target_cls, "generate_hitboxes", Hitboxed.__generate_hitboxes)
-        Extension._set(target_cls, "set_hitboxes", Hitboxed.__set_hitboxes)
         Extension._set(target_cls, "check_collisions", Hitboxed.__check_collisions)
         Extension._set(target_cls, "collide", Hitboxed.__collide)
 
-    def __generate_hitboxes(self) -> Iterable[Hitbox]:
-        """
-        Must be overridden.
-        Should return the correct hitboxes for this entity based on its current state.
-        Note that event-driven rather than state-driven hitboxes can be set without the use of this method,
-        by directly calling .set_hitboxes() (and passing it new Hitbox objects) instead
-        """
+    def __wrap_init(self, *args, **kwargs):
+        yield
+        Extension._set(self, "_hitboxes", frozenset())
+        self.hitboxes = self.generate_hitboxes()
 
-        raise NotImplementedError
+    def __hitboxes(self) -> FrozenSet[Hitbox]:
+        return self._hitboxes
 
-    def __set_hitboxes(self, hitboxes: Iterable[Hitbox]) -> None:
-        """
-        Workaround method since objectextensions does not currently support binding properties
-        """
-
+    def __set_hitboxes(self, hitboxes: Iterable[Hitbox]):
         hitbox_handler = self.game.screen.hitbox_handler
 
         for hitbox in self._hitboxes:
@@ -46,6 +42,15 @@ class Hitboxed(Extension):
                 hitbox_handler.add(hitbox)
 
         self._hitboxes = frozenset(hitboxes)
+
+    def __generate_hitboxes(self) -> Iterable[Hitbox]:
+        """
+        Must be overridden.
+        Should return the correct hitboxes for this entity based on its current state.
+        Note that hitboxes can still be created elsewhere on an ad-hoc basis (e.g. in response to specific events)
+        """
+
+        raise NotImplementedError
 
     def __check_collisions(self) -> None:
         """
@@ -74,9 +79,3 @@ class Hitboxed(Extension):
         """
 
         pass
-
-    def __wrap_init(self, *args, **kwargs):
-        yield
-        Extension._set(self, "_hitboxes", frozenset())
-
-        self.set_hitboxes(self.generate_hitboxes())

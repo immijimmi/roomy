@@ -39,15 +39,15 @@ class World(Screen):
 
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):
-        state.register("curr_room_id", ["current", "room_id"], [{}, str(None)])
-        state.register("curr_players_ids", ["current", "players_ids"], [{}, []])
+        state.register_path("curr_room_id", ["current", "room_id"], [{}, str(None)])
+        state.register_path("curr_players_ids", ["current", "players_ids"], [{}, []])
 
-        state.register("player", ["players", PartialQueries.KEY], [{}, {}])
-        state.register("room", ["rooms", PartialQueries.KEY], [{}, {}])
-        state.register("room_occupant", ["room_occupants", PartialQueries.KEY], [{}, {}])
+        state.register_path("player", ["players", PartialQueries.KEY], [{}, {}])
+        state.register_path("room", ["rooms", PartialQueries.KEY], [{}, {}])
+        state.register_path("room_occupant", ["room_occupants", PartialQueries.KEY], [{}, {}])
 
-        state.register("room_occupants_ids", ["rooms", PartialQueries.KEY, "occupants_ids"], [{}, {}, []])
-        state.register(
+        state.register_path("room_occupants_ids", ["rooms", PartialQueries.KEY, "occupants_ids"], [{}, {}, []])
+        state.register_path(
             "room_background_key",
             ["rooms", PartialQueries.KEY, "background_key"],
             [{}, {}, str(None)]
