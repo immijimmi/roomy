@@ -15,7 +15,7 @@ class Game:
     and .screen to be set to a valid Screen object, before calling .start() to begin the game loop
     """
 
-    def __init__(self, window: Surface, fps: int = 0):
+    def __init__(self, window: Surface, fps: int = 0, updates_per_frame: int = 1):
         pygame.mixer.pre_init(frequency=Constants.AUDIO_FREQUENCY)
         pygame.init()
         pygame.mixer.init()
@@ -23,6 +23,8 @@ class Game:
         self._window = window
 
         self.fps = fps
+        self.updates_per_frame = updates_per_frame
+
         self._clock = pygame.time.Clock()
 
         self._screen = None
@@ -52,11 +54,13 @@ class Game:
             raise RuntimeError("a valid Screen object must be set to .screen before the game can be started")
 
         while True:
-            self._update_screen()
+            for update_index in range(self.updates_per_frame):
+                self._update_screen()
+
             self._render_screen()
 
     def _update_screen(self) -> None:
-        elapsed_ms = self._clock.tick(self.fps)
+        elapsed_ms = self._clock.tick(self.fps * self.updates_per_frame)
         events = list(pygame.event.get())  # Events are passed in a list so that they can be consumed if necessary
 
         self._screen.update(elapsed_ms, events)
