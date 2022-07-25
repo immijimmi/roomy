@@ -73,7 +73,8 @@ class Animation(ABC):
 
     def _update(self):
         """
-        Any additional work that may be needed in specific animations can be completed here
+        Any additional work that may be needed in specific animations,
+        including playing sounds at specific parts of the animation, can be completed here
         """
 
         pass
