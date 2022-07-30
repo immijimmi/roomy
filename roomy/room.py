@@ -66,7 +66,7 @@ class Room(Entity):
         for room_occupant_id in curr_room_occupants_ids:
             room_occupant_data: dict = self.state.registered_get("room_occupant", [room_occupant_id])
 
-            occupant_class: RoomOccupant = Methods.get_object_by_str_name(room_occupant_data["class"])
+            occupant_class: RoomOccupant = Methods.get_obj_by_str_name(room_occupant_data["class"])
             occupant_stats: dict = room_occupant_data["stats"]
 
             occupant_class(self, **occupant_stats)
@@ -74,7 +74,7 @@ class Room(Entity):
         for player_id in curr_players_ids:
             player_data: dict = self.state.registered_get("player", [player_id])
 
-            player_class: RoomOccupant = Methods.get_object_by_str_name(player_data["class"])
+            player_class: RoomOccupant = Methods.get_obj_by_str_name(player_data["class"])
             player_stats: dict = player_data["stats"]
 
             player_class(self, **player_stats)
