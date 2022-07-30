@@ -54,6 +54,8 @@ class Room(Entity):
         self.surface = surface
 
     def _load_room(self):
+        ##### TODO: Needs rewriting once the process for referencing custom classes by string has been reworked
+
         curr_room_occupants_ids: Iterable[str] = self.state.registered_get("room_occupants_ids", [self._room_id])
         curr_players_ids: Iterable[str] = self.state.registered_get("curr_players_ids")
 

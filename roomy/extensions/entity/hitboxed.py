@@ -74,7 +74,8 @@ class Hitboxed(Extension):
 
         This includes inspecting the other entity (if needed) to decide what effects should apply.
 
-        ##### TODO: Review the below rule in practice
+        ##### TODO: Review the below rule in practice - 'squishy' objects and 'immovable' objects
+                    may want to edit the other object, or not be edited, respectively
         - Any *direct* changes to the position or movement (or other stats) of an entity as a result of the collision
           itself should be handled by that entity, not by the other involved entity
         """
