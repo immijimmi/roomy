@@ -14,7 +14,7 @@ class Methods:
         return {k: v for k, v in vars(target_cls).items() if not k.startswith("__")}
 
     @staticmethod
-    def get_object_from_str(object_name: str):
+    def get_object_by_str_name(object_name: str):
         """
         Returns the value stored under the provided name, in the global namespace
         """
