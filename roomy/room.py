@@ -54,7 +54,11 @@ class Room(Entity):
         self.surface = surface
 
     def _load_room(self):
-        ##### TODO: Needs rewriting once the process for referencing custom classes by string has been reworked
+        """
+        Instantiates all the entities present in the current room.
+        Assumes that any classes listed in the game's state are available under the same name in the global namespace;
+        for example, `from .test import Test` would make a class "Test" available for this purpose
+        """
 
         curr_room_occupants_ids: Iterable[str] = self.state.registered_get("room_occupants_ids", [self._room_id])
         curr_players_ids: Iterable[str] = self.state.registered_get("curr_players_ids")
@@ -62,7 +66,7 @@ class Room(Entity):
         for room_occupant_id in curr_room_occupants_ids:
             room_occupant_data: dict = self.state.registered_get("room_occupant", [room_occupant_id])
 
-            occupant_class: RoomOccupant = Methods.get_class_from_str(room_occupant_data["class"])
+            occupant_class: RoomOccupant = Methods.get_object_from_str(room_occupant_data["class"])
             occupant_stats: dict = room_occupant_data["stats"]
 
             occupant_class(self, **occupant_stats)
@@ -70,7 +74,7 @@ class Room(Entity):
         for player_id in curr_players_ids:
             player_data: dict = self.state.registered_get("player", [player_id])
 
-            player_class: RoomOccupant = Methods.get_class_from_str(player_data["class"])
+            player_class: RoomOccupant = Methods.get_object_from_str(player_data["class"])
             player_stats: dict = player_data["stats"]
 
             player_class(self, **player_stats)
