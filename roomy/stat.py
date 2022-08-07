@@ -1,6 +1,8 @@
 from typing import FrozenSet, Hashable
+from functools import total_ordering
 
 
+@total_ordering
 class Stat:
     """
     This class provides a standardised interface for any generic stat, which aims to facilitate the kinds of changes
@@ -79,6 +81,63 @@ class Stat:
 
         self._modified_by = set()
         self._modified_by_frozen = None  # Will be calculated as needed
+
+    def __repr__(self):
+        return (
+            f"<Stat(base_value={self._base_value}, base_summed_modifier={self._base_summed_modifier}, "
+            f"base_multiplied_modifier={self._base_multiplied_modifier}, secondary_value={self._secondary_value}, "
+            f"secondary_summed_modifier={self._secondary_summed_modifier}, "
+            f"secondary_multiplied_modifier={self._secondary_multiplied_modifier}, "
+            f"overall_summed_modifier={self._overall_summed_modifier}, "
+            f"overall_multiplied_modifier={self._overall_multiplied_modifier}, is_locked={self._is_locked}) "
+            f"modified by {self._modified_by}>"
+        )
+
+    def __str__(self):
+        return str(self.total)
+
+    # Note that @total_ordering covers the comparison methods that are not implemented here
+    def __lt__(self, other):
+        return self.total < other
+
+    def __eq__(self, other):
+        return self.total == other
+
+    def __add__(self, other):
+        return self.total + other
+
+    def __sub__(self, other):
+        return self.total - other
+
+    def __mul__(self, other):
+        return self.total * other
+
+    def __truediv__(self, other):
+        return self.total / other
+
+    def __floordiv__(self, other):
+        return self.total // other
+
+    def __mod__(self, other):
+        return self.total % other
+
+    def __neg__(self):
+        return -self.total
+
+    def __pos__(self):
+        return +self.total
+
+    def __abs__(self):
+        return abs(self.total)
+
+    def __int__(self):
+        return int(self.total)
+
+    def __float__(self):
+        return float(self.total)
+
+    def __round__(self, n=None):
+        return round(self.total, ndigits=n)
 
     @property
     def base_value(self) -> float:
