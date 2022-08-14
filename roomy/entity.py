@@ -3,7 +3,7 @@ from objectextensions import Extendable
 from pygame import Surface
 
 from abc import ABC
-from typing import Optional, Sequence, Any
+from typing import Optional, Tuple, Any
 
 
 class Entity(Extendable, Recurface, ABC):
@@ -17,7 +17,7 @@ class Entity(Extendable, Recurface, ABC):
     def __init__(
             self, game: "Game",
             parent: Optional["Entity"] = None, surface: Optional[Surface] = None,
-            position: Optional[Sequence[int]] = None, priority: Any = None
+            position: Optional[Tuple[int, int]] = None, priority: Any = None
     ):
         Extendable.__init__(self)
         Recurface.__init__(self, surface=surface, parent=parent, position=position, priority=priority)

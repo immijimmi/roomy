@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Tuple
 from abc import ABC
 
 from ..entity import Entity
@@ -12,7 +12,7 @@ class RoomOccupant(Entity, ABC):
     excludes things that would cease to exist once the room is exited
     """
 
-    def __init__(self, parent: "Room", render_position: Sequence[int], surface=None, priority=None):
+    def __init__(self, parent: "Room", render_position: Tuple[int, int], surface=None, priority=None):
         super().__init__(
             parent.game, parent=parent, surface=surface, position=render_position, priority=priority
         )
