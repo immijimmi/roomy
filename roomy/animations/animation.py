@@ -6,7 +6,7 @@ from weakref import ref
 from pygame import Surface
 
 from ..handlers import AnimationHandler
-from .constants import AnimationParams
+from ..handlers.enums import AnimationDataKey
 
 
 class Animation(ABC):
@@ -23,7 +23,7 @@ class Animation(ABC):
         self._key = animation_key
         self._priority = priority
 
-        self._data = AnimationHandler.get_data(type(parent), animation_key)
+        self._settings = AnimationHandler.get_settings(type(parent), animation_key)
 
         self._elapsed = timedelta(0)
         self._elapsed_effective = timedelta(0)
@@ -55,11 +55,11 @@ class Animation(ABC):
 
     @property
     def total_frames(self) -> int:
-        return len(self._data[AnimationParams.FRAMES])
+        return len(self._settings[AnimationDataKey.FRAMES])
 
     @property
     def frame(self) -> Surface:
-        frame_file_path = self._data[AnimationParams.FRAMES][self.frame_index]
+        frame_file_path = self._settings[AnimationDataKey.FRAMES][self.frame_index]
 
         return AnimationHandler.get_frame(frame_file_path, self.size)
 
