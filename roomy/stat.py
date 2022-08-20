@@ -289,7 +289,7 @@ class Stat:
     @property
     def is_locked(self) -> Any:
         """
-        Determines whether the attributes used to calculate the resulting total of this stat may be modified
+        Determines whether the other attributes of this instance may be modified
         (effectively whether this stat instance is currently mutable or not)
 
         The value can either be set to True/False to function as a simple *is locked*/*is not locked* flag,
