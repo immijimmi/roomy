@@ -293,8 +293,8 @@ class Stat:
         (effectively whether this stat instance is currently mutable or not)
 
         The value can either be set to True/False to function as a simple *is locked*/*is not locked* flag,
-        or can instead be set to a permission level (e.g. using an enum) which should be matched by any client code
-        that wishes to modify or unlock this stat instance
+        or can instead be set to a permission level (e.g. using an enum for standardised permissions values)
+        which should be matched by any client code that wishes to modify or unlock this stat instance
         """
 
         return self._is_locked
