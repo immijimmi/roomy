@@ -2,6 +2,7 @@ from typing import Tuple
 from abc import ABC
 
 from ..entity import Entity
+from ..stat import Stat
 
 
 class RoomOccupant(Entity, ABC):
@@ -16,3 +17,30 @@ class RoomOccupant(Entity, ABC):
         super().__init__(
             parent.game, parent=parent, surface=surface, position=render_position, priority=priority
         )
+
+    @property
+    def speed(self) -> Tuple[Stat, Stat]:
+        """
+        Should return a pair of Stat objects representing x speed and y speed, respectively
+        """
+
+        raise NotImplementedError
+
+    @property
+    def acceleration(self) -> Tuple[Stat, Stat]:
+        """
+        Should return a pair of Stat objects representing x acceleration and y acceleration, respectively
+        """
+
+        raise NotImplementedError
+
+    @property
+    def mass(self) -> Stat:
+        """
+        Used to apply changes in momentum rather than just speed;
+        For example, in a collision between two objects there may be a transfer of momentum - the speed
+        of one object would be multiplied by its mass, and then divided by the other object's mass before
+        being added to that other object's speed
+        """
+
+        raise NotImplementedError
