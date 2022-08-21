@@ -353,7 +353,7 @@ class Stat:
         Optional.
         Allows a source to register that it has reverted a modification to this stat.
 
-        This is the inverse of self.add_modified_by(), and so the same stipulations apply
+        This is the inverse of .add_modified_by(), and so the same stipulations apply
         """
 
         if self._is_locked:
