@@ -1,12 +1,11 @@
 from typing import FrozenSet, Hashable, Any
-from functools import total_ordering
 from contextlib import contextmanager
 
-from .constants import ErrorMessages
+from ..constants import ErrorMessages
+from .stat import Stat
 
 
-@total_ordering
-class Stat:
+class GenericStat(Stat):
     """
     This class provides a standardised interface for any generic stat, which aims to facilitate the kinds of changes
     and modifiers typically applied to stats via game mechanics.
@@ -31,7 +30,7 @@ class Stat:
     and unlock the stat if necessary.
 
     In practice, each of these attributes should be used as shown below:
-    damage = Stat()
+    damage = GenericStat()
 
     # Apply double damage (x2 multiplier)
     damage.overall_multiplied_modifier *= 2
@@ -87,7 +86,7 @@ class Stat:
 
     def __repr__(self):
         return (
-            f"<Stat(base_value={self._base_value}, base_summed_modifier={self._base_summed_modifier}, "
+            f"<{type(self).__name__}(base_value={self._base_value}, base_summed_modifier={self._base_summed_modifier}, "
             f"base_multiplied_modifier={self._base_multiplied_modifier}, secondary_value={self._secondary_value}, "
             f"secondary_summed_modifier={self._secondary_summed_modifier}, "
             f"secondary_multiplied_modifier={self._secondary_multiplied_modifier}, "
@@ -96,52 +95,6 @@ class Stat:
             f"modified by {self._modified_by}>"
         )
 
-    def __str__(self):
-        return str(self.total)
-
-    # Note that @total_ordering covers the comparison methods that are not implemented here
-    def __lt__(self, other):
-        return self.total < other
-
-    def __eq__(self, other):
-        return self.total == other
-
-    def __add__(self, other):
-        return self.total + other
-
-    def __sub__(self, other):
-        return self.total - other
-
-    def __mul__(self, other):
-        return self.total * other
-
-    def __truediv__(self, other):
-        return self.total / other
-
-    def __floordiv__(self, other):
-        return self.total // other
-
-    def __mod__(self, other):
-        return self.total % other
-
-    def __neg__(self):
-        return -self.total
-
-    def __pos__(self):
-        return +self.total
-
-    def __abs__(self):
-        return abs(self.total)
-
-    def __int__(self):
-        return int(self.total)
-
-    def __float__(self):
-        return float(self.total)
-
-    def __round__(self, n=None):
-        return round(self.total, ndigits=n)
-
     @property
     def base_value(self) -> float:
         return self._base_value
@@ -149,7 +102,8 @@ class Stat:
     @base_value.setter
     def base_value(self, value: float):
         """
-        This attribute should only have *additions* and *subtractions* applied to it
+        This attribute should only have *additions* and *subtractions* applied to it,
+        **not** multiplications or divisions
         """
 
         if self._is_locked:
@@ -167,7 +121,8 @@ class Stat:
     @base_summed_modifier.setter
     def base_summed_modifier(self, value: float):
         """
-        This attribute should only have *additions* and *subtractions* applied to it
+        This attribute should only have *additions* and *subtractions* applied to it,
+        **not** multiplications or divisions
         """
 
         if self._is_locked:
@@ -185,7 +140,8 @@ class Stat:
     @base_multiplied_modifier.setter
     def base_multiplied_modifier(self, value: float):
         """
-        This attribute should only have *multiplications* and *divisions* applied to it
+        This attribute should only have *multiplications* and *divisions* applied to it,
+        **not** additions or subtractions
         """
 
         if self._is_locked:
@@ -203,7 +159,8 @@ class Stat:
     @secondary_value.setter
     def secondary_value(self, value: float):
         """
-        This attribute should only have *additions* and *subtractions* applied to it
+        This attribute should only have *additions* and *subtractions* applied to it,
+        **not** multiplications or divisions
         """
 
         if self._is_locked:
@@ -221,7 +178,8 @@ class Stat:
     @secondary_summed_modifier.setter
     def secondary_summed_modifier(self, value: float):
         """
-        This attribute should only have *additions* and *subtractions* applied to it
+        This attribute should only have *additions* and *subtractions* applied to it,
+        **not** multiplications or divisions
         """
 
         if self._is_locked:
@@ -239,7 +197,8 @@ class Stat:
     @secondary_multiplied_modifier.setter
     def secondary_multiplied_modifier(self, value: float):
         """
-        This attribute should only have *multiplications* and *divisions* applied to it
+        This attribute should only have *multiplications* and *divisions* applied to it,
+        **not** additions or subtractions
         """
 
         if self._is_locked:
@@ -257,7 +216,8 @@ class Stat:
     @overall_summed_modifier.setter
     def overall_summed_modifier(self, value: float):
         """
-        This attribute should only have *additions* and *subtractions* applied to it
+        This attribute should only have *additions* and *subtractions* applied to it,
+        **not** multiplications or divisions
         """
 
         if self._is_locked:
@@ -275,7 +235,8 @@ class Stat:
     @overall_multiplied_modifier.setter
     def overall_multiplied_modifier(self, value: float):
         """
-        This attribute should only have *multiplications* and *divisions* applied to it
+        This attribute should only have *multiplications* and *divisions* applied to it,
+        **not** additions or subtractions
         """
 
         if self._is_locked:

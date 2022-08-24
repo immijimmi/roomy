@@ -2,7 +2,7 @@ from typing import Tuple
 from abc import ABC
 
 from ..entity import Entity
-from ..stat import Stat
+from ..stats.genericstat import GenericStat
 
 
 class RoomOccupant(Entity, ABC):
@@ -19,23 +19,23 @@ class RoomOccupant(Entity, ABC):
         )
 
     @property
-    def speed(self) -> Tuple[Stat, Stat]:
+    def speed(self) -> Tuple[GenericStat, GenericStat]:
         """
-        Should return a pair of Stat objects representing x speed and y speed, respectively
-        """
-
-        raise NotImplementedError
-
-    @property
-    def acceleration(self) -> Tuple[Stat, Stat]:
-        """
-        Should return a pair of Stat objects representing x acceleration and y acceleration, respectively
+        Should return a pair of stat objects representing x speed and y speed, respectively
         """
 
         raise NotImplementedError
 
     @property
-    def mass(self) -> Stat:
+    def acceleration(self) -> Tuple[GenericStat, GenericStat]:
+        """
+        Should return a pair of stat objects representing x acceleration and y acceleration, respectively
+        """
+
+        raise NotImplementedError
+
+    @property
+    def mass(self) -> GenericStat:
         """
         Used to apply changes in momentum rather than just speed;
         For example, in a collision between two objects there may be a transfer of momentum - the speed
