@@ -79,9 +79,9 @@ class CombinedStat(Stat):
 
     def __init__(self, operands: Tuple[Stat, Stat], operator: Callable[[float, float], float]):
         self._operands = tuple(operands)
-        self._operator = operator  # Can be a basic arithmetic operator function, or a custom algorithm as needed
+        self._operator = operator
 
-        self._subtotals = (None, None)  # Will be calculated as needed
+        self._operand_totals = (None, None)  # Will be calculated as needed
         self._total = None  # Will be calculated as needed
 
     @property
@@ -89,17 +89,27 @@ class CombinedStat(Stat):
         return self._operands
 
     @property
+    def operator(self) -> Callable[[float, float], float]:
+        """
+        Can be a basic arithmetic operator function, or a custom algorithm, as needed.
+        This customisability allows the totals returned from the provided stats to be modified in any way necessary
+        within this function, even before combining them together
+        """
+
+        return self._operator
+
+    @property
     def total(self) -> float:
-        # Pulling fresh subtotals from the referenced stat objects
-        subtotals = (self._operands[0].total, self._operands[1].total)
+        # Pulling fresh operand totals from the referenced stat objects
+        operand_totals = (self._operands[0].total, self._operands[1].total)
 
         # Checking if the total needs recalculating
-        # (either the current total is None, or the fresh subtotals don't match the stored ones)
-        if (subtotals == self._subtotals) and self._total is not None:  # Does not need recalculating
+        # (either the current total is None, or the fresh operand totals don't match the stored ones)
+        if (operand_totals == self._operand_totals) and self._total is not None:  # Does not need recalculating
             return self._total
 
         else:
-            self._subtotals = subtotals
+            self._operand_totals = operand_totals
 
-            self._total = self._operator(*subtotals)
+            self._total = self._operator(*operand_totals)
             return self._total
