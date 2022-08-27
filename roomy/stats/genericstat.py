@@ -1,4 +1,4 @@
-from typing import FrozenSet, Hashable, Any
+from typing import FrozenSet, Hashable, Any, Optional
 from contextlib import contextmanager
 
 from ..constants import ErrorMessages
@@ -64,8 +64,11 @@ class GenericStat(Stat):
             base_value: float = 0, base_summed_modifier: float = 1, base_multiplied_modifier: float = 1,
             secondary_value: float = 0, secondary_summed_modifier: float = 1, secondary_multiplied_modifier: float = 1,
             overall_summed_modifier: float = 1, overall_multiplied_modifier: float = 1,
-            is_locked: Any = False
+            is_locked: Any = False,
+            name: Optional[str] = None
     ):
+        super().__init__(name)
+
         self._base_value = base_value
         self._base_summed_modifier = base_summed_modifier
         self._base_multiplied_modifier = base_multiplied_modifier

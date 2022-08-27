@@ -1,11 +1,14 @@
 from abc import ABC
 from functools import total_ordering
 from operator import add, sub, mul, truediv, floordiv, mod
-from typing import Callable, Tuple
+from typing import Callable, Tuple, Optional
 
 
 @total_ordering
 class Stat(ABC):
+    def __init__(self, name: Optional[str] = None):
+        self.name: Optional[str] = name
+
     @property
     def total(self) -> float:
         raise NotImplementedError
@@ -77,7 +80,13 @@ class CombinedStat(Stat):
     chains of CombinedStat objects to reach the desired result
     """
 
-    def __init__(self, operands: Tuple[Stat, Stat], operator: Callable[[float, float], float]):
+    def __init__(
+            self,
+            operands: Tuple[Stat, Stat], operator: Callable[[float, float], float],
+            name: Optional[str] = None
+    ):
+        super().__init__(name)
+
         self._operands = tuple(operands)
         self._operator = operator
 
