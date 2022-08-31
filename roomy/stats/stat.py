@@ -26,7 +26,7 @@ class Stat(ABC):
             return self.total == other.total
 
         else:
-            return False
+            return self.total == other  # Stat objects can be considered comparable to other numerical objects by .total
 
     def __add__(self, other):
         if not issubclass(type(other), Stat):
