@@ -26,7 +26,7 @@ class Stat(ABC):
             return self.total == other.total
 
         else:
-            return self.total == other
+            return False
 
     def __add__(self, other):
         if not issubclass(type(other), Stat):
