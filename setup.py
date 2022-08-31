@@ -23,7 +23,7 @@ setup(
     keywords=["game", "engine", "2D"],
     install_requires=[
         "pygame~=2.0.1",
-        "managedstate~=2.0.1",
+        "managedstate~=2.1.0",
         "recurfaces~=1.0.4",
         "objectextensions~=1.2.1"
     ],
