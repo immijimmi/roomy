@@ -9,7 +9,8 @@ setup(
         "roomy",
         "roomy.animations", "roomy.extensions", "roomy.handlers",
         "roomy.hitboxes", "roomy.roomoccupants", "roomy.screens",
-        "roomy.extensions.stats"
+        "roomy.stats",
+        "roomy.extensions.renderable"
     ],
     version="0.3.0",
     license="MIT",
