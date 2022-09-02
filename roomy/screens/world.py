@@ -39,8 +39,6 @@ class World(Screen):
 
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):
-        ##### TODO: Review the below state template
-
         state.register_path("current_room_id", ["current_room_id"], [str(None)])
 
         state.register_path("room_occupant", ["room_occupants", PartialQueries.KEY], [{}, {}])
