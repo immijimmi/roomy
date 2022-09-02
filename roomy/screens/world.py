@@ -24,7 +24,7 @@ class World(Screen):
         return self._curr_room
 
     def set_room(self) -> None:
-        new_room_id = self.state.registered_get("curr_room_id")
+        new_room_id = self.state.registered_get("current_room_id")
 
         if self.curr_room is None:
             pass
@@ -41,16 +41,14 @@ class World(Screen):
     def register_paths(state: State.with_extensions(Registrar)):
         ##### TODO: Review the below state template
 
-        state.register_path("curr_room_id", ["current", "room_id"], [{}, str(None)])
-        state.register_path("curr_players_ids", ["current", "players_ids"], [{}, []])
+        state.register_path("current_room_id", ["current_room_id"], [str(None)])
 
-        state.register_path("player", ["players", PartialQueries.KEY], [{}, {}])
-        state.register_path("room", ["rooms", PartialQueries.KEY], [{}, {}])
         state.register_path("room_occupant", ["room_occupants", PartialQueries.KEY], [{}, {}])
 
+        state.register_path("room", ["rooms", PartialQueries.KEY], [{}, {}])
         state.register_path("room_occupants_ids", ["rooms", PartialQueries.KEY, "occupants_ids"], [{}, {}, []])
         state.register_path(
-            "room_background_key",
-            ["rooms", PartialQueries.KEY, "background_key"],
+            "room_background_id",
+            ["rooms", PartialQueries.KEY, "background_id"],
             [{}, {}, str(None)]
         )
