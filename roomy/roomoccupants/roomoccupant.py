@@ -1,13 +1,13 @@
 from typing import Tuple
 from abc import ABC
 
-from ..entity import Entity
+from ..renderable import Renderable
 from ..stats.genericstat import GenericStat
 
 
-class RoomOccupant(Entity, ABC):
+class RoomOccupant(Renderable, ABC):
     """
-    Concrete class tightly coupled to the Room class, which renders a persisting entity in a room.
+    Concrete class tightly coupled to the Room class, which renders a persisting Renderable object in a room.
 
     This includes people, inanimate objects, decorative objects, objects with no collision etc. and only
     excludes things that would cease to exist once the room is exited

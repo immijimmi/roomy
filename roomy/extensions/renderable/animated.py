@@ -1,13 +1,13 @@
 from objectextensions import Extension
 
-from ...entity import Entity
+from ...renderable import Renderable
 from ...animations import Animation
 
 
 class Animated(Extension):
     @staticmethod
     def can_extend(target_cls):
-        return issubclass(target_cls, Entity)
+        return issubclass(target_cls, Renderable)
 
     @staticmethod
     def extend(target_cls):
@@ -43,7 +43,7 @@ class Animated(Extension):
     def __generate_animation(self) -> Animation:
         """
         Must be overridden.
-        Should return the correct animation for this entity based on its current state.
+        Should return the correct animation for this renderable based on its current state.
         Note that animations can still be created elsewhere on an ad-hoc basis (e.g. in response to specific events)
         """
 

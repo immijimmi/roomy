@@ -7,11 +7,11 @@ from .constants import Constants
 
 
 class Hitbox(Tagged, ABC):
-    def __init__(self, parent: "Entity.with_extensions(Hitboxed)", tags: Iterable[str]):
+    def __init__(self, parent: "Renderable.with_extensions(Hitboxed)", tags: Iterable[str]):
         super().__init__(tags)
 
-        # Weakref so that it does not prevent parent entity being garbage collected
-        self._parent_entity = ref(parent)
+        # Weakref so that it does not prevent parent object being garbage collected
+        self._parent_renderable = ref(parent)
 
     @property
     def hitbox_handler(self) -> "HitboxHandler":
@@ -19,23 +19,23 @@ class Hitbox(Tagged, ABC):
         Shortcut property which accesses the current game screen, and then the current hitbox handler through that
         """
 
-        return self.parent_entity.game.screen.hitbox_handler
+        return self.parent_renderable.game.screen.hitbox_handler
 
     @property
-    def parent_entity(self) -> "Entity.with_extensions(Hitboxed)":
-        return self._parent_entity()
+    def parent_renderable(self) -> "Renderable.with_extensions(Hitboxed)":
+        return self._parent_renderable()
 
-    def is_collision(self, other: "Hitbox", check_by_entity: bool = True) -> bool:
+    def is_collision(self, other: "Hitbox", check_by_parent: bool = True) -> bool:
         """
         Checks for a collision between this hitbox and the provided other hitbox.
         If this collision has already been checked this tick, returns False.
 
-        If check_by_entity is True, hitbox objects that have the same parent Entity
+        If check_by_parent is True, hitbox objects that have the same parent Renderable
         are considered to be the same hitbox for this purpose
         """
 
-        if check_by_entity:
-            collision_key = frozenset((self.parent_entity, other.parent_entity))
+        if check_by_parent:
+            collision_key = frozenset((self.parent_renderable, other.parent_renderable))
         else:
             collision_key = frozenset((self, other))
 

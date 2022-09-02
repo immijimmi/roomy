@@ -1,1 +1,1 @@
-from .entity import Animated, Hitboxed
+from .renderable import Animated, Hitboxed

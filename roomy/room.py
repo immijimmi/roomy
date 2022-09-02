@@ -7,11 +7,11 @@ from os import path
 
 from .roomoccupants import *
 from .methods import Methods
-from .entity import Entity
+from .renderable import Renderable
 from .constants import Constants
 
 
-class Room(Entity):
+class Room(Renderable):
     """
     Concrete class tightly coupled to the World screen, which renders a single room and its occupants
     """

@@ -35,7 +35,7 @@ class AnimationHandler:
         AnimationHandler.SPRITE_SHEETS_DATA[sprite_label] = sprite_data
 
     @staticmethod
-    def get_settings(target_cls: Type["Entity.with_extensions(Animated)"], animation_key: str) -> Dict[str, Any]:
+    def get_settings(target_cls: Type["Renderable.with_extensions(Animated)"], animation_key: str) -> Dict[str, Any]:
         """
         Retrieves the animation settings associated with the provided class and animation key,
         loading the class's animation data if necessary
@@ -58,7 +58,7 @@ class AnimationHandler:
         return AnimationHandler.FRAMES[frame_key][size]
 
     @staticmethod
-    def _load_data(target_cls: Type["Entity.with_extensions(Animated)"]) -> None:
+    def _load_data(target_cls: Type["Renderable.with_extensions(Animated)"]) -> None:
         """
         Loads all animation data for the target class, if it is not already loaded.
         Assumes a standard location for the data file as dictated below in the variable `animation_data_file_path`.

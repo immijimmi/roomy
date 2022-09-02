@@ -12,7 +12,7 @@ class HitboxHandler:
         self._checked_collisions = set()
 
     @property
-    def checked_collisions(self) -> Set[FrozenSet[Union[Hitbox, "Entity.with_extensions(Hitboxed)"]]]:
+    def checked_collisions(self) -> Set[FrozenSet[Union[Hitbox, "Renderable.with_extensions(Hitboxed)"]]]:
         """
         This set represents every unique hitbox combination that has already been checked for a collision in this tick.
         Each combination is stored here as a frozenset containing the involved hitbox instances

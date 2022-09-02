@@ -6,9 +6,9 @@ from abc import ABC
 from typing import Optional, Tuple, Any
 
 
-class Entity(Extendable, Recurface, ABC):
+class Renderable(Extendable, Recurface, ABC):
     """
-    An Entity is any object that has a place in the rendering hierarchy.
+    A Renderable object is any object that has a place in the rendering hierarchy.
 
     Explanation of additional constructor param requirements:
     - game: A reference to the Game instance allows all entities to navigate the object hierarchy from a static origin
@@ -16,7 +16,7 @@ class Entity(Extendable, Recurface, ABC):
 
     def __init__(
             self, game: "Game",
-            parent: Optional["Entity"] = None, surface: Optional[Surface] = None,
+            parent: Optional["Renderable"] = None, surface: Optional[Surface] = None,
             position: Optional[Tuple[int, int]] = None, priority: Any = None
     ):
         Extendable.__init__(self)
@@ -31,7 +31,7 @@ class Entity(Extendable, Recurface, ABC):
     def update(self, elapsed_ms: int, events: list):
         self._update(elapsed_ms, events)
 
-        child: Entity
+        child: Renderable
         for child in reversed(self.ordered_child_recurfaces):  # Events passed to high render_priority children first
             child.update(elapsed_ms, events)
 
@@ -39,7 +39,7 @@ class Entity(Extendable, Recurface, ABC):
         """
         Lifecycle method, called automatically each game tick.
         Can optionally be overridden.
-        Complete any miscellaneous work necessary for this entity each tick
+        Complete any miscellaneous work necessary for this object each tick
         that is not covered by other lifecycle methods here
         """
 

@@ -4,12 +4,12 @@ from managedstate.extensions import Registrar
 
 from abc import ABC
 
-from ..entity import Entity
+from ..renderable import Renderable
 from ..constants import Constants as GameConstants
 from ..handlers import HitboxHandler
 
 
-class Screen(Entity, ABC):
+class Screen(Renderable, ABC):
     """
     Any class that inherits from Screen should be used as a top-level object in the game loop.
     Different derived classes of Screen are to represent different views of the game;

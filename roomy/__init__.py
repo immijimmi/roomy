@@ -1,6 +1,6 @@
 from .game import Game
 from .constants import Constants, ErrorMessages
 from .methods import Methods
-from .entity import Entity
+from .renderable import Renderable
 from .room import Room
 from .tagged import Tagged

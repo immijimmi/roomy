@@ -7,7 +7,7 @@ from ..handlers.enums import AnimationDataKey
 
 class RepeatAnimation(Animation):
     def __init__(
-            self, parent: "Entity.with_extensions(Animated)", animation_key: str,
+            self, parent: "Renderable.with_extensions(Animated)", animation_key: str,
             size: float = 1, speed: float = 1, priority: Any = None,
             frame_duration: Optional[timedelta] = None,
             windup_frames: int = 0

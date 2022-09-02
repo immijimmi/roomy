@@ -13,13 +13,13 @@ class Animation(ABC):
     default_frame_duration = timedelta(microseconds=20000)
 
     def __init__(
-            self, parent: "Entity.with_extensions(Animated)", animation_key: str,
+            self, parent: "Renderable.with_extensions(Animated)", animation_key: str,
             size: float = 1, speed: float = 1, priority: Any = None
     ):
         self.size: float = size
         self.speed: float = speed
 
-        self._parent_entity = ref(parent)  # Weakref so that it does not prevent parent entity being garbage collected
+        self._parent_renderable = ref(parent)  # Weakref so that it does not prevent parent object being garbage collected
         self._key = animation_key
         self._priority = priority
 
@@ -29,8 +29,8 @@ class Animation(ABC):
         self._elapsed_effective = timedelta(0)
 
     @property
-    def parent_entity(self) -> "Entity.with_extensions(Animated)":
-        return self._parent_entity()
+    def parent_renderable(self) -> "Renderable.with_extensions(Animated)":
+        return self._parent_renderable()
 
     @property
     def key(self) -> str:
