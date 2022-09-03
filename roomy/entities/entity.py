@@ -5,7 +5,7 @@ from ..renderable import Renderable
 from ..stats.genericstat import GenericStat
 
 
-class RoomOccupant(Renderable, ABC):
+class Entity(Renderable, ABC):
     """
     Concrete class tightly coupled to the Room class, which renders a persisting Renderable object in a room.
 

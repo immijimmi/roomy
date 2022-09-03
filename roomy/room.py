@@ -2,10 +2,10 @@ from pygame import transform, image
 from managedstate import State
 from managedstate.extensions import Registrar
 
-from typing import Iterable
+from typing import Iterable, Type
 from os import path
 
-from .roomoccupants import *
+from .entities import *
 from .methods import Methods
 from .renderable import Renderable
 from .constants import Constants
@@ -56,15 +56,16 @@ class Room(Renderable):
     def _load_room(self):
         """
         Instantiates all the entities present in the current room.
-        Assumes that any classes listed in the game's state are available under the same name in your global namespace
+        Assumes that any Entity subclasses listed in the game's state
+        are available under the same name in your global namespace
         """
 
-        curr_room_occupants_ids: Iterable[str] = self.state.registered_get("room_occupants_ids", [self._room_id])
+        curr_room_entities_ids: Iterable[str] = self.state.registered_get("room_entities_ids", [self._room_id])
 
-        for room_occupant_id in curr_room_occupants_ids:
-            room_occupant_data: dict = self.state.registered_get("room_occupant", [room_occupant_id])
+        for entity_id in curr_room_entities_ids:
+            entity_data: dict = self.state.registered_get("entity", [entity_id])
 
-            occupant_class: RoomOccupant = Methods.get_obj_by_str_name(room_occupant_data["class"])
-            occupant_details: dict = room_occupant_data["details"]
+            entity_class: Type[Entity] = Methods.get_obj_by_str_name(entity_data["class"])
+            entity_details: dict = entity_data["details"]
 
-            occupant_class(self, **occupant_details)
+            entity_class(self, **entity_details)

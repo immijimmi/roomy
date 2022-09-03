@@ -8,7 +8,7 @@ setup(
     packages=[
         "roomy",
         "roomy.animations", "roomy.extensions", "roomy.handlers",
-        "roomy.hitboxes", "roomy.roomoccupants", "roomy.screens",
+        "roomy.hitboxes", "roomy.entities", "roomy.screens",
         "roomy.stats",
         "roomy.extensions.renderable"
     ],
