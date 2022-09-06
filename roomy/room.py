@@ -2,10 +2,11 @@ from pygame import transform, image
 from managedstate import State
 from managedstate.extensions import Registrar
 
-from typing import Iterable, Type
+from typing import Type, Tuple, List
 from os import path
 
 from .entities import *
+from .enums import EntityDataKeys
 from .methods import Methods
 from .renderable import Renderable
 from .constants import Constants
@@ -60,12 +61,12 @@ class Room(Renderable):
         are available under the same name in your global namespace
         """
 
-        curr_room_entities_ids: Iterable[str] = self.state.registered_get("room_entities_ids", [self._room_id])
+        curr_room_entities_ids: List[str] = self.state.registered_get("room_entities_ids", [self._room_id])
 
         for entity_id in curr_room_entities_ids:
             entity_data: dict = self.state.registered_get("entity", [entity_id])
 
-            entity_class: Type[Entity] = Methods.get_obj_by_str_name(entity_data["class"])
-            entity_details: dict = entity_data["details"]
+            entity_class: Type[Entity] = Methods.get_obj_by_str_name(entity_data[EntityDataKeys.CLASS])
+            entity_details: Tuple[list, dict] = (entity_data[EntityDataKeys.ARGS], entity_data[EntityDataKeys.KWARGS])
 
-            entity_class(self, **entity_details)
+            entity_class(self, *entity_details[0], **entity_details[1])
