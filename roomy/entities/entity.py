@@ -2,7 +2,7 @@ from typing import Tuple
 from abc import ABC
 
 from ..renderable import Renderable
-from ..stats.genericstat import GenericStat
+from ..stats import Stat, GenericStat
 
 
 class Entity(Renderable, ABC):
@@ -21,7 +21,10 @@ class Entity(Renderable, ABC):
     @property
     def speed(self) -> Tuple[GenericStat, GenericStat]:
         """
-        Should return a pair of stat objects representing x speed and y speed, respectively
+        Should return a pair of stat objects representing x speed and y speed, respectively.
+
+        These stats must be concrete GenericStat objects, to expose a clear write-access interface to any external
+        forces
         """
 
         raise NotImplementedError
@@ -29,13 +32,16 @@ class Entity(Renderable, ABC):
     @property
     def acceleration(self) -> Tuple[GenericStat, GenericStat]:
         """
-        Should return a pair of stat objects representing x acceleration and y acceleration, respectively
+        Should return a pair of stat objects representing x acceleration and y acceleration, respectively.
+
+        These stats must be concrete GenericStat objects, to expose a clear write-access interface to any external
+        forces
         """
 
         raise NotImplementedError
 
     @property
-    def mass(self) -> GenericStat:
+    def mass(self) -> Stat:
         """
         Used to apply changes in momentum rather than just speed;
         For example, in a collision between two objects there may be a transfer of momentum - the speed
