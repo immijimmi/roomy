@@ -25,17 +25,19 @@ class World(Screen):
 
     def set_room(self) -> None:
         new_room_id = self.state.registered_get("current_room_id")
+        old_room = self._curr_room
+        old_room_id = None if old_room is None else old_room.room_id
 
-        if self.curr_room is None:
-            pass
-        elif new_room_id == self.curr_room.room_id:
+        if new_room_id == old_room_id:
             return
 
-        old_room = self._curr_room
-        self._curr_room = Room(self, new_room_id)
+        new_room = Room(self, new_room_id)
+        self._curr_room = new_room
 
-        old_room.parent_recurface = None
-        self.game.observer_handler.on_change_room(old_room, self.curr_room)
+        if old_room is not None:
+            old_room.parent_recurface = None
+
+        self.game.observer_handler.on_change_room(old_room, new_room)
 
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):
