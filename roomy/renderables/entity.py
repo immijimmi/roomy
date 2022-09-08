@@ -1,8 +1,8 @@
 from typing import Tuple
 from abc import ABC
 
-from ..renderable import Renderable
 from ..stats import Stat, GenericStat
+from .renderable import Renderable
 
 
 class Entity(Renderable, ABC):

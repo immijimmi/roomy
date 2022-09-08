@@ -1,7 +1,6 @@
 from typing import Callable
 
-from ..screens import Screen
-from ..room import Room
+from ..renderables import Screen, Room
 
 
 class RemoveObserver(Exception):

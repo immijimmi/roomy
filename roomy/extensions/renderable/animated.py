@@ -1,6 +1,6 @@
 from objectextensions import Extension
 
-from ...renderable import Renderable
+from ...renderables import Renderable
 from ...animations import Animation
 
 

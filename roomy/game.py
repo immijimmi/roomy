@@ -3,9 +3,10 @@ from pygame import Surface
 
 from typing import Type, Optional
 
+from .config import Config
 from .constants import Constants
 from .handlers import ObserverHandler
-from .screens import Screen
+from .renderables import Screen
 
 
 class Game:
@@ -15,12 +16,13 @@ class Game:
     and .screen to be set to a valid Screen object, before calling .start() to begin the game loop
     """
 
-    def __init__(self, window: Surface, fps: int = 0, updates_per_frame: int = 1):
+    def __init__(self, window: Surface, fps: int = 0, updates_per_frame: int = 1, config: Config = Config):
         pygame.mixer.pre_init(frequency=Constants.AUDIO_FREQUENCY)
         pygame.init()
         pygame.mixer.init()
 
         self._window = window
+        self._config = config
 
         self.fps = fps
         self.updates_per_frame = updates_per_frame
@@ -29,6 +31,14 @@ class Game:
 
         self._screen = None
         self._observer_handler = ObserverHandler
+
+    @property
+    def window(self) -> Surface:
+        return self._window
+
+    @property
+    def config(self) -> Config:
+        return self._config
 
     @property
     def screen(self) -> Optional[Screen]:
@@ -40,10 +50,6 @@ class Game:
         self._screen = value
 
         self._observer_handler.on_change_screen(old_screen, value)
-
-    @property
-    def window(self):
-        return self._window
 
     @property
     def observer_handler(self) -> Type[ObserverHandler]:

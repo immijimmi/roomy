@@ -5,11 +5,11 @@ from managedstate.extensions import Registrar
 from typing import Type, Tuple, List
 from os import path
 
-from .entities import *
-from .enums import EntityDataKeys
-from .methods import Methods
+from ..enums import EntityDataKeys
+from ..methods import Methods
+from ..constants import Constants as GameConstants
 from .renderable import Renderable
-from .constants import Constants
+from .entity import Entity
 
 
 class Room(Renderable):
@@ -45,7 +45,7 @@ class Room(Renderable):
 
         background_id = self.state.registered_get("room_background_id", [self._room_id])
         background_file_path = path.join(
-            Constants.RESOURCE_FOLDER_PATH,
+            GameConstants.RESOURCE_FOLDER_PATH,
             f"{type(self).__name__}",
             f"{background_id}.png"
         )

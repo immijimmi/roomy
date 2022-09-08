@@ -3,7 +3,6 @@ from abc import ABC
 from weakref import ref
 
 from ..tagged import Tagged
-from .constants import Constants
 
 
 class Hitbox(Tagged, ABC):
@@ -55,4 +54,4 @@ class Hitbox(Tagged, ABC):
         raise NotImplementedError
 
     def _is_valid_tag(self, tag: str) -> bool:
-        return tag in Constants.HITBOX_TAGS
+        return tag in self.parent_renderable.game.config.HITBOX_TAGS

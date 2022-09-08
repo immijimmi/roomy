@@ -4,9 +4,9 @@ from managedstate.extensions import Registrar
 
 from abc import ABC
 
+from ...constants import Constants as GameConstants
+from ...handlers import HitboxHandler
 from ..renderable import Renderable
-from ..constants import Constants as GameConstants
-from ..handlers import HitboxHandler
 
 
 class Screen(Renderable, ABC):
