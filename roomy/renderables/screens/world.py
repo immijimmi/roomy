@@ -4,6 +4,7 @@ from managedstate.extensions.registrar import PartialQueries
 
 from .screen import Screen
 from ..room import Room
+from ...methods import Methods
 
 
 class World(Screen):
@@ -31,7 +32,8 @@ class World(Screen):
         if new_room_id == old_room_id:
             return
 
-        new_room = Room(self, new_room_id)
+        new_room_cls = Methods.get_obj_by_str_name(self.state.registered_get("room_class", [new_room_id]))
+        new_room = new_room_cls(self, new_room_id)
         self._curr_room = new_room
 
         if old_room is not None:
@@ -46,6 +48,7 @@ class World(Screen):
         state.register_path("entity", ["entities", PartialQueries.KEY], [{}, {}])
 
         state.register_path("room", ["rooms", PartialQueries.KEY], [{}, {}])
+        state.register_path("room_class", ["rooms", PartialQueries.KEY, "class"], [{}, {}, "Room"])
         state.register_path("room_entities_ids", ["rooms", PartialQueries.KEY, "entities_ids"], [{}, {}, []])
         state.register_path(
             "room_background_id",

@@ -1,20 +1,19 @@
 from pygame import transform, image
-from managedstate import State
-from managedstate.extensions import Registrar
 
 from typing import Type, Tuple, List
 from os import path
 
-from ..enums import EntityDataKeys
 from ..methods import Methods
 from ..constants import Constants as GameConstants
 from .renderable import Renderable
 from .entity import Entity
+from .enums import EntityDataKeys
 
 
 class Room(Renderable):
     """
-    Concrete class tightly coupled to the World screen, which renders a single room and its occupants
+    Concrete class tightly coupled to the World screen, which renders a single room and its occupants.
+    Can be subclassed as needed to add further functionality
     """
 
     def __init__(self, parent: "World", room_id: str):
@@ -26,14 +25,6 @@ class Room(Renderable):
         self._load_room()
 
     @property
-    def state(self) -> State.with_extensions(Registrar):
-        """
-        Shortcut property which accesses the state attached to the parent World object
-        """
-
-        return self.parent_recurface.state
-
-    @property
     def room_id(self) -> str:
         return self._room_id
 
@@ -43,7 +34,7 @@ class Room(Renderable):
         dictated below in `background_file_path`
         """
 
-        background_id = self.state.registered_get("room_background_id", [self._room_id])
+        background_id = self.parent_recurface.state.registered_get("room_background_id", [self._room_id])
         background_file_path = path.join(
             GameConstants.RESOURCE_FOLDER_PATH,
             f"{type(self).__name__}",
@@ -61,10 +52,12 @@ class Room(Renderable):
         are available under the same name in your global namespace
         """
 
-        curr_room_entities_ids: List[str] = self.state.registered_get("room_entities_ids", [self._room_id])
+        curr_room_entities_ids: List[str] = self.parent_recurface.state.registered_get(
+            "room_entities_ids", [self._room_id]
+        )
 
         for entity_id in curr_room_entities_ids:
-            entity_data: dict = self.state.registered_get("entity", [entity_id])
+            entity_data: dict = self.parent_recurface.state.registered_get("entity", [entity_id])
 
             entity_class: Type[Entity] = Methods.get_obj_by_str_name(entity_data[EntityDataKeys.CLASS])
             entity_details: Tuple[list, dict] = (entity_data[EntityDataKeys.ARGS], entity_data[EntityDataKeys.KWARGS])
