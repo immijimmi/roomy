@@ -4,7 +4,7 @@ from managedstate.extensions.registrar import PartialQueries
 
 from .screen import Screen
 from ..room import Room
-from ...methods import Methods
+from ..methods import Methods as RenderablesMethods
 
 
 class World(Screen):
@@ -32,7 +32,7 @@ class World(Screen):
         if new_room_id == old_room_id:
             return
 
-        new_room_cls = Methods.get_obj_by_str_name(self.state.registered_get("room_class", [new_room_id]))
+        new_room_cls = RenderablesMethods.get_obj_by_str_name(self.state.registered_get("room_class", [new_room_id]))
         new_room = new_room_cls(self, new_room_id)
         self._curr_room = new_room
 

@@ -3,7 +3,7 @@ from pygame import transform, image
 from typing import Type, Tuple, List
 from os import path
 
-from ..methods import Methods
+from .methods import Methods
 from ..constants import Constants as GameConstants
 from .renderable import Renderable
 from .entity import Entity

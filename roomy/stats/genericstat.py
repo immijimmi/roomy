@@ -1,7 +1,7 @@
 from typing import FrozenSet, Hashable, Any
 from contextlib import contextmanager
 
-from ..methods import ErrorMessages
+from .methods import ErrorMessages
 from .stat import Stat
 
 
