@@ -7,10 +7,11 @@ setup(
     name="roomy",
     packages=[
         "roomy",
-        "roomy.animations", "roomy.extensions", "roomy.handlers",
-        "roomy.hitboxes", "roomy.entities", "roomy.screens",
-        "roomy.stats",
-        "roomy.extensions.renderable"
+        "roomy.animations",
+        "roomy.extensions", "roomy.extensions.renderable",
+        "roomy.handlers", "roomy.hitboxes",
+        "roomy.renderables", "roomy.renderables.screens",
+        "roomy.stats"
     ],
     version="0.4.1",
     license="MIT",
