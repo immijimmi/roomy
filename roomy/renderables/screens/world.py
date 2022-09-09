@@ -40,7 +40,7 @@ class World(Screen):
         if new_room_id == old_room_id:
             return
 
-        with self.game.observer_handler.surrounding_events(
+        with self.game.listener_handler.surrounding_events(
                 EventKey.WILL_CHANGE_ROOM, EventKey.DID_CHANGE_ROOM,
                 self._curr_room, new_room_id
         ):

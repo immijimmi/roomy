@@ -3,7 +3,7 @@ from enum import Enum
 
 class EventKey(str, Enum):
     """
-    Constants representing events which may be called via ObserverHandler within this package
+    Constants representing events which may be called via ListenerHandler within this package
     """
 
     WILL_CHANGE_SCREEN = "will_change_screen"
