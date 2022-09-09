@@ -1,6 +1,18 @@
 from enum import Enum
 
 
+class EventKey(str, Enum):
+    """
+    Constants representing events which may be called via ObserverHandler within this package
+    """
+
+    WILL_CHANGE_SCREEN = "will_change_screen"
+    DID_CHANGE_SCREEN = "did_change_screen"
+
+    WILL_CHANGE_ROOM = "will_change_room"
+    DID_CHANGE_ROOM = "did_change_room"
+
+
 class AnimationDataKey(str, Enum):
     """
     Constants representing JSON keys which are used in the files containing animation data.

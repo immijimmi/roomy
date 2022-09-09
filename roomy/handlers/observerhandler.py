@@ -1,6 +1,5 @@
 from typing import Callable
-
-from ..renderables import Screen, Room
+from contextlib import contextmanager
 
 
 class RemoveObserver(Exception):
@@ -8,31 +7,32 @@ class RemoveObserver(Exception):
 
 
 class ObserverHandler:
-    REGISTERED = {
-        "on_change_screen": set(),
-        "on_change_room": set(),
-    }
+    REGISTERED = {}
 
     @staticmethod
-    def add(event_key: str, observer: Callable) -> None:
-        ObserverHandler.REGISTERED[event_key].add(observer)
+    def register(event_key: str, observer: Callable) -> None:
+        ObserverHandler.REGISTERED.setdefault(event_key, set()).add(observer)
 
     @staticmethod
     def remove(event_key: str, observer: Callable) -> None:
-        ObserverHandler.REGISTERED[event_key].remove(observer)
+        ObserverHandler.REGISTERED.setdefault(event_key, set()).remove(observer)
 
     @staticmethod
-    def on_change_screen(old_screen: Screen, new_screen: Screen) -> None:
-        for observer in ObserverHandler.REGISTERED["on_change_screen"]:
+    def on_event(event_key: str, *args, **kwargs) -> None:
+        observers_to_remove = set()
+
+        for observer in ObserverHandler.REGISTERED.get(event_key, set()):
             try:
-                observer(old_screen, new_screen)
+                observer(*args, **kwargs)
             except RemoveObserver:
-                ObserverHandler.remove("on_change_screen", observer)
+                observers_to_remove.add(observer)
+
+        for observer in observers_to_remove:
+            ObserverHandler.remove(event_key, observer)
 
     @staticmethod
-    def on_change_room(old_room: Room, new_room: Room) -> None:
-        for observer in ObserverHandler.REGISTERED["on_change_room"]:
-            try:
-                observer(old_room, new_room)
-            except RemoveObserver:
-                ObserverHandler.remove("on_change_screen", observer)
+    @contextmanager
+    def surrounding_events(before_event_key: str, after_event_key: str, *args, **kwargs):
+        ObserverHandler.on_event(before_event_key, *args, **kwargs)
+        yield
+        ObserverHandler.on_event(after_event_key, *args, **kwargs)

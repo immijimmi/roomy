@@ -5,6 +5,7 @@ from managedstate.extensions.registrar import PartialQueries
 from .screen import Screen
 from ..room import Room
 from ..methods import Methods as RenderablesMethods
+from ...handlers import EventKey
 
 
 class World(Screen):
@@ -39,14 +40,19 @@ class World(Screen):
         if new_room_id == old_room_id:
             return
 
-        new_room_cls = RenderablesMethods.get_obj_by_str_name(self.state.registered_get("room_class", [new_room_id]))
-        new_room = new_room_cls(self, new_room_id)
-        self._curr_room = new_room
+        with self.game.observer_handler.surrounding_events(
+                EventKey.WILL_CHANGE_ROOM, EventKey.DID_CHANGE_ROOM,
+                self._curr_room, new_room_id
+        ):
+            new_room_cls = RenderablesMethods.get_obj_by_str_name(
+                self.state.registered_get("room_class", [new_room_id])
+            )
+            new_room = new_room_cls(self, new_room_id)
 
-        if old_room is not None:
-            old_room.parent_recurface = None
+            self._curr_room = new_room
 
-        self.game.observer_handler.on_change_room(old_room, new_room)
+            if old_room is not None:
+                old_room.parent_recurface = None
 
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):

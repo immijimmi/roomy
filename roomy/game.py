@@ -5,7 +5,7 @@ from typing import Type, Optional
 
 from .config import Config
 from .constants import Constants
-from .handlers import ObserverHandler
+from .handlers import ObserverHandler, EventKey
 from .renderables import Screen
 
 
@@ -46,10 +46,14 @@ class Game:
 
     @screen.setter
     def screen(self, value: Screen):
-        old_screen = self._screen
-        self._screen = value
+        if value is self._screen:
+            return
 
-        self._observer_handler.on_change_screen(old_screen, value)
+        with self._observer_handler.surrounding_events(
+                EventKey.WILL_CHANGE_SCREEN, EventKey.DID_CHANGE_SCREEN,
+                self._screen, value
+        ):
+            self._screen = value
 
     @property
     def observer_handler(self) -> Type[ObserverHandler]:

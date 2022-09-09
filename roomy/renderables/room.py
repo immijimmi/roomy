@@ -7,7 +7,7 @@ from .methods import Methods
 from ..constants import Constants as GameConstants
 from .renderable import Renderable
 from .entity import Entity
-from .enums import EntityDataKeys
+from .enums import EntityDataKey
 
 
 class Room(Renderable):
@@ -59,7 +59,7 @@ class Room(Renderable):
         for entity_id in curr_room_entities_ids:
             entity_data: dict = self.parent_recurface.state.registered_get("entity", [entity_id])
 
-            entity_class: Type[Entity] = Methods.get_obj_by_str_name(entity_data[EntityDataKeys.CLASS])
-            entity_details: Tuple[list, dict] = (entity_data[EntityDataKeys.ARGS], entity_data[EntityDataKeys.KWARGS])
+            entity_class: Type[Entity] = Methods.get_obj_by_str_name(entity_data[EntityDataKey.CLASS])
+            entity_details: Tuple[list, dict] = (entity_data[EntityDataKey.ARGS], entity_data[EntityDataKey.KWARGS])
 
             entity_class(self, *entity_details[0], **entity_details[1])
