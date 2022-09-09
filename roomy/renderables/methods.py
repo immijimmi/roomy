@@ -12,13 +12,18 @@ class Methods:
         Supports dot notation to access objects stored under module or class attributes
         """
 
-        if object_name in Methods.REGISTERED_OBJECTS:
-            return Methods.REGISTERED_OBJECTS[object_name]
+        try:
+            nodes = object_name.split(".")
 
-        nodes = object_name.split(".")
+            obj = getattr(modules["__main__"], nodes.pop(0))
+            for node in nodes:
+                obj = getattr(obj, node)
 
-        obj = getattr(modules["__main__"], nodes.pop(0))
-        for node in nodes:
-            obj = getattr(obj, node)
+            return obj
 
-        return obj
+        except AttributeError:
+            if object_name in Methods.REGISTERED_OBJECTS:
+                return Methods.REGISTERED_OBJECTS[object_name]
+
+            else:
+                raise ValueError(f"unable to locate an object in the global namespace with the name '{object_name}'")
