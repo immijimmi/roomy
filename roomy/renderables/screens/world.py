@@ -15,6 +15,8 @@ class World(Screen):
     def __init__(self, game, state: State.with_extensions(Registrar)):
         super().__init__(game, state)
 
+        self._register_concrete_classes()
+
         self._curr_room = None
         self.set_room()
 
@@ -25,6 +27,11 @@ class World(Screen):
         return self._curr_room
 
     def set_room(self) -> None:
+        """
+        Assumes that any Room subclasses listed in the game's state
+        are available under the same name in your global namespace (in __main__)
+        """
+
         new_room_id = self.state.registered_get("current_room_id")
         old_room = self._curr_room
         old_room_id = None if old_room is None else old_room.room_id
@@ -55,3 +62,7 @@ class World(Screen):
             ["rooms", PartialQueries.KEY, "background_id"],
             [{}, {}, str(None)]
         )
+
+    @staticmethod
+    def _register_concrete_classes():
+        RenderablesMethods.REGISTERED_OBJECTS.update({"Room": Room})

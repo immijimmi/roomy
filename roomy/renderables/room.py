@@ -49,7 +49,7 @@ class Room(Renderable):
         """
         Instantiates all the entities present in the current room.
         Assumes that any Entity subclasses listed in the game's state
-        are available under the same name in your global namespace
+        are available under the same name in your global namespace (in __main__)
         """
 
         curr_room_entities_ids: List[str] = self.parent_recurface.state.registered_get(

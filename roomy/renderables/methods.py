@@ -2,12 +2,18 @@ from sys import modules
 
 
 class Methods:
+    # Allows manual caching of objects for .get_obj_by_str_name() that may not be available in the global namespace
+    REGISTERED_OBJECTS = {}
+
     @staticmethod
     def get_obj_by_str_name(object_name: str):
         """
-        Returns the value stored under the provided name, in the global namespace.
+        Returns the value stored under the provided name, in the global namespace (in __main__).
         Supports dot notation to access objects stored under module or class attributes
         """
+
+        if object_name in Methods.REGISTERED_OBJECTS:
+            return Methods.REGISTERED_OBJECTS[object_name]
 
         nodes = object_name.split(".")
 
