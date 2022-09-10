@@ -50,10 +50,10 @@ class EventHandler:
             except RemoveListener:
                 listeners_to_remove.add(listener)
 
-        # Notify listeners registered specifically to this event
         for listener in listeners_to_remove:
             self.remove_listener(listener, None)
 
+        # Notify listeners registered specifically to this event
         listeners_to_remove = set()
         for listener in self._listeners.get(event_key, set()):
             try:
