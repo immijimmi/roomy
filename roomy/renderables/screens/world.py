@@ -4,7 +4,6 @@ from managedstate.extensions.registrar import PartialQueries
 
 from .screen import Screen
 from ..room import Room
-from ..methods import Methods as RenderablesMethods
 from ...handlers import EventKey
 
 
@@ -16,7 +15,8 @@ class World(Screen):
     def __init__(self, game, state: State.with_extensions(Registrar)):
         super().__init__(game, state)
 
-        self._register_concrete_classes()
+        # Registering a (concrete) class which may appear in the game state this class needs to work with
+        self.game.custom_class_handler.update({"Room": Room})
 
         self._curr_room = None
         self.set_room()
@@ -29,8 +29,8 @@ class World(Screen):
 
     def set_room(self) -> None:
         """
-        Assumes that any Room subclasses listed in the game's state
-        are available under the same name in your global namespace (in __main__)
+        Assumes that any custom Room subclasses listed in the game's state
+        have been made available to the game's CustomClassHandler
         """
 
         new_room_id = self.state.registered_get("current_room_id")
@@ -40,11 +40,8 @@ class World(Screen):
         if new_room_id == old_room_id:
             return
 
-        with self.game.listener_handler.surrounding_events(
-                EventKey.WILL_CHANGE_ROOM, EventKey.DID_CHANGE_ROOM,
-                self._curr_room, new_room_id
-        ):
-            new_room_cls = RenderablesMethods.get_obj_by_str_name(
+        with self.game.event_handler(EventKey.CHANGE_ROOM, self._curr_room, new_room_id):
+            new_room_cls = self.game.custom_class_handler.get(
                 self.state.registered_get("room_class", [new_room_id])
             )
             new_room = new_room_cls(self, new_room_id)
@@ -68,7 +65,3 @@ class World(Screen):
             ["rooms", PartialQueries.KEY, "background_id"],
             [{}, {}, str(None)]
         )
-
-    @staticmethod
-    def _register_concrete_classes():
-        RenderablesMethods.REGISTERED_OBJECTS.update({"Room": Room})

@@ -1,11 +1,11 @@
 import pygame
 from pygame import Surface
 
-from typing import Type, Optional
+from typing import Optional
 
 from .config import Config
 from .constants import Constants
-from .handlers import ListenerHandler, EventKey
+from .handlers import EventHandler, CustomClassHandler, EventKey
 from .renderables import Screen
 
 
@@ -28,9 +28,11 @@ class Game:
         self.updates_per_frame = updates_per_frame
 
         self._clock = pygame.time.Clock()
-
         self._screen = None
-        self._listener_handler = ListenerHandler
+
+        # Game-level handlers
+        self._event_handler = EventHandler()
+        self._custom_class_handler = CustomClassHandler(self)
 
     @property
     def window(self) -> Surface:
@@ -49,15 +51,16 @@ class Game:
         if value is self._screen:
             return
 
-        with self._listener_handler.surrounding_events(
-                EventKey.WILL_CHANGE_SCREEN, EventKey.DID_CHANGE_SCREEN,
-                self._screen, value
-        ):
+        with self._event_handler(EventKey.CHANGE_SCREEN, self._screen, value):
             self._screen = value
 
     @property
-    def listener_handler(self) -> Type[ListenerHandler]:
-        return self._listener_handler
+    def event_handler(self) -> EventHandler:
+        return self._event_handler
+
+    @property
+    def custom_class_handler(self) -> CustomClassHandler:
+        return self._custom_class_handler
 
     def start(self) -> None:
         if self._screen is None:

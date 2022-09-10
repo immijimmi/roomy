@@ -3,14 +3,11 @@ from enum import Enum
 
 class EventKey(str, Enum):
     """
-    Constants representing events which may be called via ListenerHandler within this package
+    Constants representing events which may be called via EventHandler within this package
     """
 
-    WILL_CHANGE_SCREEN = "will_change_screen"
-    DID_CHANGE_SCREEN = "did_change_screen"
-
-    WILL_CHANGE_ROOM = "will_change_room"
-    DID_CHANGE_ROOM = "did_change_room"
+    CHANGE_SCREEN = "change_screen"
+    CHANGE_ROOM = "change_room"
 
 
 class AnimationDataKey(str, Enum):
