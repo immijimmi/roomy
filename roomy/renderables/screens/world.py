@@ -4,7 +4,7 @@ from managedstate.extensions.registrar import PartialQueries
 
 from .screen import Screen
 from ..room import Room
-from ...handlers import EventKey
+from ...handlers import GameEventKey
 
 
 class World(Screen):
@@ -40,7 +40,7 @@ class World(Screen):
         if new_room_id == old_room_id:
             return
 
-        with self.game.event_handler(EventKey.CHANGE_ROOM, self._curr_room, new_room_id):
+        with self.game.game_event_handler(GameEventKey.CHANGE_ROOM, self._curr_room, new_room_id):
             new_room_cls = self.game.custom_class_handler.get(
                 self.state.registered_get("room_class", [new_room_id])
             )

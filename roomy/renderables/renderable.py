@@ -28,14 +28,14 @@ class Renderable(Extendable, Recurface, ABC):
     def game(self):
         return self._game
 
-    def update(self, elapsed_ms: int, events: list):
-        self._update(elapsed_ms, events)
+    def update(self, elapsed_ms: int, input_events: list):
+        self._update(elapsed_ms, input_events)
 
         child: Renderable
         for child in reversed(self.ordered_child_recurfaces):  # Events passed to high render_priority children first
-            child.update(elapsed_ms, events)
+            child.update(elapsed_ms, input_events)
 
-    def _update(self, elapsed_ms: int, events: list):
+    def _update(self, elapsed_ms: int, input_events: list):
         """
         Lifecycle method, called automatically each game tick.
         Can optionally be overridden.

@@ -6,17 +6,20 @@ class RemoveListener(Exception):
     pass
 
 
-class EventHandler:
+class GameEventHandler:
     """
-    This class is responsible for notifying any registered listeners when an event is triggered.
+    This class is responsible for notifying any registered listeners when a game event is triggered.
+    Game events can be anything related to a change in the game's state (for example - changing the current room,
+    a character dying, a spell being cast etc.) and are triggered by calling .on_event()
+    with the relevant event_key and any other related information for that event.
 
-    Listeners are categorised using an event key, which is either a string representing event type, or
+    Listeners are categorised by event_key, which is either a string representing the type of event occurring, or
     a tuple containing two strings (the first being either "before" or "after" and the second representing event type).
-    A tuple event key such as this would be generated when using this class as a contextmanager;
+    A tuple event key such as this will be generated when using this class as a contextmanager;
     in such a case, .on_event() is invoked both before and after the event logic contained in the `with` block, with
     the appropriate tuple being passed as an event key each time.
 
-    Alternatively, event key can be omitted when adding (or removing) a listener, to indicate that the listener
+    Alternatively, event_key can be omitted when adding (or removing) a listener, to indicate that the listener
     should be notified on all events
     """
 

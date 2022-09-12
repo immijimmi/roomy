@@ -1,11 +1,11 @@
 import pygame
 from pygame import Surface
 
-from typing import Optional
+from typing import Optional, Type
 
 from .config import Config
 from .constants import Constants
-from .handlers import EventHandler, CustomClassHandler, EventKey
+from .handlers import GameEventHandler, GameEventKey, CustomClassHandler
 from .renderables import Screen
 
 
@@ -16,7 +16,7 @@ class Game:
     and .screen to be set to a valid Screen object, before calling .start() to begin the game loop
     """
 
-    def __init__(self, window: Surface, fps: int = 0, updates_per_frame: int = 1, config: Config = Config):
+    def __init__(self, window: Surface, config=Config):
         pygame.mixer.pre_init(frequency=Constants.AUDIO_FREQUENCY)
         pygame.init()
         pygame.mixer.init()
@@ -24,14 +24,14 @@ class Game:
         self._window = window
         self._config = config
 
-        self.fps = fps
-        self.updates_per_frame = updates_per_frame
+        self.fps = config.FPS
+        self.updates_per_frame = config.UPDATES_PER_FRAME
 
         self._clock = pygame.time.Clock()
         self._screen = None
 
         # Game-level handlers
-        self._event_handler = EventHandler()
+        self._game_event_handler = GameEventHandler()
         self._custom_class_handler = CustomClassHandler(self)
 
     @property
@@ -39,7 +39,7 @@ class Game:
         return self._window
 
     @property
-    def config(self) -> Config:
+    def config(self) -> Type[Config]:
         return self._config
 
     @property
@@ -51,12 +51,12 @@ class Game:
         if value is self._screen:
             return
 
-        with self._event_handler(EventKey.CHANGE_SCREEN, self._screen, value):
+        with self._game_event_handler(GameEventKey.CHANGE_SCREEN, self._screen, value):
             self._screen = value
 
     @property
-    def event_handler(self) -> EventHandler:
-        return self._event_handler
+    def game_event_handler(self) -> GameEventHandler:
+        return self._game_event_handler
 
     @property
     def custom_class_handler(self) -> CustomClassHandler:
@@ -74,9 +74,9 @@ class Game:
 
     def _update_screen(self) -> None:
         elapsed_ms = self._clock.tick(self.fps * self.updates_per_frame)
-        events = list(pygame.event.get())  # Events are passed in a list so that they can be consumed if necessary
+        input_events = list(self.config.GET_INPUT_EVENTS())  # Repackaged into a list to be consumed from it as needed
 
-        self._screen.update(elapsed_ms, events)
+        self._screen.update(elapsed_ms, input_events)
 
     def _render_screen(self) -> None:
         updated_rects = self._screen.render(self._window)

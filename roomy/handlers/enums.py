@@ -1,9 +1,10 @@
 from enum import Enum
 
 
-class EventKey(str, Enum):
+class GameEventKey(str, Enum):
     """
-    Constants representing events which may be called via EventHandler within this package
+    Constants representing game events which may be triggered
+    via calls within this package to GameEventHandler.on_event()
     """
 
     CHANGE_SCREEN = "change_screen"
