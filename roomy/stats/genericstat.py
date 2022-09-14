@@ -339,5 +339,7 @@ class GenericStat(Stat):
         is_locked_value = self._is_locked
 
         self._is_locked = False
-        yield
-        self._is_locked = is_locked_value
+        try:
+            yield
+        finally:
+            self._is_locked = is_locked_value
