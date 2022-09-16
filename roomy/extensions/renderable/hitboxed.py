@@ -62,7 +62,7 @@ class Hitboxed(Extension):
         that method can receive.
 
         When a collision is detected between two objects, each of their respective collide() methods should
-        be invoked here and passed the other object involved in that collision.
+        be invoked and passed the other object involved in that collision.
         """
 
         pass
@@ -73,6 +73,10 @@ class Hitboxed(Extension):
         Should apply this renderable's on-collision effects to itself and/or the provided other renderable.
 
         This includes inspecting the other renderable (if needed) to decide what effects should apply.
+
+        When a collision is detected and this method is invoked, it should *also* be invoked on the other object
+        involved in the collision and passed this object as an argument
+        to allow both objects' collision logic to be applied.
 
         ##### TODO: Review the below rule in practice - 'squishy' objects and 'immovable' objects
                     may want to edit the other object, or not be edited, respectively
