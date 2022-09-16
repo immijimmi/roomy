@@ -53,10 +53,13 @@ class Hitbox(Tagged, ABC):
         if collision_key in self.hitbox_handler.checked_collisions:
             return False  # This collision check has already been carried out previously this tick
 
-        self.hitbox_handler.checked_collisions.add(collision_key)
         if type(other) in self.COLLISION_CHECKERS:
+            self.hitbox_handler.checked_collisions.add(collision_key)
+
             return self.COLLISION_CHECKERS[type(other)](self, other)
         elif type(self) in other.COLLISION_CHECKERS:
+            self.hitbox_handler.checked_collisions.add(collision_key)
+
             return other.COLLISION_CHECKERS[type(self)](self, other)
         else:
             raise TypeError(
