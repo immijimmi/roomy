@@ -1,4 +1,6 @@
-from typing import Iterable
+from objectextensions import Decorators
+
+from typing import Iterable, Dict, Type, Callable
 from abc import ABC
 from weakref import ref
 
@@ -6,6 +8,16 @@ from ..tagged import Tagged
 
 
 class Hitbox(Tagged, ABC):
+    @Decorators.classproperty
+    def COLLISION_CHECKERS(cls) -> Dict[Type["Hitbox"], Callable[[Type["Hitbox"], Type["Hitbox"]], bool]]:
+        """
+        When two hitboxes are being checked for a collision, at least one of the two Hitbox objects involved
+        should have a compatible collision checker function stored in this property.
+        It should be stored using the other involved hitbox's class as a key
+        """
+
+        raise NotImplementedError
+
     def __init__(self, parent: "Renderable.with_extensions(Hitboxed)", tags: Iterable[str]):
         super().__init__(tags)
 
@@ -42,16 +54,15 @@ class Hitbox(Tagged, ABC):
             return False  # This collision check has already been carried out previously this tick
 
         self.hitbox_handler.checked_collisions.add(collision_key)
-        return self._is_collision(other)
-
-    def _is_collision(self, other: "Hitbox") -> bool:
-        """
-        Must be overridden.
-        Should complete (or further delegate, if necessary) the actual check for a collision
-        between this hitbox object and the other provided hitbox object
-        """
-
-        raise NotImplementedError
+        if type(other) in self.COLLISION_CHECKERS:
+            return self.COLLISION_CHECKERS[type(other)](self, other)
+        elif type(self) in other.COLLISION_CHECKERS:
+            return other.COLLISION_CHECKERS[type(self)](self, other)
+        else:
+            raise TypeError(
+                "unable to locate a compatible collision checker for a collision between "
+                f"`{type(self).__name__}` and `{type(other).__name__}` instances"
+            )
 
     def _is_valid_tag(self, tag: str) -> bool:
         return tag in self.parent_renderable.game.config.HITBOX_TAGS
