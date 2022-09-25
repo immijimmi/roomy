@@ -46,7 +46,7 @@ class Hitboxed(Extension):
     def __generate_hitboxes(self) -> Iterable[Hitbox]:
         """
         Must be overridden.
-        Should return the correct hitboxes for this Renderable object based on its current state.
+        Should return new, correct hitboxes for this Renderable object based on its current state.
         Note that hitboxes can still be created elsewhere on an ad-hoc basis (e.g. in response to specific events)
         """
 

@@ -43,7 +43,7 @@ class Animated(Extension):
     def __generate_animation(self) -> Animation:
         """
         Must be overridden.
-        Should return the correct animation for this renderable based on its current state.
+        Should return a new, correct animation for this renderable based on its current state.
         Note that animations can still be created elsewhere on an ad-hoc basis (e.g. in response to specific events)
         """
 
