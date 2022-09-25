@@ -19,29 +19,34 @@ class Room(Renderable):
         super().__init__(parent.game, parent=parent, render_position=(0, 0), priority=0)
 
         self._room_id = room_id
+        self.surface = self._generate_surface()
 
-        self._load_surface()
-        self._load_room()
+        self._is_loaded = False
 
     @property
     def room_id(self) -> str:
         return self._room_id
 
-    def _load_surface(self):
+    def _update(self, elapsed_ms: int, input_events: list):
+        if not self._is_loaded:
+            self._load_room()
+
+            self._is_loaded = True
+
+    def _generate_surface(self):
         """
-        Loads the background image for the room object. Assumes a standard location for the image file as
-        dictated below in `background_file_path`
+        Loads the background image for the room object as a new Surface.
+        Assumes a standard location for the image file as dictated below in `background_file_path`
         """
 
-        background_id = self.parent_recurface.state.registered_get("room_background_id", [self._room_id])
+        background_id = self.game.screen.state.registered_get("room_background_id", [self._room_id])
         background_file_path = path.join(
             GameConstants.RESOURCE_FOLDER_PATH,
             f"{type(self).__name__}",
             f"{background_id}.png"
         )
 
-        surface = image.load(background_file_path).convert_alpha()
-        self.surface = surface
+        return image.load(background_file_path).convert_alpha()
 
     def _load_room(self):
         """
@@ -50,12 +55,12 @@ class Room(Renderable):
         have been made available to the game's CustomClassHandler
         """
 
-        curr_room_entities_ids: List[str] = self.parent_recurface.state.registered_get(
+        curr_room_entities_ids: List[str] = self.game.screen.state.registered_get(
             "room_entities_ids", [self._room_id]
         )
 
         for entity_id in curr_room_entities_ids:
-            entity_data: dict = self.parent_recurface.state.registered_get("entity", [entity_id])
+            entity_data: dict = self.game.screen.state.registered_get("entity", [entity_id])
 
             entity_class: Type[Entity] = self.game.custom_class_handler.get(entity_data[EntityDataKey.CLASS])
             entity_details: Tuple[list, dict] = (entity_data[EntityDataKey.ARGS], entity_data[EntityDataKey.KWARGS])
