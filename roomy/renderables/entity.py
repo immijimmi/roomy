@@ -15,7 +15,7 @@ class Entity(Renderable, ABC):
 
     def __init__(self, parent: "Room", render_position: Tuple[int, int], surface=None, priority=None):
         super().__init__(
-            parent.game, parent=parent, surface=surface, position=render_position, priority=priority
+            parent.game, parent=parent, surface=surface, render_position=render_position, priority=priority
         )
 
     @property
