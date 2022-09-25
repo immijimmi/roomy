@@ -19,10 +19,10 @@ class Hitbox(Tagged, ABC):
         raise NotImplementedError
 
     def __init__(self, parent: "Renderable.with_extensions(Hitboxed)", tags: Iterable[str]):
-        super().__init__(tags)
-
         # Weakref so that it does not prevent parent object being garbage collected
         self._parent_renderable = ref(parent)
+
+        super().__init__(tags)
 
     @property
     def hitbox_handler(self) -> "HitboxHandler":
