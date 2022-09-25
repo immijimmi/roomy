@@ -78,7 +78,7 @@ class Hitboxed(Extension):
         involved in the collision and passed this object as an argument
         to allow both objects' collision logic to be applied.
 
-        ##### TODO: Review the below rule in practice - 'squishy' objects and 'immovable' objects
+        # TODO: Review the below rule in practice - 'squishy' objects and 'immovable' objects
                     may want to edit the other object, or not be edited, respectively
         - Any *direct* changes to the position or movement (or other stats) of a renderable as a result of the collision
           itself should be handled by that renderable, not by the other involved renderable
