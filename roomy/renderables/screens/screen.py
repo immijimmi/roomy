@@ -20,7 +20,7 @@ class Screen(Renderable, ABC):
         surface = Surface((game.window.get_width(), game.window.get_height()))
         surface.fill(GameConstants.COLOURS["dev"])
 
-        super().__init__(game, surface=surface, position=(0, 0), parent=None, priority=None)
+        super().__init__(game, surface=surface, render_position=(0, 0), parent=None, priority=None)
 
         self._state = state
         self._hitbox_handler = HitboxHandler()

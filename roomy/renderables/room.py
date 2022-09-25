@@ -16,7 +16,7 @@ class Room(Renderable):
     """
 
     def __init__(self, parent: "World", room_id: str):
-        super().__init__(parent.game, parent=parent, position=(0, 0), priority=0)
+        super().__init__(parent.game, parent=parent, render_position=(0, 0), priority=0)
 
         self._room_id = room_id
 
