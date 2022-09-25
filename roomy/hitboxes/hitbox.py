@@ -9,7 +9,7 @@ from ..tagged import Tagged
 
 class Hitbox(Tagged, ABC):
     @Decorators.classproperty
-    def COLLISION_CHECKERS(cls) -> Dict[Type["Hitbox"], Callable[[Type["Hitbox"], Type["Hitbox"]], bool]]:
+    def COLLISION_CHECKERS(cls) -> Dict[Type["Hitbox"], Callable[["Hitbox", "Hitbox"], bool]]:
         """
         When two hitboxes are being checked for a collision, at least one of the two Hitbox objects involved
         should have a compatible collision checker function stored in this property.
