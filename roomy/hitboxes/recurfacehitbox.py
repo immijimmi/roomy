@@ -12,7 +12,7 @@ class RecurfaceHitbox(Hitbox):
             cls: cls._is_collision_recurfacehitbox_recurfacehitbox
         }
 
-    def __init__(self, parent: "Renderable.with_extensions(Hitboxed)", tags: Iterable[str]):
+    def __init__(self, parent: "Renderable.with_extensions(Hitboxed)", tags: Iterable[str] = ()):
         super().__init__(parent, tags)
 
     @staticmethod
