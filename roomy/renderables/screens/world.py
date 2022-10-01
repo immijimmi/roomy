@@ -15,7 +15,7 @@ class World(Screen):
     def __init__(self, game, state: State.with_extensions(Registrar)):
         super().__init__(game, state)
 
-        # Registering a (concrete) class which may appear in the game state this class needs to work with
+        # Registering a class `Room` which may appear in the game state and which would be needed inside this class
         self.game.custom_class_handler.update({"Room": Room})
 
         self._current_room = None
@@ -74,7 +74,7 @@ class World(Screen):
         state.register_path("room_class", ["rooms", PartialQueries.KEY, "class"], [{}, {}, "Room"])
         state.register_path("room_entities_ids", ["rooms", PartialQueries.KEY, "entities_ids"], [{}, {}, []])
         state.register_path(
-            "room_background_id",
-            ["rooms", PartialQueries.KEY, "background_id"],
-            [{}, {}, str(None)]
+            "room_background_file_path",
+            ["rooms", PartialQueries.KEY, "background_file_path"],
+            [{}, {}, f"{str(None)}.png"]
         )

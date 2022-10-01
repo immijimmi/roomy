@@ -5,7 +5,6 @@ from weakref import ref
 
 from pygame import Surface
 
-from ..handlers import AnimationHandler
 from ..handlers.enums import AnimationDataKey
 
 
@@ -23,7 +22,7 @@ class Animation(ABC):
         self._key = animation_key
         self._priority = priority
 
-        self._settings = AnimationHandler.get_settings(type(parent), animation_key)
+        self._settings = self.animation_handler.get_settings(type(parent), animation_key)
 
         self._elapsed = timedelta(0)
         self._elapsed_effective = timedelta(0)
@@ -31,6 +30,14 @@ class Animation(ABC):
     @property
     def parent_renderable(self) -> "Renderable.with_extensions(Animated)":
         return self._parent_renderable()
+
+    @property
+    def animation_handler(self):
+        """
+        Shortcut property which accesses the current game screen, and then the current animation handler through that
+        """
+
+        return self.parent_renderable.game.animation_handler
 
     @property
     def key(self) -> str:
@@ -59,9 +66,9 @@ class Animation(ABC):
 
     @property
     def frame(self) -> Surface:
-        frame_file_path = self._settings[AnimationDataKey.FRAMES][self.frame_index]
+        frame_key = self._settings[AnimationDataKey.FRAMES][self.frame_index]
 
-        return AnimationHandler.get_frame(frame_file_path, self.size)
+        return self.animation_handler.get_frame(frame_key, self.size)
 
     @property
     def frame_index(self) -> int:

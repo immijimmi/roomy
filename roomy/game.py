@@ -5,7 +5,7 @@ from typing import Optional, Type
 
 from .config import Config
 from .constants import Constants
-from .handlers import GameEventHandler, GameEventKey, CustomClassHandler
+from .handlers import GameEventHandler, GameEventKey, CustomClassHandler, AnimationHandler
 from .renderables import Screen
 
 
@@ -33,6 +33,7 @@ class Game:
         # Game-level handlers
         self._game_event_handler = GameEventHandler()
         self._custom_class_handler = CustomClassHandler(self)
+        self._animation_handler = AnimationHandler(self)
 
     @property
     def window(self) -> Surface:
@@ -61,6 +62,10 @@ class Game:
     @property
     def custom_class_handler(self) -> CustomClassHandler:
         return self._custom_class_handler
+
+    @property
+    def animation_handler(self) -> AnimationHandler:
+        return self._animation_handler
 
     def start(self) -> None:
         if self._screen is None:

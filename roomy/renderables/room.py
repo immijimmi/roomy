@@ -3,7 +3,6 @@ from pygame import image
 from typing import Type, Tuple, List
 from os import path
 
-from ..constants import Constants as GameConstants
 from .renderable import Renderable
 from .entity import Entity
 from .enums import EntityDataKey
@@ -39,11 +38,9 @@ class Room(Renderable):
         Assumes a standard location for the image file as dictated below in `background_file_path`
         """
 
-        background_id = self.game.screen.state.registered_get("room_background_id", [self._room_id])
         background_file_path = path.join(
-            GameConstants.RESOURCE_FOLDER_PATH,
-            f"{type(self).__name__}",
-            f"{background_id}.png"
+            self.game.config.RESOURCE_FOLDER_PATH,
+            self.game.screen.state.registered_get("room_background_file_path", [self._room_id])
         )
 
         return image.load(background_file_path).convert_alpha()

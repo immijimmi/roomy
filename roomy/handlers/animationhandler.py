@@ -4,25 +4,27 @@ from os import path
 from json import loads
 from typing import Type, Dict, Any, Tuple, Union, Literal
 
-from ..constants import Constants as GameConstants
 from .enums import AnimationDataKey
 
 
 class AnimationHandler:
     """
-    Helper class which retrieves and stores animation data
+    Helper class which retrieves and caches files and data for animations
     """
 
-    # For performance optimisation. Stores animation data which has already been loaded before, by (Animated) class name
-    ANIMATION_DATA = {}
-    # Stores data for any sprite sheets loaded as part of animation data, under the sprite sheet's label
-    SPRITE_SHEETS_DATA = {}
+    def __init__(self, game):
+        self._game = game
 
-    # For performance optimisation. Stores frames which have already been generated, under their frame key & size
-    FRAMES = {}
+        # The below attributes cache data for performance optimisation
+        # Stores animation data which has already been loaded before, by (Animated) class name
+        self._animation_data = {}
+        # Stores data for any sprite sheets loaded as part of animation data, under the sprite sheet's label
+        self._sprite_sheets_data = {}
+        # Stores frames which have already been generated, under their frame key & size
+        self._frames = {}
 
-    @staticmethod
     def register_sprite_sheet(
+        self,
         sprite_label: str,
         sprite_data: Dict[
             Literal[AnimationDataKey.FILE_PATH, AnimationDataKey.PARSE_TYPE, AnimationDataKey.PARSE_DATA], Any
@@ -32,33 +34,36 @@ class AnimationHandler:
         Stores data relating to a sprite sheet, to enable the relevant sprites to be loaded later if necessary
         """
 
-        AnimationHandler.SPRITE_SHEETS_DATA[sprite_label] = sprite_data
+        self._sprite_sheets_data[sprite_label] = sprite_data
 
-    @staticmethod
-    def get_settings(target_cls: Type["Renderable.with_extensions(Animated)"], animation_key: str) -> Dict[str, Any]:
+    def get_settings(self, target_cls: Type["Renderable.with_extensions(Animated)"], animation_key: str) -> Dict[str, Any]:
         """
         Retrieves the animation settings associated with the provided class and animation key,
         loading the class's animation data if necessary
         """
 
-        AnimationHandler._load_data(target_cls)
+        self._load_data(target_cls)
 
-        class_animation_data = AnimationHandler.ANIMATION_DATA[target_cls.__name__]
+        class_animation_data = self._animation_data[target_cls.__name__]
         class_animation_settings = class_animation_data[AnimationDataKey.ANIMATION_SETTINGS]
         return class_animation_settings[animation_key]
 
-    @staticmethod
-    def get_frame(frame_key: Union[str, Tuple[str, int]], size: float = 1) -> Surface:
+    def get_frame(self, frame_key: Union[str, Tuple[str, int]], size: float = 1) -> Surface:
         """
-        Retrieves an animation frame using the provided frame key and size modifier, loading the frame if necessary
+        Retrieves an animation frame using the provided frame key and size modifier, loading the frame if necessary.
+
+        The frame key should either be a relative path to an image file for the frame
+        (relative beginning from the designated resource folder, as indicated in the game's config),
+        or it should be a sequence of 2 items
+        (the first a sprite label which refers to an already loaded sprite sheet,
+        and the second an index for which sprite within in that sprite sheet is the desired frame)
         """
 
-        AnimationHandler._load_frame(frame_key, size)
+        self._load_frame(frame_key, size)
 
-        return AnimationHandler.FRAMES[frame_key][size]
+        return self._frames[frame_key][size]
 
-    @staticmethod
-    def _load_data(target_cls: Type["Renderable.with_extensions(Animated)"]) -> None:
+    def _load_data(self, target_cls: Type["Renderable.with_extensions(Animated)"]) -> None:
         """
         Loads all animation data for the target class, if it is not already loaded.
         Assumes a standard location for the data file as dictated below in the variable `animation_data_file_path`.
@@ -74,9 +79,9 @@ class AnimationHandler:
         in your Animated class' constructors (or elsewhere) as necessary
         """
 
-        if target_cls.__name__ not in AnimationHandler.ANIMATION_DATA:
+        if target_cls.__name__ not in self._animation_data:
             animation_data_file_path = path.join(
-                GameConstants.RESOURCE_FOLDER_PATH,
+                self._game.config.RESOURCE_FOLDER_PATH,
                 f"{target_cls.__name__}",
                 "animation_data.json"
             )
@@ -85,26 +90,30 @@ class AnimationHandler:
                 data = loads(file.read())
                 sprite_sheets_data = data.get(AnimationDataKey.SPRITE_SHEETS, {})
 
-                AnimationHandler.ANIMATION_DATA[target_cls.__name__] = data
-                AnimationHandler.SPRITE_SHEETS_DATA.update(sprite_sheets_data)
+                self._animation_data[target_cls.__name__] = data
+                self._sprite_sheets_data.update(sprite_sheets_data)
 
-    @staticmethod
-    def _load_frame(frame_key: Union[str, Tuple[str, int]], size: float) -> None:
+    def _load_frame(self, frame_key: Union[str, Tuple[str, int]], size: float) -> None:
         """
         Loads the animation frame at the target size modifier, if it is not already loaded.
         """
 
-        if frame_key not in AnimationHandler.FRAMES or size not in AnimationHandler.FRAMES[frame_key]:
+        if frame_key not in self._frames or size not in self._frames[frame_key]:
             if type(frame_key) is str:  # frame_key is a file path
-                surface = image.load(frame_key).convert_alpha()
+                surface = image.load(
+                    path.join(
+                        self._game.config.RESOURCE_FOLDER_PATH,
+                        frame_key
+                    )
+                ).convert_alpha()
                 surface = transform.rotozoom(surface, 0, size)
 
-                frame_sizes = AnimationHandler.FRAMES.setdefault(frame_key, {})
+                frame_sizes = self._frames.setdefault(frame_key, {})
                 frame_sizes[size] = surface
 
             else:  # frame_key is a sprite sheet label
                 sprite_label = frame_key[0]
                 sprite_index = frame_key[1]
 
-                sprite_sheet_data = AnimationHandler.SPRITE_SHEETS_DATA[sprite_label]
+                sprite_sheet_data = self._sprite_sheets_data[sprite_label]
                 pass  # TODO: Add logic to load & store sprites from sprite sheet data at provided zoom
