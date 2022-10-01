@@ -3,7 +3,7 @@ from typing import Iterable, FrozenSet
 
 
 class Tagged(ABC):
-    def __init__(self, tags: Iterable[str]):
+    def __init__(self, tags: Iterable[str] = ()):
         for tag in tags:
             if not self._is_valid_tag(tag):
                 raise ValueError(f"Invalid tag provided: {tag}")
