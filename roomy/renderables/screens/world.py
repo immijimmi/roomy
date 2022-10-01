@@ -2,6 +2,8 @@ from managedstate import State
 from managedstate.extensions import Registrar
 from managedstate.extensions.registrar import PartialQueries
 
+from os import path
+
 from .screen import Screen
 from ..room import Room
 from ...handlers import GameEventKey
@@ -76,5 +78,5 @@ class World(Screen):
         state.register_path(
             "room_background_file_path",
             ["rooms", PartialQueries.KEY, "background_file_path"],
-            [{}, {}, f"{str(None)}.png"]
+            [{}, {}, path.join(f"{Room.__name__}", f"{str(None)}.png")]
         )
