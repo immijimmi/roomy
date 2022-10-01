@@ -4,7 +4,7 @@ from typing import Callable, Iterable, Dict, Container
 
 
 class Config:
-    FPS: int = 0  # A value of 0 indicates unlimited framerate
+    FPS: float = 0  # A value of 0 indicates unlimited framerate
     UPDATES_PER_FRAME: int = 1
     GET_INPUT_EVENTS: Callable[[], Iterable] = event.get
 
