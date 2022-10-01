@@ -64,4 +64,5 @@ class AnimationDataKey(str, Enum):
 
     # Animation Settings
     FRAMES = "frames"  # Should retrieve a list of frame keys
-    FRAME_DURATION_MS = "frame_duration_ms"  # Should retrieve an int
+    # Animation-specific default FPS (overrides the generic default animation FPS in the game's config)
+    DEFAULT_FPS = "default_fps"  # Should retrieve a float

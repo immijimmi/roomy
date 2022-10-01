@@ -9,23 +9,28 @@ class RepeatAnimation(Animation):
     def __init__(
             self, parent: "Renderable.with_extensions(Animated)", animation_key: str,
             size: float = 1, speed: float = 1, priority: Any = None,
-            frame_duration: Optional[timedelta] = None,
-            windup_frames: int = 0
+            fps: Optional[float] = None, windup_frames: int = 0
     ):
         super().__init__(parent, animation_key, size=size, speed=speed, priority=priority)
+
+        if fps is None:
+            fps = self._settings.get(AnimationDataKey.DEFAULT_FPS, None)
+        if fps is None:
+            fps = self.parent_renderable.game.config.ANIMATION_DEFAULT_FPS
+
+        self._fps = fps
+        self._frame_time = timedelta(microseconds=(10**6)/fps)
 
         # Windup frames are optional non-repeating frames at the start of the animation
         self._windup_frames = windup_frames
 
-        if frame_duration is not None:
-            self._frame_time = frame_duration
-        else:
-            frame_duration_ms = self._settings.get(AnimationDataKey.FRAME_DURATION_MS, None)
+    @property
+    def fps(self) -> float:
+        """
+        This property does not factor in animation speed; it is the base framerate of the animation only
+        """
 
-            if frame_duration_ms is not None:
-                self._frame_time = timedelta(microseconds=frame_duration_ms*1000)
-            else:
-                self._frame_time = Animation.default_frame_duration
+        return self._fps
 
     @property
     def windup_frames(self) -> int:
@@ -39,6 +44,6 @@ class RepeatAnimation(Animation):
             return frames_elapsed
         else:
             return (
-                           (frames_elapsed - self._windup_frames) %
-                           (self.total_frames - self._windup_frames)
-                   ) + self._windup_frames
+                (frames_elapsed - self._windup_frames) %
+                (self.total_frames - self._windup_frames)
+            ) + self._windup_frames

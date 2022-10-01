@@ -9,8 +9,6 @@ from ..handlers.enums import AnimationDataKey
 
 
 class Animation(ABC):
-    default_frame_duration = timedelta(microseconds=20000)
-
     def __init__(
             self, parent: "Renderable.with_extensions(Animated)", animation_key: str,
             size: float = 1, speed: float = 1, priority: Any = None
@@ -72,6 +70,11 @@ class Animation(ABC):
 
     @property
     def frame_index(self) -> int:
+        """
+        Must be overridden with a property that returns the index for
+        the current frame of the animation, based on its current state
+        """
+
         raise NotImplementedError
 
     def update(self, elapsed_ms: int):
