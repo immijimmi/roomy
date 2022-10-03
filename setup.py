@@ -19,7 +19,7 @@ setup(
     long_description_content_type="text/markdown",
     long_description=long_description,
     author="immijimmi",
-    author_email="imranhamid99@msn.com",
+    author_email="immijimmi1@gmail.com",
     url="https://github.com/immijimmi/roomy",
     download_url="https://github.com/immijimmi/roomy/archive/refs/tags/v0.6.1.tar.gz",
     keywords=["game", "engine", "2D"],
