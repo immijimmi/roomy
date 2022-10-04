@@ -10,6 +10,6 @@ class Methods:
         """
 
         try:
-            image.load(file_path)
+            return image.load(file_path)
         except FileNotFoundError:
             raise FileNotFoundError(f"unable to locate a file under the following path: {file_path}")
