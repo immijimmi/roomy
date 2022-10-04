@@ -8,7 +8,7 @@ class CustomClassHandler:
 
         self._classes = {**self._game.config.CUSTOM_CLASSES}
 
-    def update(self, value: Dict[str, type]) -> None:
+    def register(self, value: Dict[str, type]) -> None:
         self._classes.update(value)
 
     def get(self, class_name: str) -> type:

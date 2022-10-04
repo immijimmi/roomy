@@ -28,17 +28,31 @@ class Renderable(Extendable, Recurface, ABC):
     def game(self):
         return self._game
 
-    def update(self, elapsed_ms: int, input_events: list):
-        self._update(elapsed_ms, input_events)
+    def update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
+        """
+        Lifecycle method, called automatically each game tick.
+
+        *args and **kwargs can optionally be passed any additional information regarding the game tick itself;
+        for example, a game which wants to prioritise updating the environment first and update the characters second
+        in each loop may then choose to run at 2 updates per frame so that the game's screen can first call .update()
+        with the kwarg `type="environment"` and second call .update() with the kwarg `type="characters"`.
+
+        Note that additional *args and **kwargs can be introduced at an arbitrary point in the Renderable hierarchy, and
+        do not have to be passed in starting from the game's screen object. They also do not have to be propagated
+        further down the hierarchy than is necessary
+        """
+
+        self._update(elapsed_ms, input_events, *args, **kwargs)
 
         child: Renderable
         for child in reversed(self.ordered_child_recurfaces):  # Events passed to high render_priority children first
-            child.update(elapsed_ms, input_events)
+            child.update(elapsed_ms, input_events, *args, **kwargs)
 
-    def _update(self, elapsed_ms: int, input_events: list):
+    def _update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
         """
         Lifecycle method, called automatically each game tick.
         Can optionally be overridden in subclasses, and further extended as necessary in subsequent subclasses.
+
         Complete any miscellaneous work necessary for this object each tick
         that is not covered by other lifecycle methods here
         """

@@ -77,11 +77,11 @@ class Animation(ABC):
 
         raise NotImplementedError
 
-    def update(self, elapsed_ms: int):
+    def update(self, elapsed_ms: int) -> None:
         self._add_elapsed(elapsed_ms)
-        self._update()
+        self._update(elapsed_ms)
 
-    def _update(self):
+    def _update(self, elapsed_ms: int) -> None:
         """
         Any additional work that may be needed in specific animations,
         including playing sounds at specific parts of the animation, can be completed here
@@ -89,7 +89,7 @@ class Animation(ABC):
 
         pass
 
-    def _add_elapsed(self, elapsed_ms: int):
+    def _add_elapsed(self, elapsed_ms: int) -> None:
         elapsed = timedelta(microseconds=elapsed_ms*1000)
         effective_elapsed = elapsed * self.speed
 

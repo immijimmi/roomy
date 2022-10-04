@@ -18,7 +18,7 @@ class World(Screen):
         super().__init__(game, state)
 
         # Registering a class `Room` which may appear in the game state and which would be needed inside this class
-        self.game.custom_class_handler.update({"Room": Room})
+        self.game.custom_class_handler.register({"Room": Room})
 
         self._current_room = None
 
@@ -61,8 +61,8 @@ class World(Screen):
             if old_room is not None:
                 old_room.parent_recurface = None
 
-    def _update(self, elapsed_ms: int, input_events: list):
-        super()._update(elapsed_ms, input_events)
+    def _update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
+        super()._update(elapsed_ms, input_events, *args, **kwargs)
 
         self.set_room()
 

@@ -26,7 +26,7 @@ class Room(Renderable):
     def room_id(self) -> str:
         return self._room_id
 
-    def _update(self, elapsed_ms: int, input_events: list):
+    def _update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
         if not self._is_loaded:
             self._load_room()
 
