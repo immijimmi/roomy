@@ -1,9 +1,10 @@
-from pygame import Surface, image, transform
+from pygame import Surface, transform
 
 from os import path
 from json import loads
 from typing import Type, Dict, Any, Tuple, Union, Literal
 
+from ..methods import Methods
 from .enums import AnimationDataKey
 
 
@@ -100,7 +101,7 @@ class AnimationHandler:
 
         if frame_key not in self._frames or size not in self._frames[frame_key]:
             if type(frame_key) is str:  # frame_key is a file path
-                surface = image.load(
+                surface = Methods.load_image(
                     path.join(
                         self._game.config.RESOURCE_FOLDER_PATH,
                         frame_key

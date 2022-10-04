@@ -1,8 +1,7 @@
-from pygame import image
-
 from typing import Type, Tuple, List
 from os import path
 
+from ..methods import Methods
 from .renderable import Renderable
 from .entity import Entity
 from .enums import EntityDataKey
@@ -43,7 +42,7 @@ class Room(Renderable):
             self.game.screen.state.registered_get("room_background_file_path", [self._room_id])
         )
 
-        return image.load(background_file_path).convert_alpha()
+        return Methods.load_image(background_file_path).convert_alpha()
 
     def _load_room(self):
         """
