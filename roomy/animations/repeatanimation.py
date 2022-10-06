@@ -1,11 +1,11 @@
 from typing import Any, Optional
 from datetime import timedelta
 
-from .animation import Animation
+from .fileanimation import FileAnimation
 from ..handlers.enums import AnimationDataKey
 
 
-class RepeatAnimation(Animation):
+class RepeatAnimation(FileAnimation):
     def __init__(
             self, parent: "Renderable.with_extensions(Animated)", animation_key: str,
             size: float = 1, speed: float = 1, priority: Any = None,

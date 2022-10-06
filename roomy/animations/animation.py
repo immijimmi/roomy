@@ -1,11 +1,9 @@
+from pygame import Surface
+
 from typing import Any
 from datetime import timedelta
 from abc import ABC
 from weakref import ref
-
-from pygame import Surface
-
-from ..handlers.enums import AnimationDataKey
 
 
 class Animation(ABC):
@@ -19,8 +17,6 @@ class Animation(ABC):
         self._parent_renderable = ref(parent)  # Weakref so that it does not prevent parent object being garbage collected
         self._key = animation_key
         self._priority = priority
-
-        self._settings = self.animation_handler.get_settings(type(parent), animation_key)
 
         self._elapsed = timedelta(0)
         self._elapsed_effective = timedelta(0)
@@ -59,19 +55,9 @@ class Animation(ABC):
         return self._elapsed_effective
 
     @property
-    def total_frames(self) -> int:
-        return len(self._settings[AnimationDataKey.FRAMES])
-
-    @property
     def frame(self) -> Surface:
-        frame_key = self._settings[AnimationDataKey.FRAMES][self.frame_index]
-
-        return self.animation_handler.get_frame(frame_key, self.size)
-
-    @property
-    def frame_index(self) -> int:
         """
-        Must be overridden with a property that returns the index for
+        Must be overridden with a property that returns a Surface representing
         the current frame of the animation, based on its current state
         """
 
@@ -83,6 +69,8 @@ class Animation(ABC):
 
     def _update(self, elapsed_ms: int) -> None:
         """
+        Lifecycle method, called automatically each game tick.
+
         Any additional work that may be needed in specific animations,
         including playing sounds at specific parts of the animation, can be completed here
         """
