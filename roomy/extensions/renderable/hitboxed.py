@@ -1,12 +1,13 @@
 from objectextensions import Extension
 
 from typing import Iterable, FrozenSet
+from abc import ABC
 
 from ...renderables import Renderable
 from ...hitboxes import Hitbox
 
 
-class Hitboxed(Extension):
+class Hitboxed(Extension, ABC):
     @staticmethod
     def can_extend(target_cls):
         return issubclass(target_cls, Renderable)

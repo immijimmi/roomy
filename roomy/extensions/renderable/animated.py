@@ -1,10 +1,12 @@
 from objectextensions import Extension
 
+from abc import ABC
+
 from ...renderables import Renderable
 from ...animations import Animation
 
 
-class Animated(Extension):
+class Animated(Extension, ABC):
     @staticmethod
     def can_extend(target_cls):
         return issubclass(target_cls, Renderable)
