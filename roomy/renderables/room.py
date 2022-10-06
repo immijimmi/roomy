@@ -59,6 +59,9 @@ class Room(Renderable):
             entity_data: dict = self.game.screen.state.registered_get("entity", [entity_id])
 
             entity_class: Type[Entity] = self.game.custom_class_handler.get(entity_data[EntityDataKey.CLASS])
-            entity_details: Tuple[list, dict] = (entity_data[EntityDataKey.ARGS], entity_data[EntityDataKey.KWARGS])
+            entity_details: Tuple[list, dict] = (
+                entity_data.get(EntityDataKey.ARGS, []),
+                entity_data.get(EntityDataKey.KWARGS, {})
+            )
 
             entity_class(self, *entity_details[0], **entity_details[1])
