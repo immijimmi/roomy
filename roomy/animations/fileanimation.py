@@ -7,7 +7,7 @@ from ..handlers.enums import AnimationDataKey
 from .animation import Animation
 
 
-class FileAnimation(ABC, Animation):
+class FileAnimation(Animation, ABC):
     def __init__(
             self, parent: "Renderable.with_extensions(Animated)", animation_key: str,
             size: float = 1, speed: float = 1, priority: Any = None
