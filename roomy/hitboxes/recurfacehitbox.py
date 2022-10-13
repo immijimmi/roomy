@@ -7,13 +7,13 @@ from .hitbox import Hitbox
 
 class RecurfaceHitbox(Hitbox):
     @Decorators.classproperty
-    def COLLISION_CHECKERS(cls) -> Dict[Type["Hitbox"], Callable[["Hitbox", "Hitbox"], bool]]:
+    def COLLISION_CHECKERS(cls) -> Dict[Type[Hitbox], Callable[[Hitbox, Hitbox], bool]]:
         return {
             cls: cls._is_collision_recurfacehitbox
         }
 
     @staticmethod
-    def _is_collision_recurfacehitbox(a: Hitbox, b: Hitbox) -> bool:
+    def _is_collision_recurfacehitbox(a: "RecurfaceHitbox", b: "RecurfaceHitbox") -> bool:
         a_x_bounds = (
             a.parent_renderable.x_render_position,
             a.parent_renderable.x_render_position + a.parent_renderable.surface.get_width()
