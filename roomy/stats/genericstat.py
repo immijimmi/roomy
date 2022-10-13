@@ -33,27 +33,27 @@ class GenericStat(Stat):
     damage = GenericStat()
 
     # Apply double damage (x2 multiplier)
-    damage.overall_multiplied_modifier *= 2
+    damage.overall_multiplied_factor *= 2
     # Remove double damage
-    damage.overall_multiplied_modifier /= 2
+    damage.overall_multiplied_factor /= 2
 
     # Apply 10% increased damage
-    damage.overall_summed_modifier += 0.1
+    damage.overall_summed_factor += 0.1
 
     # Apply double secondary damage (x2 multiplier)
-    damage.secondary_multiplied_modifier *= 2
+    damage.secondary_multiplied_factor *= 2
 
     # Apply 10% increased secondary damage
-    damage.secondary_summed_modifier += 0.1
+    damage.secondary_summed_factor += 0.1
 
     # Apply +2 secondary damage
     damage.secondary_value += 2
 
     # Apply double base damage (x2 multiplier)
-    damage.base_multiplied_modifier *= 2
+    damage.base_multiplied_factor *= 2
 
     # Apply 10% increased base damage
-    damage.base_summed_modifier += 0.1
+    damage.base_summed_factor += 0.1
 
     # Apply +2 base damage
     damage.base_value += 2
@@ -61,21 +61,21 @@ class GenericStat(Stat):
 
     def __init__(
             self,
-            base_value: float = 0, base_summed_modifier: float = 1, base_multiplied_modifier: float = 1,
-            secondary_value: float = 0, secondary_summed_modifier: float = 1, secondary_multiplied_modifier: float = 1,
-            overall_summed_modifier: float = 1, overall_multiplied_modifier: float = 1,
+            base_value: float = 0, base_summed_factor: float = 1, base_multiplied_factor: float = 1,
+            secondary_value: float = 0, secondary_summed_factor: float = 1, secondary_multiplied_factor: float = 1,
+            overall_summed_factor: float = 1, overall_multiplied_factor: float = 1,
             is_locked: Any = False
     ):
         self._base_value = base_value
-        self._base_summed_modifier = base_summed_modifier
-        self._base_multiplied_modifier = base_multiplied_modifier
+        self._base_summed_factor = base_summed_factor
+        self._base_multiplied_factor = base_multiplied_factor
 
         self._secondary_value = secondary_value
-        self._secondary_summed_modifier = secondary_summed_modifier
-        self._secondary_multiplied_modifier = secondary_multiplied_modifier
+        self._secondary_summed_factor = secondary_summed_factor
+        self._secondary_multiplied_factor = secondary_multiplied_factor
 
-        self._overall_summed_modifier = overall_summed_modifier
-        self._overall_multiplied_modifier = overall_multiplied_modifier
+        self._overall_summed_factor = overall_summed_factor
+        self._overall_multiplied_factor = overall_multiplied_factor
 
         self._is_locked = is_locked
 
@@ -86,12 +86,12 @@ class GenericStat(Stat):
 
     def __repr__(self):
         return (
-            f"<{type(self).__name__}(base_value={self._base_value}, base_summed_modifier={self._base_summed_modifier}, "
-            f"base_multiplied_modifier={self._base_multiplied_modifier}, secondary_value={self._secondary_value}, "
-            f"secondary_summed_modifier={self._secondary_summed_modifier}, "
-            f"secondary_multiplied_modifier={self._secondary_multiplied_modifier}, "
-            f"overall_summed_modifier={self._overall_summed_modifier}, "
-            f"overall_multiplied_modifier={self._overall_multiplied_modifier}, is_locked={self._is_locked}) "
+            f"<{type(self).__name__}(base_value={self._base_value}, base_summed_factor={self._base_summed_factor}, "
+            f"base_multiplied_factor={self._base_multiplied_factor}, secondary_value={self._secondary_value}, "
+            f"secondary_summed_factor={self._secondary_summed_factor}, "
+            f"secondary_multiplied_factor={self._secondary_multiplied_factor}, "
+            f"overall_summed_factor={self._overall_summed_factor}, "
+            f"overall_multiplied_factor={self._overall_multiplied_factor}, is_locked={self._is_locked}) "
             f"modified by {repr(self._modified_by)}>"
         )
 
@@ -115,11 +115,11 @@ class GenericStat(Stat):
         self._total = None
 
     @property
-    def base_summed_modifier(self) -> float:
-        return self._base_summed_modifier
+    def base_summed_factor(self) -> float:
+        return self._base_summed_factor
 
-    @base_summed_modifier.setter
-    def base_summed_modifier(self, value: float):
+    @base_summed_factor.setter
+    def base_summed_factor(self, value: float):
         """
         This attribute should only have *additions* and *subtractions* applied to it,
         **not** multiplications or divisions
@@ -127,18 +127,18 @@ class GenericStat(Stat):
 
         if self._is_locked:
             ErrorMessages.stat_locked()
-        if value == self._base_summed_modifier:
+        if value == self._base_summed_factor:
             return
 
-        self._base_summed_modifier = value
+        self._base_summed_factor = value
         self._total = None
 
     @property
-    def base_multiplied_modifier(self) -> float:
-        return self._base_multiplied_modifier
+    def base_multiplied_factor(self) -> float:
+        return self._base_multiplied_factor
 
-    @base_multiplied_modifier.setter
-    def base_multiplied_modifier(self, value: float):
+    @base_multiplied_factor.setter
+    def base_multiplied_factor(self, value: float):
         """
         This attribute should only have *multiplications* and *divisions* applied to it,
         **not** additions or subtractions
@@ -146,10 +146,10 @@ class GenericStat(Stat):
 
         if self._is_locked:
             ErrorMessages.stat_locked()
-        if value == self._base_multiplied_modifier:
+        if value == self._base_multiplied_factor:
             return
 
-        self._base_multiplied_modifier = value
+        self._base_multiplied_factor = value
         self._total = None
 
     @property
@@ -172,11 +172,11 @@ class GenericStat(Stat):
         self._total = None
 
     @property
-    def secondary_summed_modifier(self) -> float:
-        return self._secondary_summed_modifier
+    def secondary_summed_factor(self) -> float:
+        return self._secondary_summed_factor
 
-    @secondary_summed_modifier.setter
-    def secondary_summed_modifier(self, value: float):
+    @secondary_summed_factor.setter
+    def secondary_summed_factor(self, value: float):
         """
         This attribute should only have *additions* and *subtractions* applied to it,
         **not** multiplications or divisions
@@ -184,18 +184,18 @@ class GenericStat(Stat):
 
         if self._is_locked:
             ErrorMessages.stat_locked()
-        if value == self._secondary_summed_modifier:
+        if value == self._secondary_summed_factor:
             return
 
-        self._secondary_summed_modifier = value
+        self._secondary_summed_factor = value
         self._total = None
 
     @property
-    def secondary_multiplied_modifier(self) -> float:
-        return self._secondary_multiplied_modifier
+    def secondary_multiplied_factor(self) -> float:
+        return self._secondary_multiplied_factor
 
-    @secondary_multiplied_modifier.setter
-    def secondary_multiplied_modifier(self, value: float):
+    @secondary_multiplied_factor.setter
+    def secondary_multiplied_factor(self, value: float):
         """
         This attribute should only have *multiplications* and *divisions* applied to it,
         **not** additions or subtractions
@@ -203,18 +203,18 @@ class GenericStat(Stat):
 
         if self._is_locked:
             ErrorMessages.stat_locked()
-        if value == self._secondary_multiplied_modifier:
+        if value == self._secondary_multiplied_factor:
             return
 
-        self._secondary_multiplied_modifier = value
+        self._secondary_multiplied_factor = value
         self._total = None
 
     @property
-    def overall_summed_modifier(self) -> float:
-        return self._overall_summed_modifier
+    def overall_summed_factor(self) -> float:
+        return self._overall_summed_factor
 
-    @overall_summed_modifier.setter
-    def overall_summed_modifier(self, value: float):
+    @overall_summed_factor.setter
+    def overall_summed_factor(self, value: float):
         """
         This attribute should only have *additions* and *subtractions* applied to it,
         **not** multiplications or divisions
@@ -222,18 +222,18 @@ class GenericStat(Stat):
 
         if self._is_locked:
             ErrorMessages.stat_locked()
-        if value == self._overall_summed_modifier:
+        if value == self._overall_summed_factor:
             return
 
-        self._overall_summed_modifier = value
+        self._overall_summed_factor = value
         self._total = None
 
     @property
-    def overall_multiplied_modifier(self) -> float:
-        return self._overall_multiplied_modifier
+    def overall_multiplied_factor(self) -> float:
+        return self._overall_multiplied_factor
 
-    @overall_multiplied_modifier.setter
-    def overall_multiplied_modifier(self, value: float):
+    @overall_multiplied_factor.setter
+    def overall_multiplied_factor(self, value: float):
         """
         This attribute should only have *multiplications* and *divisions* applied to it,
         **not** additions or subtractions
@@ -241,10 +241,10 @@ class GenericStat(Stat):
 
         if self._is_locked:
             ErrorMessages.stat_locked()
-        if value == self._overall_multiplied_modifier:
+        if value == self._overall_multiplied_factor:
             return
 
-        self._overall_multiplied_modifier = value
+        self._overall_multiplied_factor = value
         self._total = None
 
     @property
@@ -274,10 +274,10 @@ class GenericStat(Stat):
         if self._total is None:
             self._total = (
                 (
-                    (self._base_value * self._base_summed_modifier * self._base_multiplied_modifier)
-                    + (self._secondary_value * self._secondary_summed_modifier * self._secondary_multiplied_modifier)
+                    (self._base_value * self._base_summed_factor * self._base_multiplied_factor)
+                    + (self._secondary_value * self._secondary_summed_factor * self._secondary_multiplied_factor)
                 )
-                * self._overall_summed_modifier * self._overall_multiplied_modifier
+                * self._overall_summed_factor * self._overall_multiplied_factor
             )
 
         return self._total
