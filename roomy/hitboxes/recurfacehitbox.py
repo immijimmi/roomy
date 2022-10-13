@@ -1,6 +1,6 @@
 from objectextensions import Decorators
 
-from typing import Iterable, Dict, Type, Callable
+from typing import Dict, Type, Callable
 
 from .hitbox import Hitbox
 
