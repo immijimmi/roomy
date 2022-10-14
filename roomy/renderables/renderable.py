@@ -44,8 +44,14 @@ class Renderable(Extendable, Recurface, ABC):
 
         self._update(elapsed_ms, input_events, *args, **kwargs)
 
+        try:
+            # Events passed to high render_priority children first, if possible
+            child_recurfaces = reversed(self.ordered_child_recurfaces)
+        except TypeError:
+            child_recurfaces = self.child_recurfaces
+
         child: Renderable
-        for child in reversed(self.ordered_child_recurfaces):  # Events passed to high render_priority children first
+        for child in child_recurfaces:
             child.update(elapsed_ms, input_events, *args, **kwargs)
 
     def _update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
