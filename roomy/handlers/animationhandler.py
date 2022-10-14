@@ -77,7 +77,7 @@ class AnimationHandler:
         sprite sheet label appears in multiple data files, its associated data should be identical.
         To avoid duplication issues resulting from this arrangement, it is recommended to minimise the amount of
         sprite sheets being defined in animation data files, and instead call .register_sprite_sheet() manually
-        in your Animated class' constructors (or elsewhere) as necessary
+        in your Animated classes' constructors (or elsewhere) as necessary
         """
 
         if target_cls.__name__ not in self._animation_data:
