@@ -18,7 +18,7 @@ class World(Screen):
         super().__init__(game, state)
 
         # Registering a class `Room` which may appear in the game state and which would be needed inside this class
-        self.game.custom_class_handler.register({"Room": Room})
+        self.game.custom_class_handler.register(**{"Room": Room})
 
         self._current_room = None
 

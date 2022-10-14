@@ -1,5 +1,5 @@
 from sys import modules
-from typing import Dict
+from logging import warning
 
 
 class CustomClassHandler:
@@ -8,8 +8,21 @@ class CustomClassHandler:
 
         self._classes = {**self._game.config.CUSTOM_CLASSES}
 
-    def register(self, value: Dict[str, type]) -> None:
-        self._classes.update(value)
+    def register(self, **classes: type) -> None:
+        """
+        Stores the provided classes under their associated provided names, to be retrieved as needed later.
+        This method will output a warning message if stored classes are overwritten, but will not prevent
+        them from being overwritten
+        """
+
+        for cls_key, cls in classes.items():
+            if (cls_key in self._classes) and (self._classes[cls_key] != cls):
+                warning(
+                    f"{type(self).__name__} has had an entry in its registry overwritten:"
+                    f" '{cls_key}' now refers to {cls.__name__} instead of {self._classes[cls_key].__name__}"
+                )
+
+        self._classes.update(classes)
 
     def get(self, class_name: str) -> type:
         """
