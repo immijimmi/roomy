@@ -57,7 +57,7 @@ class Renderable(Extendable, Recurface, ABC):
     def _update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
         """
         Lifecycle method, called automatically each game tick.
-        Can optionally be overridden in subclasses, and further extended as necessary in subsequent subclasses.
+        Can optionally be overridden.
 
         Complete any miscellaneous work necessary for this object each tick
         that is not covered by other lifecycle methods here

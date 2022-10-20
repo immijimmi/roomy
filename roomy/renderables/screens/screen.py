@@ -36,6 +36,10 @@ class Screen(Renderable, ABC):
         return self._hitbox_handler
 
     def _update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
+        """
+        This method can be further extended as necessary in subclasses
+        """
+
         self._hitbox_handler.reset_checked_collisions()
 
     @staticmethod

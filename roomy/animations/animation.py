@@ -70,6 +70,7 @@ class Animation(ABC):
     def _update(self, elapsed_ms: int) -> None:
         """
         Lifecycle method, called automatically each game tick.
+        Can optionally be overridden.
 
         Any additional work that may be needed in specific animations,
         including playing sounds at specific parts of the animation, can be completed here
