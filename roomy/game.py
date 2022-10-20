@@ -81,7 +81,8 @@ class Game:
         elapsed_ms = self._clock.tick(self.fps * self.updates_per_frame)
         input_events = list(self.config.GET_INPUT_EVENTS())  # Repackaged into a list to be consumed from it as needed
 
-        self._screen.update(elapsed_ms, input_events)
+        with self.game_event_handler(GameEventKey.UPDATE, elapsed_ms, input_events):
+            self._screen.update(elapsed_ms, input_events)
 
     def _render_screen(self) -> None:
         updated_rects = self._screen.render(self._window)

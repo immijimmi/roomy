@@ -7,6 +7,8 @@ class GameEventKey(str, Enum):
     via calls within this package to GameEventHandler.on_event()
     """
 
+    UPDATE = "update"
+
     CHANGE_SCREEN = "change_screen"
     CHANGE_ROOM = "change_room"
 
