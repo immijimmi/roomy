@@ -106,7 +106,7 @@ class AnimationHandler:
                         self._game.config.RESOURCE_FOLDER_PATH,
                         frame_key
                     )
-                ).convert_alpha()
+                )
                 surface = transform.rotozoom(surface, 0, size)
 
                 frame_sizes = self._frames.setdefault(frame_key, {})

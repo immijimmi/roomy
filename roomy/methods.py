@@ -10,6 +10,6 @@ class Methods:
         """
 
         try:
-            return image.load(file_path)
+            return image.load(file_path).convert_alpha()
         except FileNotFoundError:
             raise FileNotFoundError(f"unable to locate a file under the following path: {file_path}")

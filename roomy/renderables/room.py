@@ -42,7 +42,7 @@ class Room(Renderable):
             self.game.screen.state.registered_get("room_background_file_path", [self._room_id])
         )
 
-        return Methods.load_image(background_file_path).convert_alpha()
+        return Methods.load_image(background_file_path)
 
     def _load_room(self):
         """
