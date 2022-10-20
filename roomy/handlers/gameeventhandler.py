@@ -19,6 +19,9 @@ class GameEventHandler:
     in such a case, .on_event() is invoked both before and after the event logic contained in the `with` block, with
     the appropriate tuple being passed as an event key each time.
 
+    Any listener added via only a string for the event type, and not under these tuple variants
+    for that same event type, will still be notified when the event is triggered using the above contextmanager.
+
     Alternatively, event_key can be omitted when adding (or removing) a listener, to indicate that the listener
     should be notified on all events
     """
@@ -30,6 +33,12 @@ class GameEventHandler:
     def __call__(self, event_type: str, *args, **kwargs):
         self.on_event(("before", event_type), *args, **kwargs)
         yield
+        """
+        Both the non-specific and the after-specific variants of the event key are passed into `.on_event()` here,
+        because any listener stored under the non-specific key should still be called at some point when
+        calling listeners stored under the more specific variants (since the relevant event has still taken place)
+        """
+        self.on_event(event_type, *args, **kwargs)
         self.on_event(("after", event_type), *args, **kwargs)
 
     def add_listener(
