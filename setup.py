@@ -26,7 +26,7 @@ setup(
     install_requires=[
         "pygame~=2.0.1",
         "managedstate~=5.0.0",
-        "recurfaces~=1.0.7",
+        "recurfaces~=2.0.0",
         "objectextensions~=2.0.1"
     ],
     classifiers=[
