@@ -20,9 +20,9 @@ class Hitbox(Tagged, ABC):
 
     def __init__(self, parent: "Renderable.with_extensions(Hitboxed)", tags: Iterable[str] = ()):
         # Weakref so that it does not prevent parent object being garbage collected
-        self._parent_renderable = ref(parent)
+        self._parent_renderable = ref(parent)  # Hoisted so that it is available when `._is_valid_tag()` is called
 
-        super().__init__(tags)
+        super().__init__(tags=tags)
 
     @property
     def hitbox_handler(self) -> "HitboxHandler":
