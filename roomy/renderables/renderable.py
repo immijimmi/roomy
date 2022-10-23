@@ -20,7 +20,7 @@ class Renderable(Extendable, Recurface, ABC):
             parent: Optional["Renderable"] = None, priority: Any = None,
     ):
         Extendable.__init__(self)
-        Recurface.__init__(self, surface=surface, parent=parent, position=render_position, priority=priority)
+        Recurface.__init__(self, surface=surface, position=render_position, parent=parent, priority=priority)
 
         self._game = game
 
