@@ -3,8 +3,8 @@ from managedstate import State
 from managedstate.extensions import Registrar
 
 from abc import ABC
+from typing import Optional
 
-from ...constants import Constants as GameConstants
 from ...handlers import HitboxHandler
 from ..renderable import Renderable
 
@@ -12,14 +12,11 @@ from ..renderable import Renderable
 class Screen(Renderable, ABC):
     """
     Any class that inherits from Screen should be used as a top-level object in the game loop.
-    Different derived classes of Screen are to represent different views of the game;
-    for example, the start menu would be one Screen subclass whereas the game world would be a separate Screen subclass
+    Different subclasses of Screen should represent different views of the game;
+    for example, the main menu would be one Screen subclass whereas the game world would be a separate Screen subclass
     """
 
-    def __init__(self, game, state: State.with_extensions(Registrar)):
-        surface = Surface((game.window.get_width(), game.window.get_height()))
-        surface.fill(GameConstants.COLOURS["dev"])
-
+    def __init__(self, game, state: State.with_extensions(Registrar), surface: Optional[Surface] = None):
         super().__init__(game, surface=surface, render_position=(0, 0), parent=None, priority=None)
 
         self._state = state

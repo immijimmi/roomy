@@ -1,3 +1,4 @@
+from pygame import Surface
 from managedstate import State
 from managedstate.extensions import Registrar
 from managedstate.extensions.registrar import PartialQueries
@@ -7,6 +8,7 @@ from os import path
 from .screen import Screen
 from ..room import Room
 from ...handlers import GameEventKey
+from ...constants import Constants as GameConstants
 
 
 class World(Screen):
@@ -15,7 +17,10 @@ class World(Screen):
     """
 
     def __init__(self, game, state: State.with_extensions(Registrar)):
-        super().__init__(game, state)
+        surface = Surface((game.window.get_width(), game.window.get_height()))
+        surface.fill(GameConstants.COLOURS["dev"])
+
+        super().__init__(game, state, surface=surface)
 
         # Registering a class `Room` which may appear in the game state and which would be needed inside this class
         self.game.custom_class_handler.register(**{"Room": Room})
