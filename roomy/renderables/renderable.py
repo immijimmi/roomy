@@ -16,8 +16,8 @@ class Renderable(Extendable, Recurface, ABC):
 
     def __init__(
             self, game: "Game",
-            parent: Optional["Renderable"] = None, surface: Optional[Surface] = None,
-            render_position: Optional[Tuple[int, int]] = None, priority: Any = None
+            surface: Optional[Surface] = None, render_position: Optional[Tuple[float, float]] = None,
+            parent: Optional["Renderable"] = None, priority: Any = None,
     ):
         Extendable.__init__(self)
         Recurface.__init__(self, surface=surface, parent=parent, position=render_position, priority=priority)
