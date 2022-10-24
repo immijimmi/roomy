@@ -17,10 +17,8 @@ class World(Screen):
     """
 
     def __init__(self, game, state: State.with_extensions(Registrar)):
-        surface = Surface((game.window.get_width(), game.window.get_height()))
-        surface.fill(GameConstants.COLOURS["dev"])
-
-        super().__init__(game, state, surface=surface)
+        super().__init__(game, state)
+        self.surface = self.copy_surface()
 
         # Registering a class `Room` which may appear in the game state and which would be needed inside this class
         self.game.custom_class_handler.register(**{"Room": Room})
@@ -32,6 +30,11 @@ class World(Screen):
     @property
     def curr_room(self) -> Room:
         return self._current_room
+
+    @Screen.surface.setter
+    def surface(self, value):
+        # As this class uses a static surface, `.surface` should not be written to
+        raise AttributeError("can't set attribute")
 
     def set_room(self) -> None:
         """
@@ -70,6 +73,12 @@ class World(Screen):
         super()._update(elapsed_ms, input_events, *args, **kwargs)
 
         self.set_room()
+
+    def copy_surface(self) -> Surface:
+        surface = Surface((self.game.window.get_width(), self.game.window.get_height()))
+        surface.fill(GameConstants.COLOURS["dev"])
+
+        return surface
 
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):
