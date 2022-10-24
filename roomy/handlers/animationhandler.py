@@ -26,7 +26,7 @@ class AnimationHandler:
 
     def register_sprite_sheet(
         self,
-        sprite_label: str,
+        sprite_sheet_label: str,
         sprite_data: Dict[
             Literal[AnimationDataKey.FILE_PATH, AnimationDataKey.PARSE_TYPE, AnimationDataKey.PARSE_DATA], Any
         ]
@@ -35,7 +35,7 @@ class AnimationHandler:
         Stores data relating to a sprite sheet, to enable the relevant sprites to be loaded later if necessary
         """
 
-        self._sprite_sheets_data[sprite_label] = sprite_data
+        self._sprite_sheets_data[sprite_sheet_label] = sprite_data
 
     def get_settings(self, target_cls: Type["Renderable.with_extensions(Animated)"], animation_key: str) -> Dict[str, Any]:
         """
@@ -56,7 +56,7 @@ class AnimationHandler:
         The frame key should either be a relative path to an image file for the frame
         (relative beginning from the designated resource folder, as indicated in the game's config),
         or it should be a sequence of 2 items
-        (the first a sprite label which refers to an already loaded sprite sheet,
+        (the first a sprite sheet label which refers to an already loaded sprite sheet,
         and the second an index for which sprite within in that sprite sheet is the desired frame)
         """
 
@@ -123,8 +123,8 @@ class AnimationHandler:
                 frame_sizes[size] = surface
 
             else:  # frame_key is a sprite sheet label
-                sprite_label = frame_key[0]
+                sprite_sheet_label = frame_key[0]
                 sprite_index = frame_key[1]
 
-                sprite_sheet_data = self._sprite_sheets_data[sprite_label]
+                sprite_sheet_data = self._sprite_sheets_data[sprite_sheet_label]
                 pass  # TODO: Add logic to load & store sprites from sprite sheet data at provided zoom

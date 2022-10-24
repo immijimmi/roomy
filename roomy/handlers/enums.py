@@ -21,7 +21,7 @@ class AnimationDataKey(str, Enum):
     is expected to be as follows:
     {
         "sprite_sheets": {
-            "<sprite label>": {
+            "<sprite sheet label>": {
                 "file_path": <str value>,
                 "parse_type": "individual",
                 "parse_data": [
