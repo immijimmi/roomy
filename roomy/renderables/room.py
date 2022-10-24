@@ -5,9 +5,11 @@ from ..methods import Methods
 from .renderable import Renderable
 from .entity import Entity
 from .enums import EntityDataKey
+from ..extensions import Hitboxed
+from ..hitboxes import RecurfaceHitbox
 
 
-class Room(Renderable):
+class Room(Renderable.with_extensions(Hitboxed)):
     """
     Concrete class tightly coupled to the World screen, which renders a single room and its occupants.
     Can be subclassed as needed to add further functionality
@@ -19,17 +21,14 @@ class Room(Renderable):
         self._room_id = room_id
         self.surface = self._generate_surface()
 
-        self._is_loaded = False
+        self._load_room()
 
     @property
     def room_id(self) -> str:
         return self._room_id
 
-    def _update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
-        if not self._is_loaded:
-            self._load_room()
-
-            self._is_loaded = True
+    def generate_hitboxes(self):
+        return [RecurfaceHitbox(self, tags=(), is_inverted=True)]  # TODO: Add relevant tags for Room
 
     def _generate_surface(self):
         """
