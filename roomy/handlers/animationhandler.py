@@ -64,6 +64,16 @@ class AnimationHandler:
 
         return self._frames[frame_key][size]
 
+    def preload_frames(self, *frame_keys: Union[str, Tuple[str, int]], sizes: Tuple[int, ...] = (1,)) -> None:
+        """
+        Loads animation frames into memory ahead of time,
+        to prevent bottlenecking when many new frames are required in a short span
+        """
+
+        for frame_key in frame_keys:
+            for size in sizes:
+                self._load_frame(frame_key, size)
+
     def _load_data(self, target_cls: Type["Renderable.with_extensions(Animated)"]) -> None:
         """
         Loads all animation data for the target class, if it is not already loaded.
