@@ -31,11 +31,6 @@ class World(Screen):
     def curr_room(self) -> Room:
         return self._current_room
 
-    @Screen.surface.setter
-    def surface(self, value):
-        # As this class uses a static surface, `.surface` should not be written to
-        raise AttributeError("can't set attribute")
-
     def set_room(self) -> None:
         """
         Checks what room ID the current room should have via the game's state, and if it does not match
