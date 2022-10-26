@@ -41,7 +41,7 @@ class Hitbox(Tagged, ABC):
         Checks for a collision between this hitbox and the provided other hitbox.
         If this collision has already been checked this tick, returns False.
 
-        If check_by_parent is True, hitbox objects that have the same parent Renderable
+        If `check_by_parent` is True, hitbox objects that have the same parent Renderable
         are considered to be the same hitbox for this purpose
         """
 
