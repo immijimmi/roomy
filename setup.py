@@ -13,7 +13,7 @@ setup(
         "roomy.renderables", "roomy.renderables.screens",
         "roomy.stats"
     ],
-    version="0.10.0",
+    version="0.11.0",
     license="MIT",
     description="A game engine specialised for building 2D non-scrolling games, written in python",
     long_description_content_type="text/markdown",
@@ -21,7 +21,7 @@ setup(
     author="immijimmi",
     author_email="immijimmi1@gmail.com",
     url="https://github.com/immijimmi/roomy",
-    download_url="https://github.com/immijimmi/roomy/archive/refs/tags/v0.10.0.tar.gz",
+    download_url="https://github.com/immijimmi/roomy/archive/refs/tags/v0.11.0.tar.gz",
     keywords=["game", "engine", "2D"],
     install_requires=[
         "pygame~=2.0.1",
