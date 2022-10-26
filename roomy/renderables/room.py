@@ -29,14 +29,16 @@ class Room(Renderable.with_extensions(Hitboxed)):
     def generate_hitboxes(self):
         return [RecurfaceHitbox(self, tags=(RenderableHitboxTag.ROOM, ), is_inverted=True)]
 
-    def check_collisions(self):
-        for other_hitbox in self.game.screen.hitbox_handler.get(tags_all=(RenderableHitboxTag.ROOM_OCCUPANT, )):
-            for hitbox in self.hitboxes:
-                if hitbox.is_collision(other_hitbox):
-                    self.collide(other_hitbox.parent_renderable)
-                    other_hitbox.parent_renderable.collide(self)
+    def check_collisions(self) -> None:
+        """
+        This class explicitly does not check for collisions with other objects.
+        Other objects may check for collisions with this object as needed, and act accordingly if
+        a collision is detected
+        """
 
-    def collide(self, other: Renderable.with_extensions(Hitboxed)):
+        pass
+
+    def collide(self, other: Renderable.with_extensions(Hitboxed)) -> None:
         """
         This class explicitly does not apply any on-collision effects. Any that are necessary should be
         applied by the other colliding object
