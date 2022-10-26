@@ -2,6 +2,8 @@ from pygame import event
 
 from typing import Callable, Iterable, Dict, Container
 
+from .renderables import RenderableHitboxTag
+
 
 class Config:
     FPS: float = 0  # A value of 0 indicates unlimited framerate
@@ -12,6 +14,9 @@ class Config:
 
     CUSTOM_CLASSES: Dict[str, type] = {}
 
-    HITBOX_TAGS: Container = set()  # Should contain all possible valid tags for the Hitbox class
+    # Should contain all possible valid tags for the Hitbox class
+    HITBOX_TAGS: Container = set(
+        attribute.value for attribute in RenderableHitboxTag
+    )
 
     ANIMATION_DEFAULT_FPS: float = 50
