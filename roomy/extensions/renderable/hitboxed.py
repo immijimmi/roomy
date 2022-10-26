@@ -71,18 +71,14 @@ class Hitboxed(Extension, ABC):
     def __collide(self, other: "Renderable.with_extensions(Hitboxed)") -> None:
         """
         Can optionally be overridden.
-        Should apply this renderable's on-collision effects to itself and/or the provided other renderable.
+        Any on-collision effects applied by and to this and the other provided Renderable object should be
+        implemented in one of their `.collide()` methods
 
-        This includes inspecting the other renderable (if needed) to decide what effects should apply.
+        This includes inspecting the other renderable to decide what effects should apply, if necessary.
 
         When a collision is detected and this method is invoked, it should *also* be invoked on the other object
         involved in the collision and passed this object as an argument
-        to allow both objects' collision logic to be applied.
-
-        # TODO: Review the below rule in practice - 'squishy' objects and 'immovable' objects
-                    may want to edit the other object, or not be edited, respectively
-        - Any *direct* changes to the position or movement (or other stats) of a renderable as a result of the collision
-          itself should be handled by that renderable, not by the other involved renderable
+        to allow both objects' collision logic to be applied
         """
 
         pass
