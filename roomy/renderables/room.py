@@ -1,10 +1,9 @@
-from typing import Type, Tuple, List
+from typing import List, Type
 from os import path
 
 from ..methods import Methods
 from .renderable import Renderable
-from .entity import Entity
-from .enums import EntityDataKey
+from .enums import OccupantDataKey
 from ..extensions import Hitboxed
 from ..hitboxes import RecurfaceHitbox
 
@@ -45,22 +44,20 @@ class Room(Renderable.with_extensions(Hitboxed)):
 
     def _load_room(self):
         """
-        Instantiates all the entities present in the current room.
-        Assumes that any custom Entity subclasses listed in the game's state
+        Instantiates all the occupants of the current room.
+        Assumes that any custom classes listed in the game's state
         have been made available to the game's CustomClassHandler
         """
 
-        curr_room_entities_ids: List[str] = self.game.screen.state.registered_get(
-            "room_entities_ids", [self._room_id]
+        curr_room_occupants_ids: List[str] = self.game.screen.state.registered_get(
+            "room_occupants_ids", [self._room_id]
         )
 
-        for entity_id in curr_room_entities_ids:
-            entity_data: dict = self.game.screen.state.registered_get("entity", [entity_id])
+        for occupant_id in curr_room_occupants_ids:
+            occupant_data: dict = self.game.screen.state.registered_get("room_occupant", [occupant_id])
 
-            entity_class: Type[Entity] = self.game.custom_class_handler.get(entity_data[EntityDataKey.CLASS])
-            entity_details: Tuple[list, dict] = (
-                entity_data.get(EntityDataKey.ARGS, []),
-                entity_data.get(EntityDataKey.KWARGS, {})
-            )
+            occupant_class: Type[Renderable] = self.game.custom_class_handler.get(occupant_data[OccupantDataKey.CLASS])
+            occupant_args: list = occupant_data.get(OccupantDataKey.ARGS, [])
+            occupant_kwargs: dict = occupant_data.get(OccupantDataKey.KWARGS, {})
 
-            entity_class(self, *entity_details[0], **entity_details[1])
+            occupant_class(self, *occupant_args, **occupant_kwargs)

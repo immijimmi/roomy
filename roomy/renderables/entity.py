@@ -1,19 +1,17 @@
 from typing import Tuple
 from abc import ABC
 
+from ..extensions import Hitboxed
 from ..stats import Stat, GenericStat
 from .renderable import Renderable
 
 
-class Entity(Renderable, ABC):
+class Entity(Renderable.with_extensions(Hitboxed), ABC):
     """
-    Concrete class tightly coupled to the Room class, which renders a persisting Renderable object in a room.
-
-    This includes people, inanimate objects, decorative objects, objects with no collision etc. and only
-    excludes things that would cease to exist once the room is exited
+    Represents a corporeal Renderable object
     """
 
-    def __init__(self, parent: "Room", render_position: Tuple[int, int], surface=None, priority=None):
+    def __init__(self, parent: Renderable, render_position: Tuple[int, int], surface=None, priority=None):
         super().__init__(
             parent.game, parent=parent, surface=surface, render_position=render_position, priority=priority
         )

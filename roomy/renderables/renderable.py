@@ -11,7 +11,8 @@ class Renderable(Extendable, Recurface, ABC):
     A Renderable object is any object that has a place in the rendering hierarchy.
 
     Explanation of additional constructor param requirements:
-    - game: A reference to the Game instance allows all entities to navigate the object hierarchy from a static origin
+    - game: A reference to the Game instance allows all Renderable instances to navigate the object hierarchy
+      from a static origin
     """
 
     def __init__(

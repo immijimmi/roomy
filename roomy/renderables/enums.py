@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class EntityDataKey(str, Enum):
+class OccupantDataKey(str, Enum):
     CLASS = "class"
 
     ARGS = "args"

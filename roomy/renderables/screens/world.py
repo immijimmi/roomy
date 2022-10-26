@@ -79,11 +79,11 @@ class World(Screen):
     def register_paths(state: State.with_extensions(Registrar)):
         state.register_path("current_room_id", ["current_room_id"], [str(None)])
 
-        state.register_path("entity", ["entities", PartialQueries.KEY], [{}])
+        state.register_path("room_occupant", ["room_occupants", PartialQueries.KEY], [{}])
 
         state.register_path("room", ["rooms", PartialQueries.KEY], [{}])
         state.register_path("room_class", ["rooms", PartialQueries.KEY, "class"], [{}, {}, "Room"])
-        state.register_path("room_entities_ids", ["rooms", PartialQueries.KEY, "entities_ids"], [{}, {}, []])
+        state.register_path("room_occupants_ids", ["rooms", PartialQueries.KEY, "occupants_ids"], [{}, {}, []])
         state.register_path(
             "room_background_file_path",
             ["rooms", PartialQueries.KEY, "background_file_path"],
