@@ -24,6 +24,7 @@ class Animated(Extension, ABC):
     def __wrap_init(self, *args, **kwargs):
         yield
         Extension._set(self, "_animation", self.generate_animation())
+        self.surface = self._animation.frame
 
     def __animation(self) -> Animation:
         return self._animation
