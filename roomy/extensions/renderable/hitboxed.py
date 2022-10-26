@@ -62,7 +62,7 @@ class Hitboxed(Extension, ABC):
         using the get() method on self.game.screen.hitbox_handler, filtered down via the optional parameters
         that method can receive.
 
-        When a collision is detected between two objects, each of their respective collide() methods should
+        When a collision is detected between two objects, each of their respective `.collide()` methods should
         be invoked and passed the other object involved in that collision.
         """
 
