@@ -29,6 +29,21 @@ class Room(Renderable.with_extensions(Hitboxed)):
     def generate_hitboxes(self):
         return [RecurfaceHitbox(self, tags=(RenderableHitboxTag.ROOM, ), is_inverted=True)]
 
+    def check_collisions(self):
+        for other_hitbox in self.game.screen.hitbox_handler.get(tags_all=(RenderableHitboxTag.ROOM_OCCUPANT, )):
+            for hitbox in self.hitboxes:
+                if hitbox.is_collision(other_hitbox):
+                    self.collide(other_hitbox.parent_renderable)
+                    other_hitbox.parent_renderable.collide(self)
+
+    def collide(self, other: Renderable.with_extensions(Hitboxed)):
+        """
+        This class explicitly does not apply any on-collision effects. Any that are necessary should be
+        applied by the other colliding object
+        """
+
+        pass
+
     def _generate_surface(self):
         """
         Loads the background image for the room object as a new Surface.
