@@ -19,17 +19,17 @@ class GenericStat(Stat):
 
     The reason for this structure is that each segment of the formula has one multiplier comprised from
     addition operations, and one multiplier comprised from multiplication operations. This separation in multipliers
-    means that order of operations does not matter, so changes to these values may be applied and later reverted freely
-    without leaving a permanent effect on the total value.
+    means that modifications to the values can be applied in a reversible manner if needed, regardless of in what order
+    they were added and/or removed.
 
     Each of these factors is named with clarity for the player in mind - it makes intuitive sense that "base damage"
-    and "secondary damage" would be added together when calculating the total, for example.
+    and "secondary damage" (for example) would be added together when calculating "total damage", for example.
 
     If this stat is currently locked (self.is_locked is True or truthy), any attempted changes to these factors
     will raise an exception. Thus, it is important to check this attribute before making any changes,
     and unlock the stat if necessary.
 
-    In practice, each of these attributes should be used as shown below:
+    In practice, each of these attributes is expected to be used as shown below:
     damage = GenericStat()
 
     # Apply double damage (x2 multiplier)
