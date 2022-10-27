@@ -2,7 +2,7 @@ from typing import Tuple
 from abc import ABC
 
 from ..extensions import Hitboxed
-from ..stats import Stat, GenericStat
+from ..stats import Stat
 from .renderable import Renderable
 
 
@@ -17,23 +17,17 @@ class Entity(Renderable.with_extensions(Hitboxed), ABC):
         )
 
     @property
-    def speed(self) -> Tuple[GenericStat, GenericStat]:
+    def speed(self) -> Tuple[Stat, Stat]:
         """
-        Should return a pair of stat objects representing x speed and y speed, respectively.
-
-        These stats must be concrete GenericStat objects, to expose a clear write-access interface to any external
-        forces
+        Should return a pair of stat objects representing x speed and y speed, respectively
         """
 
         raise NotImplementedError
 
     @property
-    def acceleration(self) -> Tuple[GenericStat, GenericStat]:
+    def acceleration(self) -> Tuple[Stat, Stat]:
         """
-        Should return a pair of stat objects representing x acceleration and y acceleration, respectively.
-
-        These stats must be concrete GenericStat objects, to expose a clear write-access interface to any external
-        forces
+        Should return a pair of stat objects representing x acceleration and y acceleration, respectively
         """
 
         raise NotImplementedError

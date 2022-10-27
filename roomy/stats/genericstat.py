@@ -19,8 +19,8 @@ class GenericStat(Stat):
 
     The reason for this structure is that each segment of the formula has one multiplier comprised from
     addition operations, and one multiplier comprised from multiplication operations. This separation in multipliers
-    means that modifications to the values can be applied in a reversible manner if needed, regardless of in what order
-    they were added and/or removed.
+    means that modifications to the values *can* be applied in a reversible manner if needed, regardless of in
+    what order they were added and/or removed.
 
     Each of these factors is named with clarity for the player in mind - it makes intuitive sense that "base damage"
     and "secondary damage" (for example) would be added together when calculating "total damage", for example.
@@ -102,8 +102,8 @@ class GenericStat(Stat):
     @base_value.setter
     def base_value(self, value: float):
         """
-        This attribute should only have *additions* and *subtractions* applied to it,
-        **not** multiplications or divisions
+        This attribute should only have *additions* and *subtractions* applied to it
+        to preserve reversibility if necessary, **not** multiplications or divisions
         """
 
         if self._is_locked:
@@ -121,8 +121,8 @@ class GenericStat(Stat):
     @base_summed_factor.setter
     def base_summed_factor(self, value: float):
         """
-        This attribute should only have *additions* and *subtractions* applied to it,
-        **not** multiplications or divisions
+        This attribute should only have *additions* and *subtractions* applied to it
+        to preserve reversibility if necessary, **not** multiplications or divisions
         """
 
         if self._is_locked:
@@ -140,8 +140,8 @@ class GenericStat(Stat):
     @base_multiplied_factor.setter
     def base_multiplied_factor(self, value: float):
         """
-        This attribute should only have *multiplications* and *divisions* applied to it,
-        **not** additions or subtractions
+        This attribute should only have *multiplications* and *divisions* applied to it
+        to preserve reversibility if necessary, **not** additions or subtractions
         """
 
         if self._is_locked:
@@ -159,8 +159,8 @@ class GenericStat(Stat):
     @secondary_value.setter
     def secondary_value(self, value: float):
         """
-        This attribute should only have *additions* and *subtractions* applied to it,
-        **not** multiplications or divisions
+        This attribute should only have *additions* and *subtractions* applied to it
+        to preserve reversibility if necessary, **not** multiplications or divisions
         """
 
         if self._is_locked:
@@ -178,8 +178,8 @@ class GenericStat(Stat):
     @secondary_summed_factor.setter
     def secondary_summed_factor(self, value: float):
         """
-        This attribute should only have *additions* and *subtractions* applied to it,
-        **not** multiplications or divisions
+        This attribute should only have *additions* and *subtractions* applied to it
+        to preserve reversibility if necessary, **not** multiplications or divisions
         """
 
         if self._is_locked:
@@ -197,8 +197,8 @@ class GenericStat(Stat):
     @secondary_multiplied_factor.setter
     def secondary_multiplied_factor(self, value: float):
         """
-        This attribute should only have *multiplications* and *divisions* applied to it,
-        **not** additions or subtractions
+        This attribute should only have *multiplications* and *divisions* applied to it
+        to preserve reversibility if necessary, **not** additions or subtractions
         """
 
         if self._is_locked:
@@ -216,8 +216,8 @@ class GenericStat(Stat):
     @overall_summed_factor.setter
     def overall_summed_factor(self, value: float):
         """
-        This attribute should only have *additions* and *subtractions* applied to it,
-        **not** multiplications or divisions
+        This attribute should only have *additions* and *subtractions* applied to it
+        to preserve reversibility if necessary, **not** multiplications or divisions
         """
 
         if self._is_locked:
@@ -235,8 +235,8 @@ class GenericStat(Stat):
     @overall_multiplied_factor.setter
     def overall_multiplied_factor(self, value: float):
         """
-        This attribute should only have *multiplications* and *divisions* applied to it,
-        **not** additions or subtractions
+        This attribute should only have *multiplications* and *divisions* applied to it
+        to preserve reversibility if necessary, **not** additions or subtractions
         """
 
         if self._is_locked:
