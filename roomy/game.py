@@ -24,16 +24,16 @@ class Game:
         self._window = window
         self._config = config
 
-        self._fps = None
         self._tick_rate = None
-        self._frame_delay_ms = None
+        self._fps = None
         self._tick_delay_ms = None
+        self._frame_delay_ms = None
 
-        self.fps = config.FPS
         self.tick_rate = config.TICK_RATE
+        self.fps = config.FPS
 
-        self._ms_since_render = 0
         self._ms_since_update = 0
+        self._ms_since_render = 0
         self._clock = pygame.time.Clock()
         self._screen = None
 
@@ -51,15 +51,6 @@ class Game:
         return self._config
 
     @property
-    def fps(self) -> float:
-        return self._fps
-
-    @fps.setter
-    def fps(self, value: float):
-        self._fps = value
-        self._frame_delay_ms = 0 if value == 0 else (1000/value)
-
-    @property
     def tick_rate(self) -> float:
         return self._tick_rate
 
@@ -67,6 +58,15 @@ class Game:
     def tick_rate(self, value: float):
         self._tick_rate = value
         self._tick_delay_ms = 0 if value == 0 else (1000/value)
+
+    @property
+    def fps(self) -> float:
+        return self._fps
+
+    @fps.setter
+    def fps(self, value: float):
+        self._fps = value
+        self._frame_delay_ms = 0 if value == 0 else (1000/value)
 
     @property
     def screen(self) -> Optional[Screen]:
@@ -97,12 +97,7 @@ class Game:
             raise RuntimeError("a valid Screen object must be set to .screen before the game can be started")
 
         while True:
-            required_elapsed_ms = min(
-                self._tick_delay_ms - self._ms_since_update,
-                self._frame_delay_ms - self._ms_since_render
-            )
-            elapsed_ms = self._clock.tick(0 if required_elapsed_ms <= 0 else (1000/required_elapsed_ms))
-
+            elapsed_ms = self._clock.tick()
             self._ms_since_update += elapsed_ms
             self._ms_since_render += elapsed_ms
 
