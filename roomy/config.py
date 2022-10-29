@@ -7,7 +7,13 @@ from .renderables import RenderableHitboxTag
 
 class Config:
     FPS: float = 0  # A value of 0 indicates unlimited framerate
-    UPDATES_PER_FRAME: int = 1
+    TICK_RATE: float = 144  # Number of game ticks per second. A value of 0 indicates unlimited tick rate
+    """
+    Please note that while unlimited tick rate is supported, any parts of the game state
+    which are updated per tick may behave differently at different tick rates.
+    It is therefore recommended to lock the tick rate to a specific value
+    """
+
     GET_INPUT_EVENTS: Callable[[], Iterable] = event.get
 
     RESOURCE_FOLDER_PATH = "res"  # Can either be absolute, or relative to the current working directory

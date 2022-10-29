@@ -24,9 +24,16 @@ class Game:
         self._window = window
         self._config = config
 
-        self.fps = config.FPS
-        self.updates_per_frame = config.UPDATES_PER_FRAME
+        self._fps = None
+        self._tick_rate = None
+        self._frame_delay_ms = None
+        self._tick_delay_ms = None
 
+        self.fps = config.FPS
+        self.tick_rate = config.TICK_RATE
+
+        self._elapsed_ms_since_render = 0
+        self._elapsed_ms_since_update = 0
         self._clock = pygame.time.Clock()
         self._screen = None
 
@@ -42,6 +49,24 @@ class Game:
     @property
     def config(self) -> Type[Config]:
         return self._config
+
+    @property
+    def fps(self) -> float:
+        return self._fps
+
+    @fps.setter
+    def fps(self, value: float):
+        self._fps = value
+        self._frame_delay_ms = 0 if value == 0 else (1000/value)
+
+    @property
+    def tick_rate(self) -> float:
+        return self._tick_rate
+
+    @tick_rate.setter
+    def tick_rate(self, value: float):
+        self._tick_rate = value
+        self._tick_delay_ms = 0 if value == 0 else (1000/value)
 
     @property
     def screen(self) -> Optional[Screen]:
@@ -72,13 +97,19 @@ class Game:
             raise RuntimeError("a valid Screen object must be set to .screen before the game can be started")
 
         while True:
-            for update_index in range(self.updates_per_frame):
-                self._update_screen()
+            elapsed_ms = self._clock.tick()
+            self._elapsed_ms_since_render += elapsed_ms
+            self._elapsed_ms_since_update += elapsed_ms
 
-            self._render_screen()
+            if self._elapsed_ms_since_update >= self._tick_delay_ms:
+                self._update_screen(self._elapsed_ms_since_update)
+                self._elapsed_ms_since_update = 0
 
-    def _update_screen(self) -> None:
-        elapsed_ms = self._clock.tick(self.fps * self.updates_per_frame)
+            if self._elapsed_ms_since_render >= self._frame_delay_ms:
+                self._render_screen()
+                self._elapsed_ms_since_render = 0
+
+    def _update_screen(self, elapsed_ms: int) -> None:
         input_events = list(self.config.GET_INPUT_EVENTS())  # Repackaged into a list to be consumed from it as needed
 
         with self.game_event_handler(GameEventKey.UPDATE, elapsed_ms, input_events):
