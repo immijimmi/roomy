@@ -32,8 +32,8 @@ class Game:
         self.fps = config.FPS
         self.tick_rate = config.TICK_RATE
 
-        self._elapsed_ms_since_render = 0
-        self._elapsed_ms_since_update = 0
+        self._ms_since_render = 0
+        self._ms_since_update = 0
         self._clock = pygame.time.Clock()
         self._screen = None
 
@@ -97,17 +97,22 @@ class Game:
             raise RuntimeError("a valid Screen object must be set to .screen before the game can be started")
 
         while True:
-            elapsed_ms = self._clock.tick()
-            self._elapsed_ms_since_render += elapsed_ms
-            self._elapsed_ms_since_update += elapsed_ms
+            required_elapsed_ms = min(
+                self._tick_delay_ms - self._ms_since_update,
+                self._frame_delay_ms - self._ms_since_render
+            )
+            elapsed_ms = self._clock.tick(0 if required_elapsed_ms <= 0 else (1000/required_elapsed_ms))
 
-            if self._elapsed_ms_since_update >= self._tick_delay_ms:
-                self._update_screen(self._elapsed_ms_since_update)
-                self._elapsed_ms_since_update = 0
+            self._ms_since_update += elapsed_ms
+            self._ms_since_render += elapsed_ms
 
-            if self._elapsed_ms_since_render >= self._frame_delay_ms:
+            if self._ms_since_update >= self._tick_delay_ms:
+                self._update_screen(self._ms_since_update)
+                self._ms_since_update = 0
+
+            if self._ms_since_render >= self._frame_delay_ms:
                 self._render_screen()
-                self._elapsed_ms_since_render = 0
+                self._ms_since_render = 0
 
     def _update_screen(self, elapsed_ms: int) -> None:
         input_events = list(self.config.GET_INPUT_EVENTS())  # Repackaged into a list to be consumed from it as needed
