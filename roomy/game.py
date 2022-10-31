@@ -101,9 +101,32 @@ class Game:
             self._ms_since_update += elapsed_ms
             self._ms_since_render += elapsed_ms
 
-            if self._ms_since_update >= self._tick_delay_ms:
-                self._update_screen(self._ms_since_update)
-                self._ms_since_update = 0
+            current_tick_delay_ms = self._tick_delay_ms  # Current tick delay copied incase it's altered during update
+            while self._ms_since_update >= current_tick_delay_ms:
+                if current_tick_delay_ms == 0:
+                    self._update_screen(self._ms_since_update)
+                    self._ms_since_update = 0
+                    break
+                else:
+                    """
+                    Rather than setting `._ms_since_update` to 0 below after a single update, instead the expected
+                    tick delay is removed from it each time an update is completed until the remaining value is less
+                    than the expected tick delay.
+
+                    This differs from how `._ms_since_render` is handled, because for game ticks the actual tick rate
+                    needs to hold as strictly as possible to the expected tick rate to ensure that game behaviour is
+                    always as consistent as possible in any given amount of real time.
+
+                    The difference in behaviour that results from this is that when game ticks fall behind, they will
+                    not 'reset' after a late tick but will instead complete multiple updates in a row if necessary before
+                    a new render is completed in order to catch up to the expected tick rate.
+
+                    In contrast, when *renders* fall behind they *will* 'reset' after a late render, because as of the
+                    latest rendered frame the game is now displaying a completely up-to-date view of the game state
+                    """
+
+                    self._update_screen(current_tick_delay_ms)
+                    self._ms_since_update -= current_tick_delay_ms
 
             if self._ms_since_render >= self._frame_delay_ms:
                 self._render_screen()
