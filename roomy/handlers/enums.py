@@ -8,6 +8,7 @@ class GameEventType(str, Enum):
     """
 
     UPDATE = "update"
+    RENDER = "render"
 
     CHANGE_SCREEN = "change_screen"
     CHANGE_ROOM = "change_room"

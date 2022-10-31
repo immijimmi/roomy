@@ -118,4 +118,5 @@ class Game:
     def _render_screen(self) -> None:
         updated_rects = self._screen.render(self._window)
 
-        pygame.display.update(updated_rects)
+        with self._game_event_handler(GameEventType.RENDER, updated_rects):
+            pygame.display.update(updated_rects)
