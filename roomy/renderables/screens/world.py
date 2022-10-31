@@ -7,7 +7,7 @@ from os import path
 
 from .screen import Screen
 from ..room import Room
-from ...handlers import GameEventKey
+from ...handlers import GameEventType
 from ...constants import Constants as GameConstants
 
 
@@ -51,7 +51,7 @@ class World(Screen):
         if state_current_room_id == current_room_id:
             return
 
-        with self.game.game_event_handler(GameEventKey.CHANGE_ROOM, self._current_room, state_current_room_id):
+        with self.game.game_event_handler(GameEventType.CHANGE_ROOM, self._current_room, state_current_room_id):
             old_room = self._current_room
 
             new_room_cls = self.game.custom_class_handler.get(

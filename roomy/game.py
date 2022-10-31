@@ -5,7 +5,7 @@ from typing import Optional, Type
 
 from .config import Config
 from .constants import Constants
-from .handlers import GameEventHandler, GameEventKey, CustomClassHandler, AnimationHandler
+from .handlers import GameEventHandler, GameEventType, CustomClassHandler, AnimationHandler
 from .renderables import Screen
 
 
@@ -77,7 +77,7 @@ class Game:
         if value is self._screen:
             return
 
-        with self._game_event_handler(GameEventKey.CHANGE_SCREEN, self._screen, value):
+        with self._game_event_handler(GameEventType.CHANGE_SCREEN, self._screen, value):
             self._screen = value
 
     @property
@@ -112,7 +112,7 @@ class Game:
     def _update_screen(self, elapsed_ms: int) -> None:
         input_events = list(self.config.GET_INPUT_EVENTS())  # Repackaged into a list to be consumed from it as needed
 
-        with self.game_event_handler(GameEventKey.UPDATE, elapsed_ms, input_events):
+        with self.game_event_handler(GameEventType.UPDATE, elapsed_ms, input_events):
             self._screen.update(elapsed_ms, input_events)
 
     def _render_screen(self) -> None:

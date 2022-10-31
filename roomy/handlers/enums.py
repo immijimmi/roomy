@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class GameEventKey(str, Enum):
+class GameEventType(str, Enum):
     """
     Constants representing game events which may be triggered
     via calls within this package to GameEventHandler.on_event()
