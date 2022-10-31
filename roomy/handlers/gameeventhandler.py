@@ -1,4 +1,4 @@
-from typing import Callable, Union, Tuple, Literal, Optional, Any
+from typing import Callable, Union, Tuple, Literal, Optional
 from contextlib import contextmanager
 
 
@@ -46,13 +46,13 @@ class GameEventHandler:
         self.on_event(("after", event_type), *args, **kwargs)
 
     def add_callback(
-            self, callback: Callable[[Optional[Union[str, Tuple[Literal["before", "after"], str]]], ...], Any],
+            self, callback: Callable,
             event_key: Optional[Union[str, Tuple[Literal["before", "after"], str]]] = None
     ) -> None:
         self._callbacks.setdefault(event_key, set()).add(callback)
 
     def remove_callback(
-            self, callback: Callable[[Optional[Union[str, Tuple[Literal["before", "after"], str]]], ...], Any],
+            self, callback: Callable,
             event_key: Optional[Union[str, Tuple[Literal["before", "after"], str]]] = None
     ) -> None:
         self._callbacks.setdefault(event_key, set()).remove(callback)
