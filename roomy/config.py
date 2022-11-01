@@ -10,7 +10,7 @@ class Config:
     """
     Please note that while unlimited tick rate is supported, any parts of the game state
     which are updated per tick may behave differently in a given period of real time at different tick rates.
-    It is therefore recommended to lock the tick rate to a specific value
+    It is therefore highly recommended to keep the tick rate locked to a static value (>0)
     """
     FPS: float = 0  # A value of 0 indicates unlimited framerate (must be >=0)
 

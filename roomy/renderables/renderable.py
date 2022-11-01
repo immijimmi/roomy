@@ -40,7 +40,11 @@ class Renderable(Extendable, Recurface, ABC):
 
         Note that additional *args and **kwargs can be introduced at an arbitrary point in the Renderable hierarchy, and
         do not have to be passed in starting from the game's screen object. They also do not have to be propagated
-        further down the hierarchy than is necessary
+        further down the hierarchy than is necessary.
+
+        It is possible to ignore `elapsed_ms` for most changes to the game state as long as the game's tick rate is
+        locked to a static value (>0), as this will ensure that each tick happens in approximately the same amount of
+        real time as the next (assuming there are not heavy performance issues)
         """
 
         self._update(elapsed_ms, input_events, *args, **kwargs)
