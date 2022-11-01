@@ -24,18 +24,21 @@ class Game:
         self._window = window
         self._config = config
 
+        # These attributes are not yet initialised. They are initialised when their respective properties are set to
         self._tick_rate = None
-        self._fps = None
         self._tick_delay_ms = None
+        self._fps = None
         self._frame_delay_ms = None
+        self._max_frame_delay_ms = None
+        self._screen = None
 
+        # Initialising some of the above attributes
         self.tick_rate = config.TICK_RATE
         self.fps = config.FPS
 
         self._ms_since_update = 0
         self._ms_since_render = 0
         self._clock = pygame.time.Clock()
-        self._screen = None
 
         # Game-level handlers
         self._game_event_handler = GameEventHandler()
@@ -67,6 +70,7 @@ class Game:
     def fps(self, value: float):
         self._fps = value
         self._frame_delay_ms = 0 if value == 0 else (1000/value)
+        self._max_frame_delay_ms = max(self._frame_delay_ms, 1000)
 
     @property
     def screen(self) -> Optional[Screen]:
@@ -97,40 +101,50 @@ class Game:
             raise RuntimeError("a valid Screen object must be set to .screen before the game can be started")
 
         while True:
-            elapsed_ms = self._clock.tick()
-            self._ms_since_update += elapsed_ms
-            self._ms_since_render += elapsed_ms
-
-            current_tick_delay_ms = self._tick_delay_ms  # Current tick delay copied incase it's altered during update
+            # Update the game state
+            self._add_elapsed()
+            current_tick_delay_ms = self._tick_delay_ms  # Current tick delay copied in case it's altered during update
             while self._ms_since_update >= current_tick_delay_ms:
+                """
+                This inner loop allows for multiple updates before a fresh render, if the actual tick rate is
+                sufficiently behind the expected tick rate to require it.
+
+                This 'catching up' is necessary to ensure tick rate is as consistent as possible when the game is
+                experiencing performance issues, thus ensuring that game *behaviour* in turn is as consistent as
+                possible in a given amount of real time, regardless of frame rate
+                """
+
                 if current_tick_delay_ms == 0:
                     self._update_screen(self._ms_since_update)
                     self._ms_since_update = 0
                     break
                 else:
-                    """
-                    Rather than setting `._ms_since_update` to 0 below after a single update, instead the expected
-                    tick delay is removed from it each time an update is completed until the remaining value is less
-                    than the expected tick delay.
-
-                    This differs from how `._ms_since_render` is handled, because for game ticks the actual tick rate
-                    needs to hold as strictly as possible to the expected tick rate to ensure that game behaviour is
-                    always as consistent as possible in any given amount of real time.
-
-                    The difference in behaviour that results from this is that when game ticks fall behind, they will
-                    not 'reset' after a late tick but will instead complete multiple updates in a row if necessary before
-                    a new render is completed in order to catch up to the expected tick rate.
-
-                    In contrast, when *renders* fall behind they *will* 'reset' after a late render, because as of the
-                    latest rendered frame the game is now displaying a completely up-to-date view of the game state
-                    """
-
                     self._update_screen(current_tick_delay_ms)
                     self._ms_since_update -= current_tick_delay_ms
 
+            # Render to the display
+            self._add_elapsed()
             if self._ms_since_render >= self._frame_delay_ms:
                 self._render_screen()
-                self._ms_since_render = 0
+                self._ms_since_render -= self._frame_delay_ms
+
+                """
+                The frame rate will only keep track of how far behind it is up to one frame or one second behind,
+                whichever is larger.
+
+                This is a choice made for the sake of performance - if the framerate falls heavily behind, it is
+                not important to render many frames in a row in order to catch up; once a new frame has been rendered,
+                at that point in time the display is now showing the most up to date view possible and so does not need
+                to catch up further for the player's sake. Therefore, tracking *any* delay at all is only done
+                for the sake of attempting to match the expected frame rate (assuming the game is coping
+                sufficiently well for this not to be a performance problem)
+                """
+                self._ms_since_render = min(self._ms_since_render, self._max_frame_delay_ms)
+
+    def _add_elapsed(self) -> None:
+        elapsed_ms = self._clock.tick()
+        self._ms_since_update += elapsed_ms
+        self._ms_since_render += elapsed_ms
 
     def _update_screen(self, elapsed_ms: int) -> None:
         input_events = list(self.config.GET_INPUT_EVENTS())  # Repackaged into a list to be consumed from it as needed
