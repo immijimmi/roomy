@@ -24,7 +24,7 @@ class Game:
         self._window = window
         self._config = config
 
-        # These attributes are not yet initialised. They are initialised when their respective properties are set to
+        # These attributes are not yet initialised. They are initialised when their respective properties are first set
         self._tick_rate = None
         self._tick_delay_ms = None
         self._fps = None
@@ -38,6 +38,7 @@ class Game:
 
         self._ms_since_update = 0
         self._ms_since_render = 0
+        self._tick_number = 0  # Counts up by 1 per update until it reaches the game's tick rate, then resets to 0
         self._clock = pygame.time.Clock()
 
         # Game-level handlers
@@ -149,8 +150,12 @@ class Game:
     def _update_screen(self, elapsed_ms: int) -> None:
         input_events = list(self.config.GET_INPUT_EVENTS())  # Repackaged into a list to be consumed from it as needed
 
-        with self.game_event_handler(GameEventType.UPDATE, elapsed_ms, input_events):
-            self._screen.update(elapsed_ms, input_events)
+        with self.game_event_handler(GameEventType.UPDATE, self._tick_number, elapsed_ms, input_events):
+            self._screen.update(self._tick_number, elapsed_ms, input_events)
+
+        self._tick_number += 1
+        if self._tick_number >= self._tick_rate:
+            self._tick_number = 0
 
     def _render_screen(self) -> None:
         updated_rects = self._screen.render(self._window)

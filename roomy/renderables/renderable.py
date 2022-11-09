@@ -29,14 +29,14 @@ class Renderable(Extendable, Recurface, ABC):
     def game(self):
         return self._game
 
-    def update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
+    def update(self, tick_number: int, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
         """
         Lifecycle method, called automatically each game tick.
 
         *args and **kwargs can optionally be passed any additional information regarding the game tick itself;
         for example, a game which wants to prioritise updating the environment first and update the characters second
-        in each loop may then choose to run at 2 updates per frame so that the game's screen can first call .update()
-        with the kwarg `type="environment"` and second call .update() with the kwarg `type="characters"`.
+        in each loop may then choose to run at 2 updates per frame so that the game's screen can first call `.update()`
+        with the kwarg `type="environment"` and second call `.update()` with the kwarg `type="characters"`.
 
         Note that additional *args and **kwargs can be introduced at an arbitrary point in the Renderable hierarchy, and
         do not have to be passed in starting from the game's screen object. They also do not have to be propagated
@@ -47,7 +47,7 @@ class Renderable(Extendable, Recurface, ABC):
         real time as the next (assuming there are not heavy performance issues)
         """
 
-        self._update(elapsed_ms, input_events, *args, **kwargs)
+        self._update(tick_number, elapsed_ms, input_events, *args, **kwargs)
 
         try:
             # Events passed to high render_priority children first, if possible
@@ -57,9 +57,9 @@ class Renderable(Extendable, Recurface, ABC):
 
         child: Renderable
         for child in child_recurfaces:
-            child.update(elapsed_ms, input_events, *args, **kwargs)
+            child.update(tick_number, elapsed_ms, input_events, *args, **kwargs)
 
-    def _update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
+    def _update(self, tick_number: int, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
         """
         Lifecycle method, called automatically each game tick.
         Can optionally be overridden.

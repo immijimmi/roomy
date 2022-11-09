@@ -38,7 +38,7 @@ class World(Screen):
         and swapped in.
 
         This method can be manually invoked in order to apply a room change immediately, but this is not strictly
-        necessary - when the room ID is changed in the game's state, on the next call to .update() this method will be
+        necessary - when the room ID is changed in the game's state, on the next call to `.update()` this method will be
         automatically invoked.
 
         This method assumes that any custom Room subclasses listed in the game's state
@@ -64,8 +64,8 @@ class World(Screen):
             if old_room is not None:
                 old_room.parent_recurface = None
 
-    def _update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
-        super()._update(elapsed_ms, input_events, *args, **kwargs)
+    def _update(self, tick_number: int, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
+        super()._update(tick_number, elapsed_ms, input_events, *args, **kwargs)
 
         self.set_room()
 

@@ -32,7 +32,7 @@ class Screen(Renderable, ABC):
     def hitbox_handler(self) -> HitboxHandler:
         return self._hitbox_handler
 
-    def _update(self, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
+    def _update(self, tick_number: int, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
         """
         This method can be further extended as necessary in subclasses
         """
