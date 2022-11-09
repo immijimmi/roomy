@@ -38,7 +38,7 @@ class Animated(Extension, ABC):
         if animation.priority >= self._animation.priority:
             self._animation = animation
 
-    def __wrap_update(self, elapsed_ms, input_events, *args, **kwargs):
+    def __wrap_update(self, tick_number, elapsed_ms, input_events, *args, **kwargs):
         yield
         self._animation.update(elapsed_ms)
         self.surface = self._animation.frame
