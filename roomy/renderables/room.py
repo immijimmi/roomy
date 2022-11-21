@@ -74,9 +74,9 @@ class Room(Renderable.with_extensions(Hitboxed)):
             occupant_data: dict = self.game.screen.state.registered_get("room_occupant", [occupant_id])
 
             occupant_class: Type[Renderable] = self.game.custom_class_handler.get(
-                occupant_data[StateRenderableDataKey.CLASS]
+                occupant_data[StateRenderableDataKey.CLASS.value]
             )
-            occupant_args: list = occupant_data.get(StateRenderableDataKey.ARGS, [])
-            occupant_kwargs: dict = occupant_data.get(StateRenderableDataKey.KWARGS, {})
+            occupant_args: list = occupant_data.get(StateRenderableDataKey.ARGS.value, [])
+            occupant_kwargs: dict = occupant_data.get(StateRenderableDataKey.KWARGS.value, {})
 
             occupant_class(self, *occupant_args, **occupant_kwargs)
