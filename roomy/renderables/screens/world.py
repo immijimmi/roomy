@@ -4,8 +4,10 @@ from managedstate.extensions import Registrar
 from managedstate.extensions.registrar import PartialQueries
 
 from os import path
+from typing import Type
 
 from .screen import Screen
+from ..enums import StateRenderableDataKey
 from ..room import Room
 from ...handlers import GameEventType
 from ...constants import Constants as GameConstants
@@ -54,11 +56,19 @@ class World(Screen):
         with self.game.game_event_handler(GameEventType.CHANGE_ROOM, self._current_room, state_current_room_id):
             old_room = self._current_room
 
-            new_room_cls = self.game.custom_class_handler.get(
-                self.state.registered_get("room_class", [state_current_room_id])
+            new_room_data = self.game.custom_class_handler.get(
+                self.state.registered_get("room", [state_current_room_id])
             )
-            new_room = new_room_cls(self, state_current_room_id)
+            new_room_class: Type[Room] = self.game.custom_class_handler.get(
+                new_room_data[StateRenderableDataKey.CLASS]
+            )
+            new_room_args: list = new_room_data.get(StateRenderableDataKey.ARGS, [])
+            new_room_kwargs: dict = new_room_data.get(StateRenderableDataKey.KWARGS, {})
 
+            new_room = new_room_class(
+                self, state_current_room_id,
+                *new_room_args, **new_room_kwargs
+            )
             self._current_room = new_room
 
             if old_room is not None:
@@ -79,10 +89,9 @@ class World(Screen):
     def register_paths(state: State.with_extensions(Registrar)):
         state.register_path("current_room_id", ["current_room_id"], [str(None)])
 
+        state.register_path("room", ["rooms", PartialQueries.KEY], [{}])
         state.register_path("room_occupant", ["room_occupants", PartialQueries.KEY], [{}])
 
-        state.register_path("room", ["rooms", PartialQueries.KEY], [{}])
-        state.register_path("room_class", ["rooms", PartialQueries.KEY, "class"], [{}, {}, "Room"])
         state.register_path("room_occupants_ids", ["rooms", PartialQueries.KEY, "occupants_ids"], [{}, {}, []])
         state.register_path(
             "room_background_file_path",

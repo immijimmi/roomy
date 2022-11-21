@@ -3,7 +3,7 @@ from os import path
 
 from ..methods import Methods
 from .renderable import Renderable
-from .enums import RenderableHitboxTag, RoomOccupantDataKey
+from .enums import RenderableHitboxTag, StateRenderableDataKey
 from ..extensions import Hitboxed
 from ..hitboxes import RecurfaceHitbox
 
@@ -73,8 +73,10 @@ class Room(Renderable.with_extensions(Hitboxed)):
         for occupant_id in curr_room_occupants_ids:
             occupant_data: dict = self.game.screen.state.registered_get("room_occupant", [occupant_id])
 
-            occupant_class: Type[Renderable] = self.game.custom_class_handler.get(occupant_data[RoomOccupantDataKey.CLASS])
-            occupant_args: list = occupant_data.get(RoomOccupantDataKey.ARGS, [])
-            occupant_kwargs: dict = occupant_data.get(RoomOccupantDataKey.KWARGS, {})
+            occupant_class: Type[Renderable] = self.game.custom_class_handler.get(
+                occupant_data[StateRenderableDataKey.CLASS]
+            )
+            occupant_args: list = occupant_data.get(StateRenderableDataKey.ARGS, [])
+            occupant_kwargs: dict = occupant_data.get(StateRenderableDataKey.KWARGS, {})
 
             occupant_class(self, *occupant_args, **occupant_kwargs)
