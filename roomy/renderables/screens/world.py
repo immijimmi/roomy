@@ -56,9 +56,8 @@ class World(Screen):
         with self.game.game_event_handler(GameEventType.CHANGE_ROOM, self._current_room, state_current_room_id):
             old_room = self._current_room
 
-            new_room_data = self.game.custom_class_handler.get(
-                self.state.registered_get("room", [state_current_room_id])
-            )
+            new_room_data = self.state.registered_get("room", [state_current_room_id])
+
             new_room_class: Type[Room] = self.game.custom_class_handler.get(
                 new_room_data[StateRenderableDataKey.CLASS]
             )
