@@ -59,10 +59,10 @@ class World(Screen):
             new_room_data = self.state.registered_get("room", [state_current_room_id])
 
             new_room_class: Type[Room] = self.game.custom_class_handler.get(
-                new_room_data[StateRenderableDataKey.CLASS.value]
+                new_room_data[StateRenderableDataKey.CLASS]
             )
-            new_room_args: list = new_room_data.get(StateRenderableDataKey.ARGS.value, [])
-            new_room_kwargs: dict = new_room_data.get(StateRenderableDataKey.KWARGS.value, {})
+            new_room_args: list = new_room_data.get(StateRenderableDataKey.ARGS, [])
+            new_room_kwargs: dict = new_room_data.get(StateRenderableDataKey.KWARGS, {})
 
             new_room = new_room_class(
                 self, state_current_room_id,

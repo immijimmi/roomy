@@ -22,7 +22,7 @@ class Config:
 
     # Should contain all possible valid tags for the Hitbox class
     HITBOX_TAGS: Container = set(
-        attribute.value for attribute in RenderableHitboxTag
+        attribute for attribute in RenderableHitboxTag
     )
 
     ANIMATION_DEFAULT_FPS: float = 24
