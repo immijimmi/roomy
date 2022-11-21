@@ -86,14 +86,22 @@ class World(Screen):
 
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):
+        default_room_data = {
+            StateRenderableDataKey.CLASS: "Room"
+        }
+
         state.register_path("current_room_id", ["current_room_id"], [str(None)])
 
-        state.register_path("room", ["rooms", PartialQueries.KEY], [{StateRenderableDataKey.CLASS: "Room"}])
+        state.register_path("room", ["rooms", PartialQueries.KEY], [{}, default_room_data])
         state.register_path("room_occupant", ["room_occupants", PartialQueries.KEY], [{}])
 
-        state.register_path("room_occupants_ids", ["rooms", PartialQueries.KEY, "occupants_ids"], [{}, {}, []])
+        state.register_path(
+            "room_occupants_ids",
+            ["rooms", PartialQueries.KEY, "occupants_ids"],
+            [{}, default_room_data, []]
+        )
         state.register_path(
             "room_background_file_path",
             ["rooms", PartialQueries.KEY, "background_file_path"],
-            [{}, {}, path.join(f"{Room.__name__}", f"{str(None)}.png")]
+            [{}, default_room_data, path.join(f"{Room.__name__}", f"{str(None)}.png")]
         )
