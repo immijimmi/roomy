@@ -44,13 +44,16 @@ class Renderable(Extendable, Recurface, ABC):
 
         It is possible to ignore `elapsed_ms` for most changes to the game state as long as the game's tick rate is
         locked to a static value (>0), as this will ensure that each tick happens in approximately the same amount of
-        real time as the next (assuming there are not heavy performance issues)
+        real time as the next (assuming there are not heavy performance issues).
+
+        As seen below, `._update()` is carried out for any child Renderable objects before the current
+        Renderable object, and on high-priority children before low-priority children. This means that updates
+        propagate from the 'front' of the display to the 'back' (the objects rendered on top of everything else
+        are the ones updated first)
         """
 
-        self._update(tick_number, elapsed_ms, input_events, *args, **kwargs)
-
         try:
-            # Events passed to high render_priority children first, if possible
+            # This will place high-priority children at the front of the sequence
             child_recurfaces = reversed(self.ordered_child_recurfaces)
         except TypeError:
             child_recurfaces = self.child_recurfaces
@@ -58,6 +61,8 @@ class Renderable(Extendable, Recurface, ABC):
         child: Renderable
         for child in child_recurfaces:
             child.update(tick_number, elapsed_ms, input_events, *args, **kwargs)
+
+        self._update(tick_number, elapsed_ms, input_events, *args, **kwargs)
 
     def _update(self, tick_number: int, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
         """
