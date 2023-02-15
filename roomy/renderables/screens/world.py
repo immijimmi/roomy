@@ -4,11 +4,12 @@ from managedstate.extensions import Registrar
 from managedstate.extensions.registrar import PartialQueries
 
 from os import path
-from typing import Type
+from typing import Type, Set
 
 from .screen import Screen
 from ..enums import StateRenderableDataKey
 from ..room import Room
+from ..worldui import WorldUi
 from ...handlers import GameEventType
 from ...constants import Constants as GameConstants
 
@@ -22,16 +23,36 @@ class World(Screen):
         super().__init__(game, state)
         self.surface = self.copy_surface()
 
-        # Registering a class `Room` which may appear in the game state and which would be needed inside this class
-        self.game.custom_class_handler.register(**{"Room": Room})
+        # Registering classes which may appear in the game state and which would be needed inside this class
+        self.game.custom_class_handler.register(**{
+            Room.__name__: Room,
+        })
 
         self._current_room = None
+        self._interfaces = set()
 
-        # TODO: Render UI layer after room
+        initial_ui_ids = self.state.registered_get("initial_ui_ids")
+        for ui_layer_id in initial_ui_ids:
+            ui_layer_data = self.state.registered_get("ui_layer", [ui_layer_id])
+
+            ui_layer_class: Type[WorldUi] = self.game.custom_class_handler.get(
+                ui_layer_data[StateRenderableDataKey.CLASS]
+            )
+            ui_layer_args: list = ui_layer_data.get(StateRenderableDataKey.ARGS, [])
+            ui_layer_kwargs: dict = ui_layer_data.get(StateRenderableDataKey.KWARGS, {})
+
+            self.add_interface(ui_layer_class(
+                self, ui_layer_id,
+                *ui_layer_args, **ui_layer_kwargs
+            ))
 
     @property
-    def curr_room(self) -> Room:
+    def current_room(self) -> Room:
         return self._current_room
+
+    @property
+    def interfaces(self) -> Set[WorldUi]:
+        return self._interfaces
 
     def set_room(self) -> None:
         """
@@ -73,6 +94,31 @@ class World(Screen):
             if old_room is not None:
                 old_room.parent_recurface = None
 
+    def add_interface(self, interface: WorldUi) -> None:
+        """
+        This method should be manually invoked, for example when opening a menu, in order to add the provided
+        user interface layer into the rendering hierarchy. Unlike with `.set_room()`, this method must always be
+        manually invoked to change what UI layers are rendered
+        """
+
+        if interface in self.interfaces:
+            return
+
+        self._interfaces.add(interface)
+
+    def remove_interface(self, interface: WorldUi) -> None:
+        """
+        This method should be manually invoked, for example when closing, in order to remove the provided
+        user interface layer from the rendering hierarchy. Unlike with `.set_room()`, this method must always be
+        manually invoked to change what UI layers are rendered
+        """
+
+        if interface not in self.interfaces:
+            return
+
+        self._interfaces.remove(interface)
+        interface.parent_recurface = None
+
     def _update(self, tick_number: int, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
         super()._update(tick_number, elapsed_ms, input_events, *args, **kwargs)
 
@@ -86,8 +132,9 @@ class World(Screen):
 
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):
+        # Rooms
         default_room_data = {
-            StateRenderableDataKey.CLASS: "Room"
+            StateRenderableDataKey.CLASS: Room.__name__
         }
 
         state.register_path("current_room_id", ["current_room_id"], [str(None)])
@@ -105,3 +152,8 @@ class World(Screen):
             ["rooms", PartialQueries.KEY, "background_file_path"],
             [{}, default_room_data, path.join(f"{Room.__name__}", f"{str(None)}.png")]
         )
+
+        # UI
+        state.register_path("initial_ui_ids", ["initial_ui_ids"], [[]])
+
+        state.register_path("ui_layer", ["ui_layers", PartialQueries.KEY], [{}])
