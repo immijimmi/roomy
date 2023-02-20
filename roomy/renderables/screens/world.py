@@ -9,7 +9,7 @@ from typing import Type, Set
 from .screen import Screen
 from ..enums import StateRenderableDataKey
 from ..room import Room
-from ..worldui import WorldUi
+from ..userinterfacelayer import UserInterfaceLayer
 from ...handlers import GameEventType
 from ...constants import Constants as GameConstants
 
@@ -35,7 +35,7 @@ class World(Screen):
         for ui_layer_id in initial_ui_ids:
             ui_layer_data = self.state.registered_get("ui_layer", [ui_layer_id])
 
-            ui_layer_class: Type[WorldUi] = self.game.custom_class_handler.get(
+            ui_layer_class: Type[UserInterfaceLayer] = self.game.custom_class_handler.get(
                 ui_layer_data[StateRenderableDataKey.CLASS]
             )
             ui_layer_args: list = ui_layer_data.get(StateRenderableDataKey.ARGS, [])
@@ -51,7 +51,7 @@ class World(Screen):
         return self._current_room
 
     @property
-    def interfaces(self) -> Set[WorldUi]:
+    def interfaces(self) -> Set[UserInterfaceLayer]:
         return self._interfaces
 
     def set_room(self) -> None:
@@ -94,7 +94,7 @@ class World(Screen):
             if old_room is not None:
                 old_room.parent_recurface = None
 
-    def add_interface(self, interface: WorldUi) -> None:
+    def add_interface(self, interface: UserInterfaceLayer) -> None:
         """
         This method should be manually invoked, for example when opening a menu, in order to add the provided
         user interface layer into the rendering hierarchy. Unlike with `.set_room()`, this method must always be
@@ -106,7 +106,7 @@ class World(Screen):
 
         self._interfaces.add(interface)
 
-    def remove_interface(self, interface: WorldUi) -> None:
+    def remove_interface(self, interface: UserInterfaceLayer) -> None:
         """
         This method should be manually invoked, for example when closing, in order to remove the provided
         user interface layer from the rendering hierarchy. Unlike with `.set_room()`, this method must always be

@@ -4,11 +4,12 @@ from abc import ABC
 from typing import Optional, Tuple
 
 from .renderable import Renderable
+from .screens import Screen
 
 
-class WorldUi(Renderable, ABC):
+class UserInterfaceLayer(Renderable, ABC):
     def __init__(
-            self, parent: "World", ui_layer_id: str,
+            self, parent: Screen, ui_layer_id: str,
             surface: Optional[Surface] = None, render_position: Optional[Tuple[float, float]] = None,
             priority: float = 1
     ):
