@@ -4,16 +4,18 @@ from abc import ABC
 from typing import Optional, Tuple
 
 from .renderable import Renderable
-from .screens import Screen
 
 
 class UserInterfaceLayer(Renderable, ABC):
     def __init__(
-            self, parent: Screen, ui_layer_id: str,
+            self, parent: "Screen", ui_layer_id: str,
             surface: Optional[Surface] = None, render_position: Optional[Tuple[float, float]] = None,
             priority: float = 1
     ):
-        super().__init__(parent.game, parent=parent, render_position=render_position, priority=priority)
+        super().__init__(
+            parent.game, parent=parent,
+            surface=surface, render_position=render_position, priority=priority
+        )
         # Note that priority must be a float value > 0 here, in order to render above the current Room
 
         self._ui_layer_id = ui_layer_id
