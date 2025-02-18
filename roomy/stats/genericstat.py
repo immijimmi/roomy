@@ -22,9 +22,6 @@ class GenericStat(Stat):
     means that modifications to the values *can* be applied in a reversible manner if needed, regardless of in
     what order they were added and/or removed.
 
-    Each of these factors is named with clarity for the player in mind - it makes intuitive sense that "base damage"
-    and "secondary damage" (for example) would be added together when calculating "total damage", for example.
-
     If this stat is currently locked (self.is_locked is True or truthy), any attempted changes to these factors
     will raise an exception. Thus, it is important to check this attribute before making any changes,
     and unlock the stat if necessary.

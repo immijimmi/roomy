@@ -48,7 +48,8 @@ class Hitboxed(Extension, ABC):
         """
         Must be overridden.
         Should return new, correct hitboxes for this Renderable object based on its current state.
-        Note that hitboxes can still be created elsewhere on an ad-hoc basis (e.g. in response to specific events)
+        Note that hitboxes for this object may still be created outside of this method on an ad-hoc basis
+        (e.g. in response to specific events)
         """
 
         raise NotImplementedError
