@@ -6,17 +6,18 @@ from managedstate.extensions.registrar import PartialQueries
 from os import path
 from typing import Type, Set
 
-from .screen import Screen
-from ..enums import StateRenderableDataKey
-from ..room import Room
-from ..userinterfacelayer import UserInterfaceLayer
 from ...handlers import GameEventType
 from ...constants import Constants as GameConstants
+from ..screen import Screen
+from ..userinterfacelayer import UserInterfaceLayer
+from .enums import RenderableDataKey
+from .room import Room
 
 
 class World(Screen):
     """
-    A concrete implementation of Screen, that represents a standard room-based game world
+    An optional concrete implementation of Screen, that represents a standard room-based game world.
+    Pulls data to populate the game world from the provided state object, using standardised keys
     """
 
     def __init__(self, game, state: State.with_extensions(Registrar)):
@@ -36,10 +37,10 @@ class World(Screen):
             ui_layer_data = self.state.registered_get("ui_layer", [ui_layer_id])
 
             ui_layer_class: Type[UserInterfaceLayer] = self.game.custom_class_handler.get(
-                ui_layer_data[StateRenderableDataKey.CLASS]
+                ui_layer_data[RenderableDataKey.CLASS]
             )
-            ui_layer_args: list = ui_layer_data.get(StateRenderableDataKey.ARGS, [])
-            ui_layer_kwargs: dict = ui_layer_data.get(StateRenderableDataKey.KWARGS, {})
+            ui_layer_args: list = ui_layer_data.get(RenderableDataKey.ARGS, [])
+            ui_layer_kwargs: dict = ui_layer_data.get(RenderableDataKey.KWARGS, {})
 
             self.add_interface(ui_layer_class(
                 self, ui_layer_id,
@@ -80,10 +81,10 @@ class World(Screen):
             new_room_data = self.state.registered_get("room", [state_current_room_id])
 
             new_room_class: Type[Room] = self.game.custom_class_handler.get(
-                new_room_data[StateRenderableDataKey.CLASS]
+                new_room_data[RenderableDataKey.CLASS]
             )
-            new_room_args: list = new_room_data.get(StateRenderableDataKey.ARGS, [])
-            new_room_kwargs: dict = new_room_data.get(StateRenderableDataKey.KWARGS, {})
+            new_room_args: list = new_room_data.get(RenderableDataKey.ARGS, [])
+            new_room_kwargs: dict = new_room_data.get(RenderableDataKey.KWARGS, {})
 
             new_room = new_room_class(
                 self, state_current_room_id,
@@ -134,7 +135,7 @@ class World(Screen):
     def register_paths(state: State.with_extensions(Registrar)):
         # Rooms
         default_room_data = {
-            StateRenderableDataKey.CLASS: Room.__name__
+            RenderableDataKey.CLASS: Room.__name__
         }
 
         state.register_path("current_room_id", ["current_room_id"], [str(None)])

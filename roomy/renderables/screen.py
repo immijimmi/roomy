@@ -5,8 +5,8 @@ from managedstate.extensions import Registrar
 from abc import ABC
 from typing import Optional
 
-from ...handlers import HitboxHandler
-from ..renderable import Renderable
+from ..handlers import HitboxHandler
+from .renderable import Renderable
 
 
 class Screen(Renderable, ABC):
