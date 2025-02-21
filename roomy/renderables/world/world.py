@@ -6,7 +6,7 @@ from managedstate.extensions.registrar import PartialQueries
 from os import path
 from typing import Type, Set
 
-from ...handlers import GameEventType
+from ...utils import GameEventType
 from ...constants import Constants as GameConstants
 from ..screen import Screen
 from ..userinterfacelayer import UserInterfaceLayer
@@ -25,7 +25,7 @@ class World(Screen):
         self.surface = self.copy_surface()
 
         # Registering classes which may appear in the game state and which would be needed inside this class
-        self.game.custom_class_handler.register(**{
+        self.game.class_registrar.register(**{
             Room.__name__: Room,
         })
 
@@ -36,7 +36,7 @@ class World(Screen):
         for ui_layer_id in initial_ui_ids:
             ui_layer_data = self.state.registered_get("ui_layer", [ui_layer_id])
 
-            ui_layer_class: Type[UserInterfaceLayer] = self.game.custom_class_handler.get(
+            ui_layer_class: Type[UserInterfaceLayer] = self.game.class_registrar.get(
                 ui_layer_data[RenderableDataKey.CLASS]
             )
             ui_layer_args: list = ui_layer_data.get(RenderableDataKey.ARGS, [])
@@ -66,7 +66,7 @@ class World(Screen):
         automatically invoked.
 
         This method assumes that any custom Room subclasses listed in the game's state
-        have been made available to the game's CustomClassHandler
+        have been made available to the game's ClassRegistrar
         """
 
         state_current_room_id = self.state.registered_get("current_room_id")
@@ -80,7 +80,7 @@ class World(Screen):
 
             new_room_data = self.state.registered_get("room", [state_current_room_id])
 
-            new_room_class: Type[Room] = self.game.custom_class_handler.get(
+            new_room_class: Type[Room] = self.game.class_registrar.get(
                 new_room_data[RenderableDataKey.CLASS]
             )
             new_room_args: list = new_room_data.get(RenderableDataKey.ARGS, [])

@@ -3,7 +3,7 @@ from typing import Set, FrozenSet, Optional, Callable, Iterable, Union
 from ..hitboxes import Hitbox
 
 
-class HitboxHandler:
+class HitboxManager:
     def __init__(self):
 
         self._hitboxes = set()

@@ -26,12 +26,12 @@ class Animation(ABC):
         return self._parent_renderable()
 
     @property
-    def animation_handler(self):
+    def animation_cache(self):
         """
-        Shortcut property which accesses the current game screen, and then the current animation handler through that
+        Shortcut property which accesses the current game screen, and then the game's animation cache through that
         """
 
-        return self.parent_renderable.game.animation_handler
+        return self.parent_renderable.game.animation_cache
 
     @property
     def key(self) -> str:

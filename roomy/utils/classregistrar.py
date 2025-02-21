@@ -2,11 +2,17 @@ from sys import modules
 from logging import warning
 
 
-class CustomClassHandler:
+class ClassRegistrar:
+    """
+    Makes provided custom classes available to tools in this library which must
+    dynamically populate their components from plaintext schematics
+    """
+
     def __init__(self, game):
         self._game = game
 
         self._classes = {**self._game.config.CUSTOM_CLASSES}
+        self._search_global = self._game.config.ALLOW_GLOBAL_CUSTOM_CLASSES
 
     def register(self, **classes: type) -> None:
         """
@@ -36,14 +42,17 @@ class CustomClassHandler:
         if class_name in self._classes:
             return self._classes[class_name]
 
-        try:
-            nodes = class_name.split(".")
+        if self._search_global:
+            try:
+                nodes = class_name.split(".")
 
-            result = getattr(modules["__main__"], nodes.pop(0))
-            for node in nodes:
-                result = getattr(result, node)
+                result = getattr(modules["__main__"], nodes.pop(0))
+                for node in nodes:
+                    result = getattr(result, node)
 
-            return result
+                return result
 
-        except AttributeError:
-            raise ValueError(f"unable to resolve the class name '{class_name}'")
+            except AttributeError:
+                pass
+
+        raise ValueError(f"unable to resolve the class name '{class_name}'")

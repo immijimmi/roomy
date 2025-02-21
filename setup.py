@@ -9,8 +9,8 @@ setup(
         "roomy",
         "roomy.animations",
         "roomy.extensions", "roomy.extensions.renderable",
-        "roomy.handlers", "roomy.hitboxes",
-        "roomy.renderables", "roomy.renderables.screens",
+        "roomy.utils", "roomy.hitboxes",
+        "roomy.renderables", "roomy.renderables.world",
         "roomy.stats"
     ],
     version="0.12.0",

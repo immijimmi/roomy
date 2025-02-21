@@ -25,12 +25,12 @@ class Hitbox(Tagged, ABC):
         super().__init__(tags=tags)
 
     @property
-    def hitbox_handler(self) -> "HitboxHandler":
+    def hitbox_manager(self) -> "HitboxManager":
         """
-        Shortcut property which accesses the current game screen, and then the current hitbox handler through that
+        Shortcut property which accesses the current game screen, and then that screen's hitbox manager from there
         """
 
-        return self.parent_renderable.game.screen.hitbox_handler
+        return self.parent_renderable.game.screen.hitbox_manager
 
     @property
     def parent_renderable(self) -> "Renderable.with_extensions(Hitboxed)":
@@ -50,15 +50,15 @@ class Hitbox(Tagged, ABC):
         else:
             collision_key = frozenset((self, other))
 
-        if collision_key in self.hitbox_handler.checked_collisions:
+        if collision_key in self.hitbox_manager.checked_collisions:
             return False  # This collision check has already been carried out previously this tick
 
         if type(other) in self.COLLISION_CHECKERS:
-            self.hitbox_handler.checked_collisions.add(collision_key)
+            self.hitbox_manager.checked_collisions.add(collision_key)
 
             return self.COLLISION_CHECKERS[type(other)](self, other)
         elif type(self) in other.COLLISION_CHECKERS:
-            self.hitbox_handler.checked_collisions.add(collision_key)
+            self.hitbox_manager.checked_collisions.add(collision_key)
 
             return other.COLLISION_CHECKERS[type(self)](self, other)
         else:

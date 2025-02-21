@@ -5,7 +5,8 @@ from ...extensions import Hitboxed
 from ...hitboxes import RecurfaceHitbox
 from ...methods import Methods
 from ..renderable import Renderable
-from .enums import RenderableHitboxTag, RenderableDataKey
+from ..enums import RenderableHitboxTag
+from .enums import RenderableDataKey
 
 
 class Room(Renderable.with_extensions(Hitboxed)):
@@ -63,7 +64,7 @@ class Room(Renderable.with_extensions(Hitboxed)):
         """
         Instantiates all the occupants of the current room.
         Assumes that any custom classes listed in the game's state
-        have been made available to the game's CustomClassHandler
+        have been made available to the game's ClassRegistrar
         """
 
         curr_room_occupants_ids: List[str] = self.game.screen.state.registered_get(
@@ -73,7 +74,7 @@ class Room(Renderable.with_extensions(Hitboxed)):
         for occupant_id in curr_room_occupants_ids:
             occupant_data: dict = self.game.screen.state.registered_get("room_occupant", [occupant_id])
 
-            occupant_class: Type[Renderable] = self.game.custom_class_handler.get(
+            occupant_class: Type[Renderable] = self.game.class_registrar.get(
                 occupant_data[RenderableDataKey.CLASS]
             )
             occupant_args: list = occupant_data.get(RenderableDataKey.ARGS, [])

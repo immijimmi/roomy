@@ -32,15 +32,15 @@ class Hitboxed(Extension, ABC):
         return self._hitboxes
 
     def __set_hitboxes(self, hitboxes: Iterable[Hitbox]):
-        hitbox_handler = self.game.screen.hitbox_handler
+        hitbox_manager = self.game.screen.hitbox_manager
 
         for hitbox in self._hitboxes:
             if hitbox not in hitboxes:
-                hitbox_handler.remove(hitbox)
+                hitbox_manager.remove(hitbox)
 
         for hitbox in hitboxes:
             if hitbox not in self._hitboxes:
-                hitbox_handler.add(hitbox)
+                hitbox_manager.add(hitbox)
 
         self._hitboxes = frozenset(hitboxes)
 
@@ -60,7 +60,7 @@ class Hitboxed(Extension, ABC):
         Standardises the entry point for checking collisions for this Renderable object.
 
         Hitboxes from other Renderable objects that may have valid collisions with this one's hitboxes can be retrieved
-        using the get() method on self.game.screen.hitbox_handler, filtered down via the optional parameters
+        using the get() method on self.game.screen.hitbox_manager, filtered down via the optional parameters
         that method can receive.
 
         When a collision is detected between two objects, each of their respective `.collide()` methods should

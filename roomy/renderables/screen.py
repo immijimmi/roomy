@@ -5,7 +5,7 @@ from managedstate.extensions import Registrar
 from abc import ABC
 from typing import Optional
 
-from ..handlers import HitboxHandler
+from ..utils import HitboxManager
 from .renderable import Renderable
 
 
@@ -20,7 +20,7 @@ class Screen(Renderable, ABC):
         super().__init__(game, surface=surface, render_position=(0, 0), parent=None, priority=None)
 
         self._state = state
-        self._hitbox_handler = HitboxHandler()
+        self._hitbox_manager = HitboxManager()
 
         self.register_paths(self._state)
 
@@ -29,15 +29,15 @@ class Screen(Renderable, ABC):
         return self._state
 
     @property
-    def hitbox_handler(self) -> HitboxHandler:
-        return self._hitbox_handler
+    def hitbox_manager(self) -> HitboxManager:
+        return self._hitbox_manager
 
     def _update(self, tick_number: int, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
         """
         This method can be further extended as necessary in subclasses
         """
 
-        self._hitbox_handler.reset_checked_collisions()
+        self._hitbox_manager.reset_checked_collisions()
 
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):

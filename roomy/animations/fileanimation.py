@@ -3,7 +3,7 @@ from pygame import Surface
 from abc import ABC
 from typing import Any
 
-from ..handlers.enums import AnimationDataKey
+from ..utils.enums import AnimationDataKey
 from .animation import Animation
 
 
@@ -14,7 +14,7 @@ class FileAnimation(Animation, ABC):
     ):
         super().__init__(parent, animation_key, size=size, speed=speed, priority=priority)
 
-        self._settings = self.animation_handler.get_settings(type(parent), animation_key)
+        self._settings = self.animation_cache.get_settings(type(parent), animation_key)
 
     @property
     def total_frames(self) -> int:
@@ -24,7 +24,7 @@ class FileAnimation(Animation, ABC):
     def frame(self) -> Surface:
         frame_key = self._settings[AnimationDataKey.FRAMES][self.frame_index]
 
-        return self.animation_handler.get_frame(frame_key, self.size)
+        return self.animation_cache.get_frame(frame_key, self.size)
 
     @property
     def frame_index(self) -> int:

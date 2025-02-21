@@ -5,7 +5,7 @@ from typing import Optional, Type
 
 from .config import Config
 from .constants import Constants
-from .handlers import GameEventHandler, GameEventType, CustomClassHandler, AnimationHandler
+from .utils import GameEventHandler, GameEventType, ClassRegistrar, AnimationCache
 from .renderables import Screen
 
 
@@ -41,10 +41,10 @@ class Game:
         self._tick_number = 0  # Counts up by 1 per update until it reaches the game's tick rate, then resets to 0
         self._clock = pygame.time.Clock()
 
-        # Game-level handlers
+        # Game-level utilities
         self._game_event_handler = GameEventHandler()
-        self._custom_class_handler = CustomClassHandler(self)
-        self._animation_handler = AnimationHandler(self)
+        self._class_registrar = ClassRegistrar(self)
+        self._animation_cache = AnimationCache(self)
 
     @property
     def window(self) -> Surface:
@@ -90,12 +90,12 @@ class Game:
         return self._game_event_handler
 
     @property
-    def custom_class_handler(self) -> CustomClassHandler:
-        return self._custom_class_handler
+    def class_registrar(self) -> ClassRegistrar:
+        return self._class_registrar
 
     @property
-    def animation_handler(self) -> AnimationHandler:
-        return self._animation_handler
+    def animation_cache(self) -> AnimationCache:
+        return self._animation_cache
 
     def start(self) -> None:
         if self._screen is None:

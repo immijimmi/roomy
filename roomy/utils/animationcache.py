@@ -8,9 +8,9 @@ from ..methods import Methods
 from .enums import AnimationDataKey
 
 
-class AnimationHandler:
+class AnimationCache:
     """
-    Helper class which retrieves and caches files and data for animations
+    Helper class which retrieves and caches files and data for animations, to optimise memory usage
     """
 
     def __init__(self, game):

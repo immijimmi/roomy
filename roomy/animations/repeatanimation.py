@@ -2,7 +2,7 @@ from typing import Any, Optional
 from datetime import timedelta
 
 from .fileanimation import FileAnimation
-from ..handlers.enums import AnimationDataKey
+from ..utils.enums import AnimationDataKey
 
 
 class RepeatAnimation(FileAnimation):
