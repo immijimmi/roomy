@@ -22,7 +22,7 @@ class World(Screen):
 
     def __init__(self, game, state: State.with_extensions(Registrar)):
         super().__init__(game, state)
-        self.surface = self.copy_surface()
+        self.surface = self._copy_surface()  # Invokes overridden method below to generate a surface
 
         # Registering classes which may appear in the game state and which would be needed inside this class
         self.game.class_registrar.register(**{
@@ -125,7 +125,7 @@ class World(Screen):
 
         self.set_room()
 
-    def copy_surface(self) -> Surface:
+    def _copy_surface(self) -> Surface:
         surface = Surface((self.game.window.get_width(), self.game.window.get_height()))
         surface.fill(GameConstants.COLOURS["dev"])
 
