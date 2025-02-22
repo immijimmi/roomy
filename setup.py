@@ -24,9 +24,9 @@ setup(
     download_url="https://github.com/immijimmi/roomy/archive/refs/tags/v0.12.0.tar.gz",
     keywords=["game", "engine", "2D"],
     install_requires=[
-        "pygame~=2.0.1",
+        "pygame~=2.5.0",
         "managedstate~=5.0.0",
-        "recurfaces~=2.2.0",
+        "recurfaces~=3.0.0",
         "objectextensions~=2.0.1"
     ],
     classifiers=[
@@ -35,6 +35,6 @@ setup(
         "Topic :: Software Development :: Libraries :: Application Frameworks",
         "Topic :: Software Development :: Libraries :: pygame",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.8"
+        "Programming Language :: Python :: 3.12"
     ],
 )
