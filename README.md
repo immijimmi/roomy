@@ -1,6 +1,6 @@
 # roomy
 
-###### A game engine specialised for building 2D non-scrolling games, written in python
+###### A small 2D game engine written in python 
 
 ## Quickstart
 
