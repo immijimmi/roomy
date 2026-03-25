@@ -4,4 +4,4 @@ from .screen import Screen
 from .userinterfacelayer import UserInterfaceLayer
 from .enums import RenderableHitboxTag
 
-from .world import World, Room
+from .world import World, Room, RenderableDataKey
