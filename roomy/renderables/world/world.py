@@ -22,7 +22,7 @@ class World(Screen):
 
     def __init__(self, game, state: State.with_extensions(Registrar)):
         super().__init__(game, state)
-        self.surface = self._copy_surface()  # Invokes overridden method below to generate a surface
+        self.surface = self.generate_surface_copy()  # Invokes overridden method below to generate a surface
 
         # Registering classes which may appear in the game state and which would be needed inside this class
         self.game.class_registrar.register(**{
@@ -120,16 +120,16 @@ class World(Screen):
         self._interfaces.remove(interface)
         interface.parent_recurface = None
 
-    def _update(self, tick_number: int, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
-        super()._update(tick_number, elapsed_ms, input_events, *args, **kwargs)
-
-        self.set_room()
-
-    def _copy_surface(self) -> Surface:
+    def generate_surface_copy(self) -> Surface:
         surface = Surface((self.game.window.get_width(), self.game.window.get_height()))
         surface.fill(GameConstants.COLOURS["dev"])
 
         return surface
+
+    def _update(self, tick_number: int, elapsed_ms: int, input_events: list, *args, **kwargs) -> None:
+        super()._update(tick_number, elapsed_ms, input_events, *args, **kwargs)
+
+        self.set_room()
 
     @staticmethod
     def register_paths(state: State.with_extensions(Registrar)):

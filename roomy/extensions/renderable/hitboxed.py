@@ -3,7 +3,7 @@ from objectextensions import Extension
 from typing import Iterable, FrozenSet
 from abc import ABC
 
-from ...renderables import Renderable
+from ...renderables.renderable import Renderable
 from ...hitboxes import Hitbox
 
 

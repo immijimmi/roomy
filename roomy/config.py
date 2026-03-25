@@ -1,21 +1,16 @@
-from pygame import event
-
-from typing import Callable, Iterable, Dict, Container
+from typing import Dict, Container
 
 from .renderables.enums import RenderableHitboxTag
 
 
 class Config:
-    TICK_RATE: float = 120  # Number of game ticks per second. A value of 0 indicates unlimited tick rate (must be >=0)
+    # Number of physics ticks per second
+    TICK_RATE: float = 60  # A value of 0 indicates unlimited tick rate (must be >=0)
     """
-    Please note that while unlimited tick rate is supported, any parts of the game state
-    which are updated per tick may behave differently in a given period of real time at different tick rates.
-    It is therefore highly recommended to keep the tick rate locked to a static value (>0)
+    Please note that while unlimited tick rate is supported, it is not recommended as game physics will behave
+    unpredictably
     """
     FPS: float = 0  # A value of 0 indicates unlimited framerate (must be >=0)
-
-    # This function will be used to retrieve new input events each tick (uses pygame's built-in function by default)
-    GET_INPUT_EVENTS: Callable[[], Iterable] = event.get
 
     RESOURCE_FOLDER_PATH = "res"  # Can either be absolute, or relative to the current working directory
 

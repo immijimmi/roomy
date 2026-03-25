@@ -7,8 +7,8 @@ class GameEventType(str, Enum):
     via calls within this package to GameEventHandler.on_event()
     """
 
-    UPDATE = "update"
-    RENDER = "render"
+    TICK = "tick"
+    FRAME = "frame"
 
     CHANGE_SCREEN = "change_screen"
     CHANGE_ROOM = "change_room"

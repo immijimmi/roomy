@@ -2,7 +2,7 @@ from objectextensions import Extension
 
 from abc import ABC
 
-from ...renderables import Renderable
+from ...renderables.renderable import Renderable
 from ...animations import Animation
 
 
