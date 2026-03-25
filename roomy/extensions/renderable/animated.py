@@ -2,6 +2,7 @@ from objectextensions import Extension
 
 from abc import ABC
 
+# Renderable must be imported from the file, not the folder, to avoid circular imports
 from ...renderables.renderable import Renderable
 from ...animations import Animation
 
