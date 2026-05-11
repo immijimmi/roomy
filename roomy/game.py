@@ -145,6 +145,7 @@ class Game:
                 GameEventType.FRAME,
                 ms_since_last_tick=ms_since_last_tick, ms_since_last_frame=ms_since_last_frame
         ):
+            ##### TODO: .frame and .tick methods are not yet implemented anywhere else
             self._screen.frame(ms_since_last_tick, ms_since_last_frame)
 
             updated_rects = self._screen.render(self._window)
